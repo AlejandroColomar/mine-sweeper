@@ -2,10 +2,10 @@
  *	Copyright (C) 2015	Alejandro Colomar Andrés		      *
  ******************************************************************************/
 
-# ifndef		MSW_CHECK_H
-	# define	MSW_CHECK_H
+# ifndef		MSW_TUI_H
+	# define	MSW_TUI_H
 
 
-void	game_end	(void);
+void	menu_main	(void);
 
-# endif			/* check.h */
+# endif			/* tui.h */
