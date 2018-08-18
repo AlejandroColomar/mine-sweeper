@@ -6,7 +6,7 @@
 
 LIBALX_DIR = ./
 
-OBJ_DIR = $(LIBALX_DIR)/obj/
+OBJ_DIR = $(LIBALX_DIR)/.obj/
 
 
 # target: dependencies
