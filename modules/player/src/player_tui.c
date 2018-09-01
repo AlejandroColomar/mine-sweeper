@@ -30,6 +30,12 @@
 
 
 /******************************************************************************
+ ******* macros ***************************************************************
+ ******************************************************************************/
+	# define	REFRESH_TIME_MS		(100)
+
+
+/******************************************************************************
  ******* variables ************************************************************
  ******************************************************************************/
 /*	*	*	*	*	*	*	*	*	*
@@ -135,10 +141,10 @@ void	player_tui_init		(int rows, int cols)
 	const int	c2 =	0;
 	win_help =	newwin(h2, w2, r2, c2);
 
-	/* Activate keypad, don't echo input, and set timeout = 100 ms */
+	/* Activate keypad, don't echo input, and set timeout = REFRESH_TIME_MS ms */
 	keypad(win_board, true);
 	noecho();
-	wtimeout(win_board, 100);
+	wtimeout(win_board, REFRESH_TIME_MS);
 }
 
 int	player_tui_start	(const struct Player_Iface_Position	*position,
@@ -599,7 +605,7 @@ static	int	usr_input	(void)
 		}
 
 		/* Resume */
-		wtimeout(win_board, 100);
+		wtimeout(win_board, REFRESH_TIME_MS);
 		break;
 
 	case '0':
