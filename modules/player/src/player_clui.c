@@ -129,13 +129,12 @@ static	void	show_board_start(const struct Player_Iface_Position	*position,
 {
 	/* Title */
 	puts("________________________________________________________________________________");
-	puts(title);
 
 	/* Board */
 	board_loop_start(position);
 
-	/* Subtitle */
-	puts(subtitle);
+	/* Subtitle & title */
+	printf("%s	-	%s\n", subtitle, title);
 	puts("--------------------------------------------------------------------------------");
 }
 
@@ -174,15 +173,13 @@ static	void	show_board	(const struct Game_Iface_Out		*board,
 				const char				*title,
 				const char				*subtitle)
 {
-	/* Title */
 	puts("________________________________________________________________________________");
-	puts(title);
 
 	/* Board */
 	board_loop(board, position);
 
-	/* Subtitle */
-	puts(subtitle);
+	/* Subtitle & title */
+	printf("%s	-	%s\n", subtitle, title);
 	puts("--------------------------------------------------------------------------------");
 
 }
@@ -460,193 +457,59 @@ static	void	show_help		(const struct Game_Iface_Out	*board)
 
 static	void	show_help_start		(void)
 {
-	puts("Move:");
-	/* hjkl */
-	printf(" %c", 'h');
-	printf(" %c", 'j');
-	printf(" %c", 'k');
-	printf(" %c", 'l');
-	putchar('\n');
-	/* Arrows */
-	printf(" %c", '<');
-	printf(" %c", 'v');
-	printf(" %c", '^');
-	printf(" %c", '>');
-	putchar('\n');
-
-	puts("Step:");
-	printf(" %c\n", '+');
-
-	puts("Save:");
-	printf(" %c\n", 's');
-
-	puts("Quit:");
-	printf(" %c\n", 'q');
-
-	puts("Confirm:");
-	printf(" Enter\n");
+	puts(  "Move      "      "|Step " "|Save " "|Quit " "|Confirm");
+	printf(" %c%c%c%c %c%c%c%c| %c   ""| %c   ""| %c   ""| Enter\n",
+		'h','j','k','l',
+			'<','v','^','>',
+				'+',	's',	'q');
 }
 
 static	void	show_help_play		(void)
 {
-	puts("Move:");
-	/* hjkl */
-	printf(" %c", 'h');
-	printf(" %c", 'j');
-	printf(" %c", 'k');
-	printf(" %c", 'l');
-	putchar('\n');
-	/* Arrows */
-	printf(" %c", '<');
-	printf(" %c", 'v');
-	printf(" %c", '^');
-	printf(" %c", '>');
-	putchar('\n');
-
-	puts("Step:");
-	printf(" %c\n", '+');
-
-	puts("Flag:");
-	printf(" Space\n");
-
-	puts("Possible:");
-	printf(" %c\n", 'f');
-
-	puts("rm flag:");
-	printf(" Backspace\n");
-
-	puts("Pause:");
-	printf(" %c\n", 'p');
-
-	puts("Save:");
-	printf(" %c\n", 's');
-
-	puts("Quit:");
-	printf(" %c\n", 'q');
-
-	puts("Confirm:");
-	printf(" Enter\n");
+	puts(  "Move      "      "|Step " "|Flag  |? " "|Remove |Pause " "|Save " "|Quit " "|Confirm");
+	printf(" %c%c%c%c %c%c%c%c| %c   ""| Space| %c""| BS    | %c    ""| %c   ""| %c   ""| Enter\n",
+		'h','j','k','l',
+			'<','v','^','>',
+					'+',	'f',	'p',	's',	'q');
 }
 
 static	void	show_help_pause		(void)
 {
-
-	puts("Continue:");
-	printf(" %c\n", 'p');
-
-	puts("Save:");
-	printf(" %c\n", 's');
-
-	puts("Quit:");
-	printf(" %c\n", 'q');
-
-	puts("Confirm:");
-	printf(" Enter\n");
+	puts(  "Continue " "|Save " "|Quit " "|Confirm");
+	printf(" %c       ""| %c   ""| %c   ""| Enter",
+		'p',	's',	'q');
 }
 
 static	void	show_help_xyzzy		(void)
 {
-	puts("XYZZY:");
-	printf(" %c", '1');
-	printf(" %c", '2');
-	putchar('\n');
-
-	puts("XYZZY off:");
-	printf(" %c\n", '0');
-
-	puts("Move:");
-	/* hjkl */
-	printf(" %c", 'h');
-	printf(" %c", 'j');
-	printf(" %c", 'k');
-	printf(" %c", 'l');
-	putchar('\n');
-	/* Arrows */
-	printf(" %c", '<');
-	printf(" %c", 'v');
-	printf(" %c", '^');
-	printf(" %c", '>');
-	putchar('\n');
-
-	puts("Step:");
-	printf(" %c\n", '+');
-
-	puts("Flag:");
-	printf(" Space\n");
-
-	puts("Possible:");
-	printf(" %c\n", 'f');
-
-	puts("rm flag:");
-	printf(" Backspace\n");
-
-	puts("Save:");
-	printf(" %c\n", 's');
-
-	puts("Quit:");
-	printf(" %c\n", 'q');
-
-	puts("Confirm:");
-	printf(" Enter\n");
+	puts(  "XYZZY |Move      "      "|Step " "|Flag  |? " "|Remove |Save " "|Quit " "|Confirm");
+	printf(" 0 1 2| %c%c%c%c %c%c%c%c| %c   ""| Space| %c""| BS    | %c   ""| %c   ""| Enter\n",
+			'h','j','k','l',
+				'<','v','^','>',
+						'+',	'f',	's',	'q');
 }
 
 static	void	show_help_cheat		(void)
 {
-	puts("Move:");
-	/* hjkl */
-	printf(" %c", 'h');
-	printf(" %c", 'j');
-	printf(" %c", 'k');
-	printf(" %c", 'l');
-	putchar('\n');
-	/* Arrows */
-	printf(" %c", '<');
-	printf(" %c", 'v');
-	printf(" %c", '^');
-	printf(" %c", '>');
-	putchar('\n');
-
-	puts("Step:");
-	printf(" %c\n", '+');
-
-	puts("Flag:");
-	printf(" Space\n");
-
-	puts("Possible:");
-	printf(" %c\n", 'f');
-
-	puts("rm flag:");
-	printf(" Backspace\n");
-
-	puts("Save:");
-	printf(" %c\n", 's');
-
-	puts("Quit:");
-	printf(" %c\n", 'q');
-
-	puts("Confirm:");
-	printf(" Enter\n");
+	puts(  "Move      "      "|Step " "|Flag  |? " "|Remove |Save " "|Quit " "|Confirm");
+	printf(" %c%c%c%c %c%c%c%c| %c   ""| Space| %c""| BS    | %c   ""| %c   ""| Enter\n",
+		'h','j','k','l',
+			'<','v','^','>',
+					'+',	'f',	's',	'q');
 }
 
 static	void	show_help_safe		(void)
 {
-	puts("Save:");
-	printf(" %c\n", 's');
-
-	puts("Quit:");
-	printf(" %c\n", 'q');
-
-	puts("Confirm:");
-	printf(" Enter\n");
+	puts(  "Save " "|Quit " "|Confirm");
+	printf(" %c   ""| %c   ""| Enter\n",
+		's',	'q');
 }
 
 static	void	show_help_gameover	(void)
 {
-	puts("Quit:");
-	printf(" %c\n", 'q');
-
-	puts("Confirm:");
-	printf(" Enter\n");
+	puts(  "Quit " "|Confirm");
+	printf(" %c   ""| Enter\n",
+		'q');
 }
 
 

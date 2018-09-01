@@ -11,8 +11,6 @@
  *	*	*	*	*	*	*	*	*	*/
 		/* errno */
 	#include <errno.h>
-		/* fflush(stdout) */
-	#include <stdio.h>
 
 /*	*	*	*	*	*	*	*	*	*
  *	*	* Other	*	*	*	*	*	*	*
@@ -82,25 +80,27 @@ static	void	start_rand	(void)
 	menu_iface_board(&level, &rows, &cols, &mines);
 
 	/* user iface init */
+	bool	fail;
 	player_iface_init(rows, cols);
 
 	/* start position */
 	int	r;
 	int	c;
-	player_iface_start(&r, &c);
+	fail	= player_iface_start(&r, &c);
 
-	/* game init */
-	game_init_rand(rows, cols, mines, r, c);
+	if (!fail) {
+		/* game init */
+		game_init_rand(rows, cols, mines, r, c);
 
-	/* game iface init */
-	game_iface_init_rand(level, r, c);
+		/* game iface init */
+		game_iface_init_rand(level, r, c);
 
-	/* game loop */
-	game_iface();
+		/* game loop */
+		game_iface();
+	}
 
 	/* user iface cluanup */
 	player_iface_cleanup();
-	fflush(stdout);
 }
 
 static	void	start_load	(void)
@@ -110,20 +110,19 @@ static	void	start_load	(void)
 	int	cols;
 	game_init_load(&rows, &cols);
 
-	/* player iface init */
-	player_iface_init(rows, cols);
-
 	if (!errno) {
+		/* player iface init */
+		player_iface_init(rows, cols);
+
 		/* game iface init */
 		game_iface_init_load();
 
 		/* game loop */
 		game_iface();
-	}
 
-	/* user iface cluanup */
-	player_iface_cleanup();
-	fflush(stdout);
+		/* user iface cluanup */
+		player_iface_cleanup();
+	}
 }
 
 

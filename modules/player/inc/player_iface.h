@@ -73,7 +73,7 @@ extern	int	player_iface_mode;
  ******* functions ************************************************************
  ******************************************************************************/
 void	player_iface_init	(int rows, int cols);
-void	player_iface_start	(int *pos_row, int *pos_col);
+int	player_iface_start	(int *pos_row, int *pos_col);
 void	player_iface		(const	struct Game_Iface_Out	*game_iface_out,
 				const	struct Game_Iface_Score	*game_iface_score,
 					struct Game_Iface_In	*game_iface_in);

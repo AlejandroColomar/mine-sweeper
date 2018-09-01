@@ -9,7 +9,7 @@
 /*	*	*	*	*	*	*	*	*	*
  *	*	* Standard	*	*	*	*	*	*
  *	*	*	*	*	*	*	*	*	*/
-		/* sprintf() */
+		/* sprintf() & fflush() */
 	#include <stdio.h>
 
 /*	*	*	*	*	*	*	*	*	*
@@ -87,7 +87,7 @@ void	player_iface_init	(int rows, int cols)
 	}
 }
 
-void	player_iface_start	(int *pos_row, int *pos_col)
+int	player_iface_start	(int *pos_row, int *pos_col)
 {
 	/* Title */
 	char	title[TITLE_SIZE];
@@ -117,10 +117,23 @@ void	player_iface_start	(int *pos_row, int *pos_col)
 		}
 
 		player_iface_act_start(player_action);
-	} while (player_action != PLAYER_IFACE_ACT_STEP);
+	} while (player_action != PLAYER_IFACE_ACT_STEP &&
+					player_action != PLAYER_IFACE_ACT_QUIT);
 
 	*pos_row	= player_iface_position.row;
 	*pos_col	= player_iface_position.col;
+
+	int	fail;
+	switch (player_action) {
+	case PLAYER_IFACE_ACT_STEP:
+		fail	= 0;
+		break;
+
+	case PLAYER_IFACE_ACT_QUIT:
+		fail	= -1;
+		break;
+	}
+	return	fail;
 }
 
 void	player_iface		(const	struct Game_Iface_Out	*game_iface_out,
@@ -217,6 +230,7 @@ void	player_iface_cleanup	(void)
 		player_tui_cleanup();
 		break;
 	}
+	fflush(stdout);
 }
 
 
@@ -274,6 +288,7 @@ static	void	player_iface_act_start	(int player_action)
 {
 	switch (player_action) {
 	case PLAYER_IFACE_ACT_STEP:
+	case PLAYER_IFACE_ACT_QUIT:
 		break;
 
 	case PLAYER_IFACE_ACT_MOVE_UP:

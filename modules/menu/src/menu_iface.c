@@ -67,6 +67,12 @@ void	menu_iface_board	(int *level, int *rows, int *cols, int *mines)
 		*mines	= GAME_IFACE_LEVEL_EXPERT_MINES;
 		break;
 
+	case GAME_IFACE_LEVEL_EXPERT_INV:
+		*rows	= GAME_IFACE_LEVEL_EXPERT_COLS;
+		*cols	= GAME_IFACE_LEVEL_EXPERT_ROWS;
+		*mines	= GAME_IFACE_LEVEL_EXPERT_MINES;
+		break;
+
 	case GAME_IFACE_LEVEL_CUSTOM:
 		*rows	= menu_iface_variables.rows;
 		*cols	= menu_iface_variables.cols;

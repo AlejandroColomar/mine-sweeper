@@ -37,7 +37,7 @@
 #	error	"rows max (clui)"
 #endif
 
-	# define	COLS_CLUI_MAX	(99)
+	# define	COLS_CLUI_MAX	(26)
 #if (COLS_CLUI_MAX > COLS_MAX)
 #	error	"cols max (clui)"
 #endif
@@ -133,7 +133,7 @@ static	void	menu_clui_rand		(void)
 	}
 
 	ch	= 'b';
-	printf("Level? (BEGINNER/intermediate/expert/custom): ");
+	printf("Level? (BEGINNER/intermediate/(expert)/custom): ");
 	fgets(buff, BUFF_SIZE, stdin);
 	sscanf(buff, " %c", &ch);
 	if (ch == 'i' || ch == 'I') {
@@ -142,8 +142,9 @@ static	void	menu_clui_rand		(void)
 		menu_clui_start();
 	} else if (ch == 'e' || ch == 'E') {
 		puts (" >expert");
-		menu_iface_variables.level	= GAME_IFACE_LEVEL_EXPERT;
+		menu_iface_variables.level	= GAME_IFACE_LEVEL_EXPERT_INV;
 		menu_clui_start();
+
 	} else if (ch == 'c' || ch == 'C') {
 		puts (" >custom");
 		menu_iface_variables.level	= GAME_IFACE_LEVEL_CUSTOM;
