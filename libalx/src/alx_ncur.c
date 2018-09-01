@@ -424,8 +424,6 @@ void	alx_ncur_prn_title	(WINDOW *win, const char *title)
 	mvwaddch(win, 0, (w - (len + 2))/2 - 1, ACS_RTEE);
 	wprintw(win, " %s ", title);
 	waddch(win, ACS_LTEE);
-
-	wrefresh(win);
 }
 
 
@@ -444,8 +442,6 @@ void	alx_ncur_prn_subtitle	(WINDOW *win, const char *subtitle)
 	mvwaddch(win, h - 1, (w - len)/2 - 1, ACS_RTEE);
 	wprintw(win, " %s ", subtitle);
 	waddch(win, ACS_LTEE);
-
-	wrefresh(win);
 }
 
 
