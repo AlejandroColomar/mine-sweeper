@@ -457,11 +457,11 @@ static	void	show_help		(const struct Game_Iface_Out	*board)
 
 static	void	show_help_start		(void)
 {
-	puts(  "Move      "      "|Step " "|Save " "|Quit " "|Confirm");
-	printf(" %c%c%c%c %c%c%c%c| %c   ""| %c   ""| %c   ""| Enter\n",
+	puts(  "Move      "      "|Step " "|Quit " "|Confirm");
+	printf(" %c%c%c%c %c%c%c%c| %c   ""| %c   ""| Enter\n",
 		'h','j','k','l',
 			'<','v','^','>',
-				'+',	's',	'q');
+				'+',	'q');
 }
 
 static	void	show_help_play		(void)

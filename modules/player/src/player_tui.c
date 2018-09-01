@@ -48,6 +48,7 @@ bool	flag_color;
  *	*	*	*	*	*	*	*	*	*/
 static	WINDOW	*win_board;
 static	WINDOW	*win_help;
+static	int	last_help;
 
 
 /******************************************************************************
@@ -132,14 +133,14 @@ void	player_tui_init		(int rows, int cols)
 	const int	w1 =	2 * cols + 3;
 	const int	r1 =	0;
 	const int	c1 =	11;
-	win_board =	newwin(h1, w1, r1, c1);
+	win_board	= newwin(h1, w1, r1, c1);
 
 	/* Dimensions: help */
 	const int	h2 =	24;
 	const int	w2 =	10;
 	const int	r2 =	0;
 	const int	c2 =	0;
-	win_help =	newwin(h2, w2, r2, c2);
+	win_help	= newwin(h2, w2, r2, c2);
 
 	/* Activate keypad, don't echo input, and set timeout = REFRESH_TIME_MS ms */
 	keypad(win_board, true);
@@ -666,41 +667,49 @@ static	int	usr_input	(void)
  *	*	*	*	*	*	*	*	*	*/
 static	void	show_help		(const struct Game_Iface_Out	*board)
 {
-	/* Clear */
-	werase(win_help);
+	if (last_help != board->state) {
+		/* Clear */
+		werase(win_help);
 
-	switch (board->state) {
-	case GAME_IFACE_STATE_PLAYING:
-		show_help_play();
-		break;
+		switch (board->state) {
+		case GAME_IFACE_STATE_PLAYING:
+			show_help_play();
+			break;
 
-	case GAME_IFACE_STATE_PAUSE:
-		show_help_pause();
-		break;
+		case GAME_IFACE_STATE_PAUSE:
+			show_help_pause();
+			break;
 
-	case GAME_IFACE_STATE_XYZZY:
-		show_help_xyzzy();
-		break;
+		case GAME_IFACE_STATE_XYZZY:
+			show_help_xyzzy();
+			break;
 
-	case GAME_IFACE_STATE_CHEATED:
-		show_help_cheat();
-		break;
+		case GAME_IFACE_STATE_CHEATED:
+			show_help_cheat();
+			break;
 
-	case GAME_IFACE_STATE_SAFE:
-		show_help_safe();
-		break;
+		case GAME_IFACE_STATE_SAFE:
+			show_help_safe();
+			break;
 
-	case GAME_IFACE_STATE_GAMEOVER:
-		show_help_gameover();
-		break;
+		case GAME_IFACE_STATE_GAMEOVER:
+			show_help_gameover();
+			break;
+		}
+
+		/* Refresh */
+		wrefresh(win_help);
+
+		/* Update last_help */
+		last_help	= board->state;
 	}
-
-	/* Refresh */
-	wrefresh(win_help);
 }
 
 static	void	show_help_start		(void)
 {
+	/* Clear */
+	werase(win_help);
+
 	int	r;
 	int	c;
 
@@ -734,11 +743,14 @@ static	void	show_help_start		(void)
 	mvwaddstr(win_help, r++, c, "Step:");
 	mvwprintw(win_help, r++, c, " Enter / %c", '+');
 
-	mvwaddstr(win_help, r++, c, "Save:");
-	mvwprintw(win_help, r++, c, " %c", 's');
-
 	mvwaddstr(win_help, r++, c, "Quit:");
 	mvwprintw(win_help, r++, c, " %c", 'q');
+
+	/* Refresh */
+	wrefresh(win_help);
+
+	/* Update last_help */
+	last_help	= GAME_IFACE_STATE_FOO;
 }
 
 static	void	show_help_play		(void)
