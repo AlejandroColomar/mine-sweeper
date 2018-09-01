@@ -7,7 +7,7 @@
 ::##############################################################################
 :: Uninstall
 
-rmdir	"%ProgramFiles(x86)%\mine_sweeper\"	/s /q
+rmdir	"%ProgramFiles(x86)%\mine-sweeper\"	/s /q
 echo	"Clean old installations"
 echo	""
 

@@ -106,20 +106,31 @@ export	MODULES_DIR
 ifeq ($(OS), linux)
   INSTALL_BIN_DIR	= /usr/local/games/
   INSTALL_SHARE_DIR	= /usr/local/share/
-  SHARE_DIR		= mine_sweeper/
+  SHARE_DIR		= mine-sweeper/
   INSTALL_VAR_DIR	= /var/local/
-  VAR_DIR		= mine_sweeper/
+  VAR_DIR		= mine-sweeper/
 else ifeq ($(OS), win)
   INSTALL_DIR		= c:/Program files (x86)/
-  INSTALL_SHARE_DIR	= $(INSTALL_DIR)/mine_sweeper/
+  INSTALL_SHARE_DIR	= $(INSTALL_DIR)/mine-sweeper/
   SHARE_DIR		= share/
-  INSTALL_VAR_DIR	= $(INSTALL_DIR)/mine_sweeper/
+  INSTALL_VAR_DIR	= $(INSTALL_DIR)/mine-sweeper/
   VAR_DIR		= var/
 endif
 
 export	INSTALL_DIR
 export	INSTALL_SHARE_DIR
 export	SHARE_DIR
+
+################################################################################
+# executables
+
+ifeq ($(OS), linux)
+  BIN_NAME	= mine-sweeper
+else ifeq ($(OS), win)
+  BIN_NAME	= mine-sweeper.exe
+endif
+
+export	BIN_NAME
 
 ################################################################################
 # Make variables (CC, etc...)
@@ -185,8 +196,8 @@ binary:
 
 PHONY += install
 install: uninstall
-	@echo "Copy mine_sweeper"
-	$(Q)cp $(BIN_DIR)/mine_sweeper		$(INSTALL_BIN_DIR)/
+	@echo "Copy $(BIN_NAME)"
+	$(Q)cp $(BIN_DIR)/$(BIN_NAME)		$(INSTALL_BIN_DIR)/
 	@echo  ""
 	
 	@echo  "Create $(INSTALL_SHARE_DIR)/$(SHARE_DIR)/"
@@ -210,7 +221,7 @@ install: uninstall
 
 PHONY += uninstall
 uninstall:
-	$(Q)rm -f $(INSTALL_BIN_DIR)/mine_sweeper
+	$(Q)rm -f $(INSTALL_BIN_DIR)/$(BIN_NAME)
 	$(Q)rm -f -r $(INSTALL_SHARE_DIR)/$(SHARE_DIR)/
 	$(Q)rm -f -r $(INSTALL_VAR_DIR)/$(VAR_DIR)/
 	@echo  "Clean old installations"

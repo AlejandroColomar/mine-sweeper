@@ -31,7 +31,6 @@
 	# define	BOARDS_INTERMEDIATE_DIR		"hiscores/boards_intermediate/"
 	# define	BOARDS_EXPERT_DIR		"hiscores/boards_expert/"
 	# define	BOARDS_CUSTOM_DIR		"hiscores/boards_custom/"
-	# define	USER_SAVED_DIR			".mine_sweeper/saved/"
 	# define	HISCORES_BEGINNER_NAME		"hiscores_beginner.mine"
 	# define	HISCORES_INTERMEDIATE_NAME	"hiscores_intermediate.mine"
 	# define	HISCORES_EXPERT_NAME		"hiscores_expert.mine"

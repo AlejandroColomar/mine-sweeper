@@ -28,13 +28,9 @@ XYZZY_OBJ_DIR	= $(XYZZY_DIR)/obj/
 OBJ_DIR	= $(MAIN_DIR)/obj/
 
 # dependencies
-_ALL	= mine_sweeper mine_sweeper.exe
+_ALL	= mine-sweeper mine-sweeper.exe
 
-ifeq ($(OS), linux)
-  ALL	= mine_sweeper
-else ifeq ($(OS), win)
-  ALL	= mine_sweeper.exe
-endif
+ALL	= $(BIN_NAME)
 
 MAIN_OBJ_LIBALX	= alx_file.o alx_getnum.o alx_ncur.o alx_seed.o
 MAIN_OBJ_ABOUT	= about_mod.o
@@ -62,14 +58,9 @@ MAIN_OBJS	= $(OBJ_DIR)/main.o \
 all: $(ALL)
 
 
-mine_sweeper: $(MAIN_OBJS)
+$(BIN_NAME): $(MAIN_OBJS)
 	$(Q)$(CC) $^ -o $@ $(LIBS)
-	@echo  "\tLD $<"
-	@echo  ""
-
-mine_sweeper.exe: $(MAIN_OBJS)
-	$(Q)$(CC) $^ -o $@ $(LIBS)
-	@echo  "\tLD $<"
+	@echo  "\tLD $@"
 	@echo  ""
 
 

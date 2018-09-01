@@ -26,8 +26,8 @@
 	#	define		ENV_HOME		"USERPROFILE"
 	# endif
 
-	# define		USER_GAME_DIR		".mine_sweeper/"
-	# define		USER_SAVED_DIR		".mine_sweeper/saved/"
+	# define		USER_GAME_DIR		".mine-sweeper/"
+	# define		USER_SAVED_DIR		".mine-sweeper/saved/"
 	# define		SAVED_NAME_DEFAULT	"saved"
 	# define		FILE_EXTENSION		".mine"
 
