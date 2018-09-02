@@ -95,13 +95,13 @@ export	MODULES_DIR
 
 # FIXME: Set local or not local when building a package
 ifeq ($(OS), linux)
-  INSTALL_BIN_DIR	= $(DESTDIR)/usr/local/games/
-#  INSTALL_BIN_DIR	= $(DESTDIR)/usr/games/
-  INSTALL_SHARE_DIR	= $(DESTDIR)/usr/local/share/
-#  INSTALL_SHARE_DIR	= $(DESTDIR)/usr/share/
+  INSTALL_BIN_DIR	= /usr/local/games/
+#  INSTALL_BIN_DIR	= /usr/games/
+  INSTALL_SHARE_DIR	= /usr/local/share/
+#  INSTALL_SHARE_DIR	= /usr/share/
   SHARE_DIR		= mine-sweeper/
-  INSTALL_VAR_DIR	= $(DESTDIR)/var/local/
-#  INSTALL_VAR_DIR	= $(DESTDIR)/var/games/
+  INSTALL_VAR_DIR	= /var/local/
+#  INSTALL_VAR_DIR	= /var/games/
   VAR_DIR		= mine-sweeper/
 else ifeq ($(OS), win)
   INSTALL_DIR		= c:/Program files (x86)/
@@ -140,7 +140,7 @@ export	CC
 export	LD
 
 ################################################################################
-CFLAGS		= -std=c11 -v
+CFLAGS		= -std=c11
 CFLAGS	       += -D PROG_VERSION=\"$(PROGRAMVERSION)\"
 CFLAGS	       += -D 'INSTALL_SHARE_DIR="$(INSTALL_SHARE_DIR)"'
 CFLAGS	       += -D SHARE_DIR=\"$(SHARE_DIR)\"
@@ -169,7 +169,7 @@ export	LIBS
 
 # That's the default target when none is given on the command line
 PHONY := all
-all: libalx modules object binary
+all: binary
 
 
 PHONY += libalx
@@ -177,39 +177,39 @@ libalx:
 	$(Q)cd $(LIBALX_DIR) && $(MAKE) && cd ..
 
 PHONY += modules
-modules:
+modules: libalx
 	$(Q)cd $(MODULES_DIR) && $(MAKE) && cd ..
 
 PHONY += object
-object:
+object: modules libalx
 	$(Q)cd $(OBJ_DIR) && $(MAKE) && cd ..
 
 PHONY += binary
-binary:
+binary: object
 	$(Q)cd $(BIN_DIR) && $(MAKE) && cd ..
 
 PHONY += install
 install: uninstall
 	@echo  "Create $(INSTALL_BIN_DIR)/"
-	$(Q)mkdir -p		$(INSTALL_BIN_DIR)/
+	$(Q)mkdir -p		$(DESTDIR)/$(INSTALL_BIN_DIR)/
 	@echo "Copy $(BIN_NAME)"
-	$(Q)cp			$(BIN_DIR)/$(BIN_NAME)	$(INSTALL_BIN_DIR)/
+	$(Q)cp			$(BIN_DIR)/$(BIN_NAME)	$(DESTDIR)/$(INSTALL_BIN_DIR)/
 	@echo  ""
 	
 	@echo  "Create $(INSTALL_SHARE_DIR)/$(SHARE_DIR)/"
-	$(Q)mkdir -p		$(INSTALL_SHARE_DIR)/$(SHARE_DIR)/
+	$(Q)mkdir -p		$(DESTDIR)/$(INSTALL_SHARE_DIR)/$(SHARE_DIR)/
 	@echo "Copy share/*"
-	$(Q)cp -r		./share/*		$(INSTALL_SHARE_DIR)/$(SHARE_DIR)/
+	$(Q)cp -r		./share/*		$(DESTDIR)/$(INSTALL_SHARE_DIR)/$(SHARE_DIR)/
 	
 	@echo  "Create $(INSTALL_VAR_DIR)/$(VAR_DIR)/"
-	$(Q)mkdir -p		$(INSTALL_VAR_DIR)/$(VAR_DIR)/
+	$(Q)mkdir -p		$(DESTDIR)/$(INSTALL_VAR_DIR)/$(VAR_DIR)/
 	@echo "Copy var/*"
-	$(Q)cp -r		./var/*			$(INSTALL_VAR_DIR)/$(VAR_DIR)/
+	$(Q)cp -r		./var/*			$(DESTDIR)/$(INSTALL_VAR_DIR)/$(VAR_DIR)/
 	@echo "Change owner"
-	$(Q)chown root:games -R	$(INSTALL_VAR_DIR)/$(VAR_DIR)/
+	$(Q)chown root:games -R	$(DESTDIR)/$(INSTALL_VAR_DIR)/$(VAR_DIR)/
 	@echo "Change permissions"
-	$(Q)chmod 664 -R	$(INSTALL_VAR_DIR)/$(VAR_DIR)/
-	$(Q)chmod +X -R		$(INSTALL_VAR_DIR)/$(VAR_DIR)/
+	$(Q)chmod 664 -R	$(DESTDIR)/$(INSTALL_VAR_DIR)/$(VAR_DIR)/
+	$(Q)chmod +X -R		$(DESTDIR)/$(INSTALL_VAR_DIR)/$(VAR_DIR)/
 	@echo  ""
 	
 	@echo  "Done"
@@ -217,9 +217,9 @@ install: uninstall
 
 PHONY += uninstall
 uninstall:
-	$(Q)rm -f	$(INSTALL_BIN_DIR)/$(BIN_NAME)
-	$(Q)rm -f -r	$(INSTALL_SHARE_DIR)/$(SHARE_DIR)/
-	$(Q)rm -f -r	$(INSTALL_VAR_DIR)/$(VAR_DIR)/
+	$(Q)rm -f	$(DESTDIR)/$(INSTALL_BIN_DIR)/$(BIN_NAME)
+	$(Q)rm -f -r	$(DESTDIR)/$(INSTALL_SHARE_DIR)/$(SHARE_DIR)/
+	$(Q)rm -f -r	$(DESTDIR)/$(INSTALL_VAR_DIR)/$(VAR_DIR)/
 	@echo  "Clean old installations"
 	@echo  ""
 
@@ -245,10 +245,10 @@ help:
 	@echo  '* modules	  - Build all modules'
 	@echo  '* object	  - Build the main object'
 	@echo  '* binary	  - Build the binary'
-	@echo  '  kernelversion	  - Output the version stored in Makefile (use with make -s)'
+	@echo  '  install	  - Install the program into the filesystem'
+	@echo  '  uninstall	  - Uninstall the program off the filesystem'
 	@echo  ''
 	@echo  '  make V=0|1 [targets] 0 => quiet build (default), 1 => verbose build'
-	@echo  '  make V=2   [targets] 2 => give reason for rebuild of target'
 	@echo  ''
 	@echo  'Execute "make" or "make all" to build all targets marked with [*] '
 	@echo  'For further info see the ./README file'
