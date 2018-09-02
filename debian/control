@@ -1,0 +1,17 @@
+Source: mine-sweeper
+Maintainer: Alejandro Colomar Andrés <1903716@gmail.com>
+Uploaders: Alejandro Colomar Andrés <1903716@gmail.com>
+Section: games
+Priority: optional
+Build-Depends: libc6-dev libncursesw5-dev libtinfo-dev
+Standards-Version: 4.2.1.0
+Homepage: https://github.com/AlejandroColomar/mine-sweeper/
+
+Package: mine-sweeper
+Architecture: any
+Section: games
+Priority: optional
+Essential: no
+Depends: libc6,libncursesw5,libtinfo5
+Description: Terminal game based on 'Mine'.
+Homepage: https://github.com/AlejandroColomar/mine-sweeper/
