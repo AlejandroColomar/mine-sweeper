@@ -20,7 +20,11 @@
 		/* strcpy() & strcat() */
 	#include <string.h>
 		/* mkdir */
+#if defined	OS_LINUX
 	#include <sys/stat.h>
+#elif defined	OS_WIN
+	#include <direct.h>
+#endif
 
 /*	*	*	*	*	*	*	*	*	*
  *	*	* Other	*	*	*	*	*	*	*
