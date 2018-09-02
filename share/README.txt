@@ -4,7 +4,7 @@
  *									      *
  * Check this: https://tcrf.net/Proto:Minesweeper_(Windows,_1990)	      *
  ******************************************************************************
- * mine_sweeper	Copyright (C) 2015	Alejandro Colomar Andrés	      *
+ * mine-sweeper	Copyright (C) 2015	Alejandro Colomar Andrés	      *
  *									      *
  * This program is free software; you can redistribute it and/or modify	      *
  * it under the terms of the GNU General Public License as published by	      *
@@ -50,18 +50,22 @@ COMPILE:
 INSTALL:
 	linux:
 		# make install
+	windows:
+		double click on SETUP.cmd
 
 RUN:
 	linux:
-		$ mine_sweeper
+		$ mine-sweeper
 				if it doesn't work:
-		$ /usr/local/games/mine_sweeper
+		$ /usr/local/games/mine-sweeper
 	windows:
-		double click on bin/mine_sweeper.exe
+		double click on bin/mine-sweeper.exe
 
 UNINSTALL:
 	linux:
 		# make uninstall
+	windows:
+		double click on UNINSTALL.cmd
 
 
 THE PROGRAM DOES:
