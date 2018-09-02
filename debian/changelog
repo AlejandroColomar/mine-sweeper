@@ -1,0 +1,4 @@
+mine-sweeper (3~b5) unstable; urgency=low
+
+ * Initial Release.
+ * This is my first Debian package.

@@ -1,14 +1,20 @@
-# License: GPL-2.0
-# This Makefile has parts of the linux kernel Makefile code.
+#!/usr/bin/make -f
+
 VERSION	= 3
-PATCHLEVEL = b
-SUBLEVEL = 4
+PATCHLEVEL = ~b4
+SUBLEVEL = 
 EXTRAVERSION =
 NAME = instalable
 
 export	VERSION
 export	PATCHLEVEL
 export	SUBLEVEL
+
+################################################################################
+# *AUTHOR*
+
+# EMAIL		"1903716@gmail.com"
+# FULL NAME	"Alejandro Colomar Andrés"
 
 ################################################################################
 # *DOCUMENTATION*
@@ -18,24 +24,12 @@ export	SUBLEVEL
 # expect to learn how to build mine_sweeper reading this file.
 
 ################################################################################
-# Beautify output FIXME
+# Beautify output
 # ---------------------------------------------------------------------------
-#
-# Normally, we echo the whole command before executing it.  We now
-# have the possibility to choose other forms of output instead, e.g.
-#
-#         quiet_cmd_cc_o_c = Compiling $(RELDIR)/$@
-#         cmd_cc_o_c       = $(CC) $(c_flags) -c -o $@ $<
-#
-# If $(Q) is empty, the whole command will be printed.
-# If it is set to "quiet_", only the short version will be printed.
-# If it is set to "silent_", nothing will be printed at all, since
-# the variable $(silent_cmd_cc_o_c) doesn't exist.
-#
-# A simple variant is to prefix commands with $(Q) - that's useful
+# Prefix commands with $(Q) - that's useful
 # for commands that shall be hidden in non-verbose mode.
 #
-#	$(Q)ln $@ :<
+#	$(Q)some command here
 #
 # If BUILD_VERBOSE equals 0 then the above command will be hidden.
 # If BUILD_VERBOSE equals 1 then the above command is displayed.
@@ -52,10 +46,8 @@ endif
 
 ifeq ($(BUILD_VERBOSE), 1)
   Q =
-  QQ =
 else
   Q = @
-  QQ =
 endif
 
 # If the user is running make -s (silent mode), suppress echoing of
@@ -63,11 +55,9 @@ endif
 
 ifneq ($(findstring s,$(filter-out --%,$(MAKEFLAGS))),)
   Q = @
-  QQ = @
 endif
 
 export	Q
-export	QQ
 export	BUILD_VERBOSE
 
 ################################################################################
@@ -77,7 +67,7 @@ export	BUILD_VERBOSE
 MAKEFLAGS += --no-print-directory
 
 ################################################################################
-PROGRAMVERSION	= $(VERSION)$(if $(PATCHLEVEL),.$(PATCHLEVEL)$(if $(SUBLEVEL),.$(SUBLEVEL)))$(EXTRAVERSION)
+PROGRAMVERSION	= $(VERSION)$(if $(PATCHLEVEL),$(PATCHLEVEL)$(if $(SUBLEVEL),$(SUBLEVEL)))$(EXTRAVERSION)
 export	PROGRAMVERSION
 
 ################################################################################
@@ -103,11 +93,15 @@ export	MAIN_DIR
 export	LIBALX_DIR
 export	MODULES_DIR
 
+# FIXME: Set local or not local when building a package
 ifeq ($(OS), linux)
   INSTALL_BIN_DIR	= /usr/local/games/
+#  INSTALL_BIN_DIR	= /usr/games/
   INSTALL_SHARE_DIR	= /usr/local/share/
+#  INSTALL_SHARE_DIR	= /usr/share/
   SHARE_DIR		= mine-sweeper/
   INSTALL_VAR_DIR	= /var/local/
+#  INSTALL_VAR_DIR	= /var/games/
   VAR_DIR		= mine-sweeper/
 else ifeq ($(OS), win)
   INSTALL_DIR		= c:/Program files (x86)/
@@ -175,7 +169,7 @@ export	LIBS
 
 # That's the default target when none is given on the command line
 PHONY := all
-all: libalx modules object binary
+all: binary
 
 
 PHONY += libalx
@@ -183,37 +177,39 @@ libalx:
 	$(Q)cd $(LIBALX_DIR) && $(MAKE) && cd ..
 
 PHONY += modules
-modules:
+modules: libalx
 	$(Q)cd $(MODULES_DIR) && $(MAKE) && cd ..
 
 PHONY += object
-object:
+object: modules libalx
 	$(Q)cd $(OBJ_DIR) && $(MAKE) && cd ..
 
 PHONY += binary
-binary:
+binary: object
 	$(Q)cd $(BIN_DIR) && $(MAKE) && cd ..
 
 PHONY += install
 install: uninstall
+	@echo  "Create $(INSTALL_BIN_DIR)/"
+	$(Q)mkdir -p		$(DESTDIR)/$(INSTALL_BIN_DIR)/
 	@echo "Copy $(BIN_NAME)"
-	$(Q)cp $(BIN_DIR)/$(BIN_NAME)		$(INSTALL_BIN_DIR)/
+	$(Q)cp			$(BIN_DIR)/$(BIN_NAME)	$(DESTDIR)/$(INSTALL_BIN_DIR)/
 	@echo  ""
 	
 	@echo  "Create $(INSTALL_SHARE_DIR)/$(SHARE_DIR)/"
-	$(Q)mkdir $(INSTALL_SHARE_DIR)/$(SHARE_DIR)/
+	$(Q)mkdir -p		$(DESTDIR)/$(INSTALL_SHARE_DIR)/$(SHARE_DIR)/
 	@echo "Copy share/*"
-	$(Q)cp -r ./share/*			$(INSTALL_SHARE_DIR)/$(SHARE_DIR)/
+	$(Q)cp -r		./share/*		$(DESTDIR)/$(INSTALL_SHARE_DIR)/$(SHARE_DIR)/
 	
 	@echo  "Create $(INSTALL_VAR_DIR)/$(VAR_DIR)/"
-	$(Q)mkdir $(INSTALL_VAR_DIR)/$(VAR_DIR)/
+	$(Q)mkdir -p		$(DESTDIR)/$(INSTALL_VAR_DIR)/$(VAR_DIR)/
 	@echo "Copy var/*"
-	$(Q)cp -r ./var/*			$(INSTALL_VAR_DIR)/$(VAR_DIR)/
+	$(Q)cp -r		./var/*			$(DESTDIR)/$(INSTALL_VAR_DIR)/$(VAR_DIR)/
 	@echo "Change owner"
-	$(Q)chown root:games -R $(INSTALL_VAR_DIR)/$(VAR_DIR)/
+	$(Q)chown root:games -R	$(DESTDIR)/$(INSTALL_VAR_DIR)/$(VAR_DIR)/
 	@echo "Change permissions"
-	$(Q)chmod 664 -R $(INSTALL_VAR_DIR)/$(VAR_DIR)/
-	$(Q)chmod +X -R $(INSTALL_VAR_DIR)/$(VAR_DIR)/
+	$(Q)chmod 664 -R	$(DESTDIR)/$(INSTALL_VAR_DIR)/$(VAR_DIR)/
+	$(Q)chmod +X -R		$(DESTDIR)/$(INSTALL_VAR_DIR)/$(VAR_DIR)/
 	@echo  ""
 	
 	@echo  "Done"
@@ -221,9 +217,9 @@ install: uninstall
 
 PHONY += uninstall
 uninstall:
-	$(Q)rm -f $(INSTALL_BIN_DIR)/$(BIN_NAME)
-	$(Q)rm -f -r $(INSTALL_SHARE_DIR)/$(SHARE_DIR)/
-	$(Q)rm -f -r $(INSTALL_VAR_DIR)/$(VAR_DIR)/
+	$(Q)rm -f	$(DESTDIR)/$(INSTALL_BIN_DIR)/$(BIN_NAME)
+	$(Q)rm -f -r	$(DESTDIR)/$(INSTALL_SHARE_DIR)/$(SHARE_DIR)/
+	$(Q)rm -f -r	$(DESTDIR)/$(INSTALL_VAR_DIR)/$(VAR_DIR)/
 	@echo  "Clean old installations"
 	@echo  ""
 
@@ -249,10 +245,10 @@ help:
 	@echo  '* modules	  - Build all modules'
 	@echo  '* object	  - Build the main object'
 	@echo  '* binary	  - Build the binary'
-	@echo  '  kernelversion	  - Output the version stored in Makefile (use with make -s)'
+	@echo  '  install	  - Install the program into the filesystem'
+	@echo  '  uninstall	  - Uninstall the program off the filesystem'
 	@echo  ''
 	@echo  '  make V=0|1 [targets] 0 => quiet build (default), 1 => verbose build'
-	@echo  '  make V=2   [targets] 2 => give reason for rebuild of target'
 	@echo  ''
 	@echo  'Execute "make" or "make all" to build all targets marked with [*] '
 	@echo  'For further info see the ./README file'
