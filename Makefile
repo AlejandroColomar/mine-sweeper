@@ -1,7 +1,7 @@
 #!/usr/bin/make -f
 
 VERSION	= 3
-PATCHLEVEL = ~b4
+PATCHLEVEL = ~rc1
 SUBLEVEL = 
 EXTRAVERSION =
 NAME = instalable

@@ -70,7 +70,7 @@ void	parser	(int argc, char *argv[])
 		{"file",		required_argument,	0,	'f'},
 		{"iface",		required_argument,	0,	'i'},
 		{"proportion",		required_argument,	0,	'p'},
-		{"rand-seed",		required_argument,	0,	'r'},
+//		{"rand-seed",		required_argument,	0,	'r'},
 		{"start",		required_argument,	0,	's'},
 		/* Null */
 		{0,			0,			0,	0}
@@ -121,11 +121,11 @@ void	parser	(int argc, char *argv[])
 		case 'p':
 			parse_proportion(optarg);
 			break;
-
+/* Only for DEVEL
 		case 'r':
 			parse_rand_seed(optarg);
 			break;
-
+*/
 		case 's':
 			parse_start(optarg);
 			break;

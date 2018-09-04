@@ -5,7 +5,6 @@ Usage: $ mine-sweeper [OPTION...]
 	-f, --file=FILE			set game file
 	-i, --iface=IFACE		set game interface
 	-p, --proportion=PROPORTION	set proportion of mines
-	-r, --rand-seed=SEED		set seed for rand
 
  Main modes of operation:
 	-s, --start=START_MODE		set start mode
@@ -20,6 +19,9 @@ Usage: $ mine-sweeper [OPTION...]
 	-h, --help			give this help list
 	-u, --usage			give a short usage message
 	-v, --version			print program version
+
+ Only for DEVEL (disabled in normal release):
+	-r, --rand-seed=SEED		set seed for rand (DEVEL; DISABLED)
 
 MANDATORY or [OPTIONAL] arguments to long options are also mandatory or optional
 for any corresponding short options.

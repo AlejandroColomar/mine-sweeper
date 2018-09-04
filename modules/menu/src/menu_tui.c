@@ -71,7 +71,7 @@ void	menu_tui		(void)
 	w	= 34;
 	int	N;
 	N	= 4;
-	struct alx_optn	mnu[4]	= {
+	struct Alx_Menu	mnu[4]	= {
 		{7, 4, "[0]	Exit program"},
 		{2, 4, "[1]	Continue"},
 		{4, 4, "[2]	Disclaimer of warranty"},
@@ -132,15 +132,16 @@ static	void	menu_tui_continue	(void)
 	r	= 1;
 	c	= (80 - w) / 2;
 	int	N;
-	N	= 7;
-	struct alx_optn	mnu[7]	= {
+	/* N = 7 if DEVEL option is enabled */
+	N	= 6;
+	struct Alx_Menu	mnu[6]	= {
 		{11, 4, "[0]	Back"},
 		{2, 4, "[1]	Start"},
 		{4, 4, "[2]	Select map"},
 		{5, 4, "[3]	Change difficulty"},
 		{6, 4, "[4]	Change file name"},
-		{7, 4, "[5]	Hi scores"},
-		{9, 4, "[6]	DEVEL"}
+		{7, 4, "[5]	Hi scores"}/*,
+		{9, 4, "[6]	DEVEL"}*/
 	};
 
 	/* Input box */
@@ -198,11 +199,12 @@ static	void	menu_tui_continue	(void)
 			getchar();
 			alx_resume_curses();
 			break;
-
+/*
 		case 6:
 			alx_win_del(win);
 			menu_tui_devel();
 			break;
+*/
 		}
 	}
 }
@@ -221,7 +223,7 @@ static	void	menu_tui_select	(void)
 	c	= (80 - w) / 2;
 	int	N;
 	N	= 3;
-	struct alx_optn	mnu[3]	= {
+	struct Alx_Menu	mnu[3]	= {
 		{6, 4, "[0]	Back"},
 		{2, 4, "[1]	New map"},
 		{4, 4, "[2]	Load map"}
@@ -258,7 +260,7 @@ static	void	menu_tui_level	(void)
 	w	= 70;
 	int	N;
 	N	= 5;
-	struct alx_optn	mnu[5]	= {
+	struct Alx_Menu	mnu[5]	= {
 		{7, 4, "[0]	Back"},
 		{2, 4, "[1]	Beginner"},
 		{3, 4, "[2]	Intermediate"},
@@ -306,7 +308,7 @@ static	void	menu_tui_custom	(void)
 	c	= (80 - w) / 2;
 	int	N;
 	N	= 4;
-	struct alx_optn	mnu[4]	= {
+	struct Alx_Menu	mnu[4]	= {
 		{8, 4, "[0]	Back"},
 		{2, 4, "[1]	Change rows:"},
 		{4, 4, "[2]	Change columns:"},
@@ -380,7 +382,7 @@ static	void	menu_tui_devel	(void)
 	c	= (80 - w) / 2;
 	int	N;
 	N	= 2;
-	struct alx_optn	mnu[2]	= {
+	struct Alx_Menu	mnu[2]	= {
 		{5, 4, "[0]	Back"},
 		{2, 4, "[1]	Change seed (srand)"}
 	};
