@@ -2,6 +2,13 @@
  *	Copyright (C) 2017	Alejandro Colomar Andrés		      *
  ******************************************************************************/
 
+
+/******************************************************************************
+ ******* headers **************************************************************
+ ******************************************************************************/
+/*	*	*	*	*	*	*	*	*	*
+ *	*	* Standard	*	*	*	*	*	*
+ *	*	*	*	*	*	*	*	*	*/
 	#include <ncurses.h>
 	#include <inttypes.h>
 	#include <stdarg.h>
@@ -11,8 +18,15 @@
 		/* wchar_t */
 	#include <wchar.h>
 
+/*	*	*	*	*	*	*	*	*	*
+ *	*	* Other	*	*	*	*	*	*	*
+ *	*	*	*	*	*	*	*	*	*/
 	#include "alx_ncur.h"
 
+
+/******************************************************************************
+ ******* macros ***************************************************************
+ ******************************************************************************/
 	# define	BUFF_SIZE	(1024)
 
 	# define	MAX_TRIES	(2)
@@ -28,10 +42,13 @@
 	# define	ERR_FPTR_MSG	"¡ FILE error !"
 
 
+/******************************************************************************
+ ******* static functions *****************************************************
+ ******************************************************************************/
 static	void	alx_ncur_prn_menu	(WINDOW *win,
-					int N, struct alx_optn mnu[N]);
+					int N, struct Alx_Menu mnu[N]);
 static	int	alx_ncur_usr_sel	(WINDOW *win,
-					int N, struct alx_optn mnu[N]);
+					int N, struct Alx_Menu mnu[N]);
 static	double	loop_w_getdbl		(WINDOW *win,
 					double m, double def, double M);
 static	int64_t	loop_w_getint		(WINDOW *win,
@@ -43,6 +60,9 @@ static	void	loop_w_getfname		(const char *fpath, char *fname, bool exist,
 static	void	manage_w_error		(WINDOW *win, int err);
 
 
+/******************************************************************************
+ ******* main *****************************************************************
+ ******************************************************************************/
 void	alx_start_curses	(void)
 {
 	initscr();
@@ -87,7 +107,7 @@ void	alx_win_del		(WINDOW *win)
 }
 
 int	alx_menu		(int h, int w,
-				int N, struct alx_optn mnu[N], const char *title)
+				int N, struct Alx_Menu mnu[N], const char *title)
 {
 	/* Dimensions */
 	WINDOW	*win;
@@ -108,7 +128,7 @@ int	alx_menu		(int h, int w,
 }
 
 int	alx_menu_2		(WINDOW *win,
-				int N, struct alx_optn mnu[N], const char *title)
+				int N, struct Alx_Menu mnu[N], const char *title)
 {
 	/* Activate keypad, and don't echo input */
 	keypad(win, true);
@@ -125,7 +145,6 @@ int	alx_menu_2		(WINDOW *win,
 
 	return	i;
 }
-
 
 double	alx_w_getdbl		(int w, int r, const char *title,
 				double m, double def, double M,
@@ -198,7 +217,6 @@ double	alx_w_getdbl		(int w, int r, const char *title,
 	return	R;
 }
 
-
 int64_t	alx_w_getint		(int w, int r, const char *title,
 				double m, int64_t def, double M,
 				const char *format, ...)
@@ -270,7 +288,6 @@ int64_t	alx_w_getint		(int w, int r, const char *title,
 	return	Z;
 }
 
-
 void	alx_w_getstr		(char *str,
 				int w, int r, const char *title,
 				const char *format, ...)
@@ -338,7 +355,6 @@ void	alx_w_getstr		(char *str,
 	/* End varargs */
 	va_end(args);
 }
-
 
 void	alx_w_getfname		(const char *fpath, char *fname, bool exist,
 				int w, int r, const char *title,
@@ -408,7 +424,6 @@ void	alx_w_getfname		(const char *fpath, char *fname, bool exist,
 	va_end(args);
 }
 
-
 void	alx_ncur_prn_title	(WINDOW *win, const char *title)
 {
 	/* Find size of window */
@@ -425,7 +440,6 @@ void	alx_ncur_prn_title	(WINDOW *win, const char *title)
 	wprintw(win, " %s ", title);
 	waddch(win, ACS_LTEE);
 }
-
 
 void	alx_ncur_prn_subtitle	(WINDOW *win, const char *subtitle)
 {
@@ -445,13 +459,11 @@ void	alx_ncur_prn_subtitle	(WINDOW *win, const char *subtitle)
 }
 
 
-/******************************************************************************/
-/******* static functions *****************************************************/
-/******************************************************************************/
-
-
+/******************************************************************************
+ ******* static functions *****************************************************
+ ******************************************************************************/
 static	void	alx_ncur_prn_menu	(WINDOW *win,
-					int N, struct alx_optn mnu[N])
+					int N, struct Alx_Menu mnu[N])
 {
 	/* Find size of window */
 	int	h;
@@ -467,9 +479,8 @@ static	void	alx_ncur_prn_menu	(WINDOW *win,
 	wrefresh(win);
 }
 
-
 static	int	alx_ncur_usr_sel	(WINDOW *win,
-					int N, struct alx_optn mnu[N])
+					int N, struct Alx_Menu mnu[N])
 {
 	/* default item */
 	int	i =	1;
@@ -697,3 +708,8 @@ static	void	manage_w_error		(WINDOW *win, int err)
 	wclear(win);
 	wrefresh(win);
 }
+
+
+/******************************************************************************
+ ******* end of file **********************************************************
+ ******************************************************************************/
