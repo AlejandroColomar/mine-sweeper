@@ -18,9 +18,7 @@
  * You should have received a copy of the GNU General Public License	      *
  * along with this program; if not, see the file COPYING, or write	      *
  * to the Free Software Foundation, Inc.				      *
- ******************************************************************************/
-
-/******************************************************************************
+ ******************************************************************************
  *	Disclaimer of Warranty.						      *
  *									      *
  * THERE IS NO WARRANTY FOR THE PROGRAM, TO THE EXTENT PERMITTED BY	      *
@@ -42,30 +40,30 @@
 	I would like to see it. Thank you.
 
 COMPILE:
-	linux:
+	 - linux:
 		$ make
-	windows (MSYS):
+	 - windows (MSYS):
 		$ make OS=win
 
 INSTALL:
-	linux:
+	 - linux:
 		# make install
-	windows:
-		double click on SETUP.cmd
+	 - windows:
+		run 'SETUP.cmd' as administrator
 
 RUN:
-	linux:
+	 - linux:
 		$ mine-sweeper
 				if it doesn't work:
 		$ /usr/local/games/mine-sweeper
-	windows:
-		double click on bin/mine-sweeper.exe
+	 - windows:
+		run 'bin/mine-sweeper.exe'
 
 UNINSTALL:
-	linux:
+	 - linux:
 		# make uninstall
-	windows:
-		double click on UNINSTALL.cmd
+	 - windows:
+		run 'UNINSTALL.cmd' as administrator
 
 
 THE PROGRAM DOES:
@@ -81,18 +79,23 @@ MENU:
 	 *		- Start
 	 *		+ Select map:
 	 *			- New map
-	 *			- Load map("path
+	 *			- Load map(File: "<file>")
 	 *			- ..
 	 *		+ Change difficulty:
-	 *			- Change rows: rows		(XX)
-	 *			- Change columns: cols		(XX)
-	 *			- Change proportion of mines: p	(XX.XXXXXX)
+	 *			- Beginner
+	 *			- Intermediate
+	 *			- Expert
+	 *			+ Custom:
+	 *				- Change rows: rows		(X)
+	 *				- Change columns: cols		(X)
+	 *				- Change proportion of mines: p	(0.XXXXXX)
+	 *				- ..
 	 *			- ..
 	 *		- Change file name (File: "<file_name>")
-	 *		+ DEVEL:
-	 *			- Change seed (srand)
-	 *			x Change verbose
-	 *			- ..
+	 *		- Hi scores
+	 * N/A		x DEVEL:
+	 * N/A			- Change seed (srand)
+	 * N/A			- ..
 	 *		- ..
 	 *	- Disclaimer of warranty
 	 *	- Terms and conditions
@@ -102,8 +105,6 @@ MENU:
 
 SYSTEM REQUIREMENTS:
 
-	/*
 	 * A terminal ¿?
-	 */
 
 To be continued...
