@@ -38,4 +38,4 @@ for any corresponding short options.
 
 
 Report bugs to: 1903716@gmail.com
-mine_sweeper home page: <https://github.com/AlejandroColomar/mine_sweeper/>
+mine-sweeper home page: <https://github.com/AlejandroColomar/mine-sweeper/>

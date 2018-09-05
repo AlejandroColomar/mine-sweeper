@@ -66,6 +66,11 @@ UNINSTALL:
 		run 'UNINSTALL.cmd' as administrator
 
 
+The program creates a folder '.mine-sweeper/' at $HOME (also in Windows).  It
+is used by the program to store saved games.  If you remove the game, you
+should delete that folder manually.
+
+
 THE PROGRAM DOES:
 	The typical minesweeper game.
 

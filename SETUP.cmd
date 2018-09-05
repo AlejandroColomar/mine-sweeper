@@ -2,12 +2,15 @@
 :: *DOCUMENTATION*
 :: This SETUP.bat installs mine-sweeper in MS Windows
 
-@echo	off
+::##############################################################################
+:: Uninstall previous installations
+
+call	"%~dp0\UNINSTALL.cmd"
 
 ::##############################################################################
 :: Install
 
-call	"%~dp0\UNINSTALL.cmd"
+@echo	off
 
 mkdir	"%ProgramFiles(x86)%\mine-sweeper\"
 echo	"Create %ProgramFiles(x86)%/mine-sweeper/"
