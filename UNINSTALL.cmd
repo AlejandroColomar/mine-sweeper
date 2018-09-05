@@ -1,6 +1,6 @@
 ::##############################################################################
 :: *DOCUMENTATION*
-:: This UNINSTALL.bat uninstalls mine_sweeper off MS Windows
+:: This UNINSTALL.bat uninstalls mine-sweeper off MS Windows
 
 @echo	off
 

@@ -119,7 +119,7 @@ void	load_game_file	(char *filepath, char *filename)
 
 	fp	= fopen(file_name, "r");
 	if (fp) {
-		fscanf(fp, "mine_sweeper saved game");
+		fscanf(fp, "mine-sweeper saved game");
 		fscanf(fp, " rows %i", &game_board.rows);
 		fscanf(fp, " cols %i", &game_board.cols);
 		fscanf(fp, " mines %i", &game_board.mines);
@@ -196,7 +196,7 @@ void	save_game_file	(char *filepath)
 	/* Write to a new file */
 	fp	= fopen(file_name, "w");
 	if (fp) {
-		fprintf(fp, "mine_sweeper saved game\n");
+		fprintf(fp, "mine-sweeper saved game\n");
 		fprintf(fp, "rows %i\n", game_board.rows);
 		fprintf(fp, "cols %i\n", game_board.cols);
 		fprintf(fp, "mines %i\n", game_board.mines);
