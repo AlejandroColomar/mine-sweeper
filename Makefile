@@ -1,7 +1,7 @@
 #!/usr/bin/make -f
 
 VERSION	= 3
-PATCHLEVEL = ~rc1
+PATCHLEVEL = ~rc2
 SUBLEVEL = 
 EXTRAVERSION =
 NAME = instalable
@@ -21,7 +21,7 @@ export	SUBLEVEL
 # To see a list of typical targets execute "make help"
 # More info can be located in ./README.txt
 # Comments in this file are targeted only to the developer, do not
-# expect to learn how to build mine_sweeper reading this file.
+# expect to learn how to build mine-sweeper reading this file.
 
 ################################################################################
 # Beautify output
@@ -203,6 +203,10 @@ install: uninstall
 	
 	@echo  "Create $(INSTALL_VAR_DIR)/$(VAR_DIR)/"
 	$(Q)mkdir -p		$(DESTDIR)/$(INSTALL_VAR_DIR)/$(VAR_DIR)/
+	$(Q)mkdir		$(DESTDIR)/$(INSTALL_VAR_DIR)/$(VAR_DIR)/boards_beginner/
+	$(Q)mkdir		$(DESTDIR)/$(INSTALL_VAR_DIR)/$(VAR_DIR)/boards_intermediate/
+	$(Q)mkdir		$(DESTDIR)/$(INSTALL_VAR_DIR)/$(VAR_DIR)/boards_expert/
+	$(Q)mkdir		$(DESTDIR)/$(INSTALL_VAR_DIR)/$(VAR_DIR)/boards_custom/
 	@echo "Copy var/*"
 	$(Q)cp -r		./var/*			$(DESTDIR)/$(INSTALL_VAR_DIR)/$(VAR_DIR)/
 	@echo "Change owner"
