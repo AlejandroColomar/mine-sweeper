@@ -176,7 +176,8 @@ static	void	parse_file		(char* argument)
 	} else {
 		fclose(fp);
 
-		strcat(saved_name, argument);
+		strcpy(saved_path, "");
+		strcpy(saved_name, argument);
 	}
 }
 

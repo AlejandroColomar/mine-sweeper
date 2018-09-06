@@ -63,8 +63,7 @@ void	save_init	(void)
 	strcat(saved_path, USER_SAVED_DIR);
 	strcat(saved_path, "/");
 
-	strcpy(saved_name, SAVED_NAME_DEFAULT);
-	strcat(saved_name, FILE_EXTENSION);
+	strcpy(saved_name, "");
 
 	int	err;
 #if defined	OS_LINUX
@@ -98,7 +97,15 @@ void	save_init	(void)
 	}
 }
 
-void	load_game_file	(char *filepath, char *filename)
+void	save_clr	(void)
+{
+	strcpy(saved_path, home_path);
+	strcat(saved_path, "/");
+	strcat(saved_path, USER_SAVED_DIR);
+	strcat(saved_path, "/");
+}
+
+void	load_game_file	(void)
 {
 	char	file_name [FILENAME_MAX];
 	FILE	*fp;
@@ -106,16 +113,8 @@ void	load_game_file	(char *filepath, char *filename)
 	int	i;
 	int	j;
 
-	if (filepath == NULL) {
-		strcpy(file_name, saved_path);
-	} else {
-		strcpy(file_name, filepath);
-	}
-	if (filename == NULL) {
-		strcat(file_name, saved_name);
-	} else {
-		strcat(file_name, filename);
-	}
+	strcpy(file_name, saved_path);
+	strcat(file_name, saved_name);
 
 	fp	= fopen(file_name, "r");
 	if (fp) {
@@ -159,7 +158,8 @@ void	save_game_file	(char *filepath)
 	w	= 70;
 	r	= 10;
 
-	/* Default name */
+	/* Default path & name */
+	save_clr();
 	strcpy(saved_name, SAVED_NAME_DEFAULT);
 
 	/* Request file name */
