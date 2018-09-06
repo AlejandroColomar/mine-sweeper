@@ -454,7 +454,7 @@ void	alx_ncur_prn_subtitle	(WINDOW *win, const char *subtitle)
 	len =	strlen(subtitle);
 
 	/* Print subtitle centered */
-	mvwaddch(win, h - 1, (w - len)/2 - 1, ACS_RTEE);
+	mvwaddch(win, h - 1, (w - (len + 2))/2 - 1, ACS_RTEE);
 	wprintw(win, " %s ", subtitle);
 	waddch(win, ACS_LTEE);
 }
