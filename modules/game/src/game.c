@@ -9,6 +9,8 @@
 /*	*	*	*	*	*	*	*	*	*
  *	*	* Standard	*	*	*	*	*	*
  *	*	*	*	*	*	*	*	*	*/
+		/* bool */
+	#include <stdbool.h>
 		/* rand() */
 	#include <stdlib.h>
 		/* time_t & clock() & time() */
@@ -87,7 +89,7 @@ void	game_init_rand		(int rows, int cols, int mines,
 
 void	game_init_load		(int *rows, int *cols)
 {
-	load_game_file(NULL, NULL);
+	load_game_file();
 
 	game_board.state	= GAME_STATE_PLAYING;
 

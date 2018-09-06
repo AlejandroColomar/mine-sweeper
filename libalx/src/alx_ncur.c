@@ -31,6 +31,7 @@
 
 	# define	MAX_TRIES	(2)
 
+	# define	ERR_OK		(0)
 	# define	ERR_RANGE	(1)
 	# define	ERR_SSCANF	(2)
 	# define	ERR_GETSTR	(3)
@@ -559,6 +560,7 @@ static	double	loop_w_getdbl		(WINDOW *win,
 		wclear(win);
 		wrefresh(win);
 
+		err	= ERR_OK;
 		if (x == ERR) {
 			err =	ERR_GETSTR;
 		} else if (sscanf(buff, "%lf", &R) != 1) {
@@ -587,17 +589,18 @@ static	int64_t	loop_w_getint		(WINDOW *win,
 
 	for (i = 0; i < MAX_TRIES; i++) {
 		echo();
-		x =	mvwgetnstr(win, 0, 0, buff, BUFF_SIZE);
+		x	= mvwgetnstr(win, 0, 0, buff, BUFF_SIZE);
 		noecho();
 		wclear(win);
 		wrefresh(win);
 
+		err	= ERR_OK;
 		if (x == ERR) {
-			err =	ERR_GETSTR;
+			err	= ERR_GETSTR;
 		} else if (sscanf(buff, "%"SCNi64, &Z) != 1) {
-			err =	ERR_SSCANF;
+			err	= ERR_SSCANF;
 		} else if (Z < m || Z > M) {
-			err =	ERR_RANGE;
+			err	= ERR_RANGE;
 		} else {
 			break;
 		}
@@ -618,13 +621,14 @@ static	void	loop_w_getstr		(char *str, WINDOW *win)
 
 	for (i = 0; i < MAX_TRIES; i++) {
 		echo();
-		x =	mvwgetnstr(win, 0, 0, buff, BUFF_SIZE);
+		x	= mvwgetnstr(win, 0, 0, buff, BUFF_SIZE);
 		noecho();
 		wclear(win);
 		wrefresh(win);
 
+		err	= ERR_OK;
 		if (x == ERR) {
-			err =	ERR_GETSTR;
+			err	= ERR_GETSTR;
 		} else {
 			break;
 		}
@@ -642,6 +646,7 @@ static	void	loop_w_getfname		(const char *fpath, char *fname, bool exist,
 {
 	int	i;
 	char	buff [FILENAME_MAX];
+	char	buff2 [FILENAME_MAX];
 	char	file_path [FILENAME_MAX];
 	int	x;
 	int	err;
@@ -649,16 +654,20 @@ static	void	loop_w_getfname		(const char *fpath, char *fname, bool exist,
 
 	for (i = 0; i < MAX_TRIES; i++) {
 		echo();
-		x =	mvwgetnstr(win, 0, 0, buff, FILENAME_MAX);
+		x	= mvwgetnstr(win, 0, 0, buff, FILENAME_MAX);
 		noecho();
 		wclear(win);
 		wrefresh(win);
 
+		err	= ERR_OK;
 		if (x == ERR) {
 			err =	ERR_GETSTR;
+		} else if (sscanf(buff, " %s ", buff2) != 1) {
+			err	= ERR_SSCANF;
 		} else {
 			strcpy(file_path, fpath);
-			strcat(file_path, buff);
+			strcat(file_path, buff2);
+
 			fp =	fopen(file_path, "r");
 
 			if (exist) {
@@ -682,7 +691,7 @@ static	void	loop_w_getfname		(const char *fpath, char *fname, bool exist,
 	}
 
 	if (!err) {
-		strcpy(fname, buff);
+		strcpy(fname, buff2);
 	}
 }
 

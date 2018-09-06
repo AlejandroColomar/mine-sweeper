@@ -13,6 +13,8 @@
 /******************************************************************************
  ******* headers **************************************************************
  ******************************************************************************/
+		/* bool */
+	#include <stdbool.h>
 		/* FILENAME_MAX */
 	#include <stdio.h>
 
@@ -45,7 +47,8 @@ extern	char	saved_name [FILENAME_MAX];
  ******* functions ************************************************************
  ******************************************************************************/
 void	save_init	(void);
-void	load_game_file	(char *filepath, char *filename);
+void	save_clr	(void);
+void	load_game_file	(void);
 void	save_game_file	(char *filepath);
 
 
