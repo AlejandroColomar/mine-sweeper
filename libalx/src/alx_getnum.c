@@ -123,7 +123,7 @@ static	double	loop_getdbl	(double m, double def, double M)
 
 		if (x == NULL) {
 			err	= ERR_FGETS;
-		} else if (sscanf(buff, "%lf", &R) != 1) {
+		} else if (sscanf(buff, " %lf", &R) != 1) {
 			err	= ERR_SSCANF;
 		} else if (R < m || R > M) {
 			err	= ERR_RANGE;
@@ -151,7 +151,7 @@ static	int64_t	loop_getint	(double m, int64_t def, double M)
 
 		if (x == NULL) {
 			err	= ERR_FGETS;
-		} else if (sscanf(buff, "%"SCNi64, &Z) != 1) {
+		} else if (sscanf(buff, " %"SCNi64, &Z) != 1) {
 			err	= ERR_SSCANF;
 		} else if (Z < m || Z > M) {
 			err	= ERR_RANGE;
