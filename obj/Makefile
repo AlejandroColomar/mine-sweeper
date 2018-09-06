@@ -60,8 +60,8 @@ MAIN_INC_DIRS	= -I $(LIBALX_INC_DIR) \
 all: $(ALL)
 
 main.o: $(MAIN_DEPS)
-	$(Q)$(CC) $(CFLAGS) $(MAIN_INC_DIRS) -c $< -o $@ $(LIBS)
-	@echo  "\tCC $<"
+	$(Q)$(CC) $(CFLAGS) $(MAIN_INC_DIRS) -c $< -o $@
+	@echo  "\tCC	$@"
 	@echo  ""
 
 

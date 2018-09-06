@@ -1,10 +1,10 @@
 #!/usr/bin/make -f
 
-VERSION	= 3
-PATCHLEVEL = .0
+VERSION	= 4
+PATCHLEVEL = ~a1
 SUBLEVEL = 
 EXTRAVERSION =
-NAME = instalable
+NAME = graphic
 
 export	VERSION
 export	PATCHLEVEL

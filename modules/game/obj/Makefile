@@ -51,19 +51,17 @@ all: $(ALL)
 
 game_mod.o: $(_ALL)
 	$(Q)$(LD) -r $^ -o $@
-	@echo  "\tLD $@"
+	@echo  "\tLD	$@"
 	@echo  ""
 
 
 game.o: $(GAME_DEPS)
-	$(Q)$(CC) $(CFLAGS) $(GAME_INC_DIRS) -c $< -o $@ $(LIBS)
-	@echo  "\tCC $<"
-	@echo  ""
+	$(Q)$(CC) $(CFLAGS) $(GAME_INC_DIRS) -c $< -o $@
+	@echo  "\tCC	$@"
 
 game_iface.o: $(GAMEI_DEPS)
-	$(Q)$(CC) $(CFLAGS) $(GAMEI_INC_DIRS) -c $< -o $@ $(LIBS)
-	@echo  "\tCC $<"
-	@echo  ""
+	$(Q)$(CC) $(CFLAGS) $(GAMEI_INC_DIRS) -c $< -o $@
+	@echo  "\tCC	$@"
 
 
 clean:

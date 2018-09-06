@@ -60,7 +60,7 @@ all: $(ALL)
 
 $(BIN_NAME): $(MAIN_OBJS)
 	$(Q)$(CC) $^ -o $@ $(LIBS)
-	@echo  "\tLD $@"
+	@echo  "\tLD	$@"
 	@echo  ""
 
 

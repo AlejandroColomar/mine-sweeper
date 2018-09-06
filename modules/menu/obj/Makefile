@@ -102,29 +102,25 @@ all: $(ALL)
 
 menu_mod.o: $(_ALL)
 	$(Q)$(LD) -r $^ -o $@
-	@echo  "\tLD $@"
+	@echo  "\tLD	$@"
 	@echo  ""
 
 
 parser.o: $(PARS_DEPS)
-	$(Q)$(CC) $(CFLAGS) $(PARS_INC_DIRS) -c $< -o $@ $(LIBS)
-	@echo  "\tCC $<"
-	@echo  ""
+	$(Q)$(CC) $(CFLAGS) $(PARS_INC_DIRS) -c $< -o $@
+	@echo  "\tCC	$@"
 
 menu_iface.o: $(MENUI_DEPS)
-	$(Q)$(CC) $(CFLAGS) $(MENUI_INC_DIRS) -c $< -o $@ $(LIBS)
-	@echo  "\tCC $<"
-	@echo  ""
+	$(Q)$(CC) $(CFLAGS) $(MENUI_INC_DIRS) -c $< -o $@
+	@echo  "\tCC	$@"
 
 menu_clui.o: $(MENUCLUI_DEPS)
-	$(Q)$(CC) $(CFLAGS) $(MENUCLUI_INC_DIRS) -c $< -o $@ $(LIBS)
-	@echo  "\tCC $<"
-	@echo  ""
+	$(Q)$(CC) $(CFLAGS) $(MENUCLUI_INC_DIRS) -c $< -o $@
+	@echo  "\tCC	$@"
 
 menu_tui.o: $(MENUTUI_DEPS)
-	$(Q)$(CC) $(CFLAGS) $(MENUTUI_INC_DIRS) -c $< -o $@ $(LIBS)
-	@echo  "\tCC $<"
-	@echo  ""
+	$(Q)$(CC) $(CFLAGS) $(MENUTUI_INC_DIRS) -c $< -o $@
+	@echo  "\tCC	$@"
 
 
 clean:

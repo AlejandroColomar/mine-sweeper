@@ -51,24 +51,21 @@ all: $(ALL)
 
 player_mod.o: $(_ALL)
 	$(Q)$(LD) -r $^ -o $@
-	@echo  "\tLD $@"
+	@echo  "\tLD	$@"
 	@echo  ""
 
 
 player_iface.o: $(PLAYI_DEPS)
-	$(Q)$(CC) $(CFLAGS) $(PLAYI_INC_DIRS) -c $< -o $@ $(LIBS)
-	@echo  "\tCC $<"
-	@echo  ""
+	$(Q)$(CC) $(CFLAGS) $(PLAYI_INC_DIRS) -c $< -o $@
+	@echo  "\tCC	$@"
 
 player_clui.o: $(PLAYCLUI_DEPS)
-	$(Q)$(CC) $(CFLAGS) $(PLAYCLUI_INC_DIRS) -c $< -o $@ $(LIBS)
-	@echo  "\tCC $<"
-	@echo  ""
+	$(Q)$(CC) $(CFLAGS) $(PLAYCLUI_INC_DIRS) -c $< -o $@
+	@echo  "\tCC	$@"
 
 player_tui.o: $(PLAYTUI_DEPS)
-	$(Q)$(CC) $(CFLAGS) $(PLAYTUI_INC_DIRS) -c $< -o $@ $(LIBS)
-	@echo  "\tCC $<"
-	@echo  ""
+	$(Q)$(CC) $(CFLAGS) $(PLAYTUI_INC_DIRS) -c $< -o $@
+	@echo  "\tCC	$@"
 
 
 clean:
