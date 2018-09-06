@@ -1,7 +1,7 @@
 #!/usr/bin/make -f
 
 VERSION	= 3
-PATCHLEVEL = ~rc2
+PATCHLEVEL = .0
 SUBLEVEL = 
 EXTRAVERSION =
 NAME = instalable
