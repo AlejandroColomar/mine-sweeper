@@ -20,6 +20,7 @@
 
 	#include "menu_clui.h"
 	#include "menu_tui.h"
+	#include "menu_gui.h"
 
 	#include "menu_iface.h"
 
@@ -41,6 +42,21 @@ void	menu_iface_init		(void)
 	menu_iface_variables.rows	= 8;
 	menu_iface_variables.cols	= 8;
 	menu_iface_variables.p		= 0.16;
+}
+
+void	menu_iface_init_iface	(void)
+{
+	switch (menu_iface_mode) {
+	case MENU_IFACE_CLUI:
+		break;
+
+	case MENU_IFACE_TUI:
+		break;
+
+	case MENU_IFACE_GUI:
+		menu_gui_init();
+		break;
+	}
 }
 
 void	menu_iface_board	(int *level, int *rows, int *cols, int *mines)
@@ -103,6 +119,7 @@ void	menu_iface		(void)
 			break;
 
 		case MENU_IFACE_GUI:
+			menu_gui();
 			break;
 		}
 	}

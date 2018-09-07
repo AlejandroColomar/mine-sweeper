@@ -185,9 +185,9 @@ static	void	parse_iface		(char* argument)
 {
 	menu_iface_mode		= atoi(argument);
 	player_iface_mode	= menu_iface_mode;
-	if (menu_iface_mode < MENU_IFACE_CLUI || menu_iface_mode > MENU_IFACE_TUI) {
+	if (menu_iface_mode < MENU_IFACE_CLUI || menu_iface_mode > MENU_IFACE_GUI) {
 		printf("--iface argument not valid\n");
-		printf("It must be an integer [%i U %i]\n", MENU_IFACE_CLUI, MENU_IFACE_TUI);
+		printf("It must be an integer [%i U %i]\n", MENU_IFACE_CLUI, MENU_IFACE_GUI);
 		exit(EXIT_FAILURE);
 	}
 }
