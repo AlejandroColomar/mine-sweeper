@@ -67,6 +67,7 @@ struct	Label_Data {
  ******* variables ************************************************************
  ******************************************************************************/
 GtkWidget	*window_gui;
+bool		gui_is_open;
 
 
 /******************************************************************************
@@ -76,20 +77,16 @@ GtkWidget	*window_gui;
 static	gboolean	delete_event	(GtkWidget	*widget,
 					GdkEvent	*event,
 					void		*data);
-static	void		destroy_event	(GtkWidget	*widget,
-					void		*data);
 	/* Selection */
 static	void	callback_button		(GtkWidget	*widget,
 					void		*data);
 	/* Submenus */
 static	void	menu_gui_continue	(void);
-#if 0
-static	void	menu_tui_select		(void);
-static	void	menu_tui_level		(void);
-static	void	menu_tui_custom		(void);
-static	void	menu_tui_devel		(void);
-static	void	menu_tui_verbose	(void);
-#endif
+static	void	menu_gui_select		(void);
+static	void	menu_gui_level		(void);
+static	void	menu_gui_custom		(void);
+static	void	menu_gui_devel		(void);
+static	void	menu_gui_verbose	(void);
 
 
 /******************************************************************************
@@ -99,10 +96,10 @@ void	menu_gui_init		(void)
 {
 	/* Window */
 	window_gui	= gtk_window_new(GTK_WINDOW_TOPLEVEL);
+	gui_is_open	= true;
 
 	/* Quit */
 	g_signal_connect(window_gui, "delete-event", G_CALLBACK(delete_event), NULL);
-	g_signal_connect(window_gui, "destroy", G_CALLBACK(destroy_event), NULL);
 
 	/* Title.  PROG_VERSION defined in Makefile */
 	char		title [80];
@@ -111,6 +108,12 @@ void	menu_gui_init		(void)
 
 	/* Border */
 	gtk_container_set_border_width(GTK_CONTAINER(window_gui), 20);
+}
+
+void	menu_gui_cleanup	(void)
+{
+	/* Destroy window */
+	gtk_widget_destroy(window_gui);
 }
 
 void	menu_gui		(void)
@@ -141,7 +144,7 @@ void	menu_gui		(void)
 
 	/* Menu loop */
 	wh	= true;
-	while (wh) {
+	while (wh && gui_is_open) {
 
 		/* Generate widgets */
 		box		= gtk_vbox_new(false, 0);
@@ -190,6 +193,7 @@ void	menu_gui		(void)
 		gtk_widget_show(window_gui);
 
 		/* GTK loop */
+		sw	= 0;
 		gtk_main();
 
 		/* Clear window */
@@ -198,30 +202,16 @@ void	menu_gui		(void)
 		/* Selection */
 		switch (sw) {
 		case 0:
-g_print("0\n");
 			wh	= false;
 			break;
 		case 1:
-g_print("1\n");
 			menu_gui_continue();
 			break;
 		case 2:
-g_print("2\n");
-/*
-			alx_pause_curses();
 			print_disclaim();
-			getchar();
-			alx_resume_curses();
-*/
 			break;
 		case 3:
-g_print("3\n");
-/*
-			alx_pause_curses();
 			print_license();
-			getchar();
-			alx_resume_curses();
-*/
 			break;
 		}
 	}
@@ -232,21 +222,22 @@ g_print("3\n");
  ******* static functions *****************************************************
  ******************************************************************************/
 /*	*	*	*	*	*	*	*	*	*
- *	*	Init & cleanup	*	*	*	*	*	*
+ *	*	Cleanup	*	*	*	*	*	*
  *	*	*	*	*	*	*	*	*	*/
 static	gboolean	delete_event	(GtkWidget	*widget,
 					GdkEvent	*event,
 					void		*data)
 {
+	gui_is_open	= false;
 	g_print ("delete event occurred\n");
-	/* true to block closing (only for debug) */
-	return	true;
-}
 
-static	void		destroy_event	(GtkWidget	*widget,
-					void		*data)
-{
 	gtk_main_quit();
+
+	/*
+	 * true to block closing
+	 * the window will be closed by menu_gui_cleanup()
+	 */
+	return	true;
 }
 
 /*	*	*	*	*	*	*	*	*	*
@@ -264,102 +255,163 @@ static	void	callback_button		(GtkWidget	*widget,
 	gtk_main_quit();
 }
 
+/*	*	*	*	*	*	*	*	*	*
+ *	*	Submenus	*	*	*	*	*	*
+ *	*	*	*	*	*	*	*	*	*/
 static	void	menu_gui_continue	(void)
 {
-#if 0
-	/* Menu dimensions & options */
-	WINDOW	*win;
-	int	h;
-	int	w;
-	int	r;
-	int	c;
-	h	= 18;
-	w	= 50;
-	r	= 1;
-	c	= (80 - w) / 2;
-	int	N;
-	/* N = 7 if DEVEL option is enabled */
-	N	= 6;
-	struct Alx_Menu	mnu[6]	= {
-		{11, 4, "[0]	Back"},
-		{2, 4, "[1]	Start"},
-		{4, 4, "[2]	Select map"},
-		{5, 4, "[3]	Change difficulty"},
-		{6, 4, "[4]	Change file name"},
-		{7, 4, "[5]	Hi scores"}/*,
-		{9, 4, "[6]	DEVEL"}*/
-	};
+	bool			wh;
+	int			sw;
+	GtkWidget		*box;
+	GtkWidget		*separator[4];
+	struct Label_Data	label;
+	struct Button_Data	button [7];
 
-	/* Input box */
-	int	w2;
-	int	r2;
-	w2	= w - 8;
-	r2	= r + h - 5;
-	char	*txt[]	= {"File name:"};
+	/* Text */
+	sprintf(label.text, "Game menu");
+	sprintf(button[1].text, "Start");
+	sprintf(button[2].text, "Select map");
+	sprintf(button[3].text, "Change difficulty");
+	sprintf(button[5].text, "Hi scores");
+	sprintf(button[6].text, "DEVEL");
+	sprintf(button[0].text, "Back");
 
-	/* Menu */
-	bool	wh;
-	int	sw;
+	/* Data */
+	button[1].num	= 1;
+	button[2].num	= 2;
+	button[3].num	= 3;
+	button[4].num	= 4;
+	button[5].num	= 5;
+	button[6].num	= 6;
+	button[0].num	= 0;
+	button[1].sw	= &sw;
+	button[2].sw	= &sw;
+	button[3].sw	= &sw;
+	button[4].sw	= &sw;
+	button[5].sw	= &sw;
+	button[6].sw	= &sw;
+	button[0].sw	= &sw;
+
+	/* Menu loop */
 	wh	= true;
-	while (wh) {
-		/* Menu loop */
-		win	= newwin(h, w, r, c);
-		mvwprintw(win, mnu[4].r, mnu[4].c, "%s (File: \"%s\")", mnu[4].t, saved_name);
-		wrefresh(win);
-		sw	= alx_menu_2(win, N, mnu, "CONTINUE:");
+	while (wh && gui_is_open) {
+		/* Text */
+		sprintf(button[4].text, "Change file name (File: \"%s\")", saved_name);
+
+		/* Generate widgets */
+		box		= gtk_vbox_new(false, 0);
+		label.ptr	= gtk_label_new(label.text);
+		separator[0]	= gtk_hseparator_new();
+		button[1].ptr	= gtk_button_new_with_label(button[1].text);
+		separator[1]	= gtk_hseparator_new();
+		button[2].ptr	= gtk_button_new_with_label(button[2].text);
+		button[3].ptr	= gtk_button_new_with_label(button[3].text);
+		button[4].ptr	= gtk_button_new_with_label(button[4].text);
+		button[5].ptr	= gtk_button_new_with_label(button[5].text);
+		separator[2]	= gtk_hseparator_new();
+		button[6].ptr	= gtk_button_new_with_label(button[6].text);
+		separator[3]	= gtk_hseparator_new();
+		button[0].ptr	= gtk_button_new_with_label(button[0].text);
+
+		/* Events */
+		g_signal_connect(button[1].ptr, "clicked",
+				G_CALLBACK(callback_button), (void *)&button[1]);
+		g_signal_connect(button[2].ptr, "clicked",
+				G_CALLBACK(callback_button), (void *)&button[2]);
+		g_signal_connect(button[3].ptr, "clicked",
+				G_CALLBACK(callback_button), (void *)&button[3]);
+		g_signal_connect(button[4].ptr, "clicked",
+				G_CALLBACK(callback_button), (void *)&button[4]);
+		g_signal_connect(button[5].ptr, "clicked",
+				G_CALLBACK(callback_button), (void *)&button[5]);
+		g_signal_connect(button[6].ptr, "clicked",
+				G_CALLBACK(callback_button), (void *)&button[6]);
+		g_signal_connect(button[0].ptr, "clicked",
+				G_CALLBACK(callback_button), (void *)&button[0]);
+
+		/* Container */
+		gtk_container_add(GTK_CONTAINER(window_gui), box);
+
+		/* Box */
+		gtk_box_pack_start(GTK_BOX(box), label.ptr, false, false, 0);
+		gtk_box_pack_start(GTK_BOX(box), separator[0], false, false, 5);
+		gtk_box_pack_start(GTK_BOX(box), button[1].ptr, true, true, 0);
+		gtk_box_pack_start(GTK_BOX(box), separator[1], false, false, 5);
+		gtk_box_pack_start(GTK_BOX(box), button[2].ptr, true, true, 0);
+		gtk_box_pack_start(GTK_BOX(box), button[3].ptr, true, true, 0);
+		gtk_box_pack_start(GTK_BOX(box), button[4].ptr, true, true, 0);
+		gtk_box_pack_start(GTK_BOX(box), button[5].ptr, true, true, 0);
+		gtk_box_pack_start(GTK_BOX(box), separator[2], false, false, 5);
+		gtk_box_pack_start(GTK_BOX(box), button[6].ptr, true, true, 0);
+		gtk_box_pack_start(GTK_BOX(box), separator[3], false, false, 5);
+		gtk_box_pack_start(GTK_BOX(box), button[0].ptr, true, true, 0);
+
+		/* Show */
+		gtk_widget_show(label.ptr);
+		gtk_widget_show(separator[0]);
+		gtk_widget_show(button[1].ptr);
+		gtk_widget_show(separator[1]);
+		gtk_widget_show(button[2].ptr);
+		gtk_widget_show(button[3].ptr);
+		gtk_widget_show(button[4].ptr);
+		gtk_widget_show(button[5].ptr);
+		gtk_widget_show(separator[2]);
+//		gtk_widget_show(button[6].ptr);
+		gtk_widget_show(separator[3]);
+		gtk_widget_show(button[0].ptr);
+		gtk_widget_show(box);
+		gtk_widget_show(window_gui);
+
+		/* GTK loop */
+		sw	= 0;
+		gtk_main();
 
 		/* Selection */
 		switch (sw) {
 		case 0:
-			alx_win_del(win);
+			gtk_widget_destroy(box);
 			wh	= false;
 			break;
 
 		case 1:
-			alx_win_del(win);
-			alx_pause_curses();
-			start_switch();
-			alx_resume_curses();
+			gtk_widget_destroy(box);
+//			start_switch();
 			break;
 
 		case 2:
-			alx_win_del(win);
-			menu_tui_select();
+			gtk_widget_destroy(box);
+			menu_gui_select();
 			break;
 
 		case 3:
-			alx_win_del(win);
-			menu_tui_level();
+			gtk_widget_destroy(box);
+			menu_gui_level();
 			break;
 
 		case 4:
 			save_clr();
-			alx_w_getfname(saved_path, saved_name, true, w2, r2,
-								txt[0], NULL);
-			alx_win_del(win);
+//			alx_w_getfname(saved_path, saved_name, true, w2, r2,
+//								txt[0], NULL);
+			gtk_widget_destroy(box);
 			break;
 
 		case 5:
-			alx_win_del(win);
-			alx_pause_curses();
+			gtk_widget_destroy(box);
 			read_scores();
-			getchar();
-			alx_resume_curses();
 			break;
 /*
 		case 6:
-			alx_win_del(win);
-			menu_tui_devel();
+			gtk_widget_destroy(box);
+			menu_gui_devel();
 			break;
 */
 		}
 	}
-#endif
 }
-#if 0
 
-static	void	menu_tui_select	(void)
+static	void	menu_gui_select	(void)
 {
+#if 0
 	/* Menu dimensions & options */
 	WINDOW	*win;
 	int	h;
@@ -396,11 +448,12 @@ static	void	menu_tui_select	(void)
 		start_mode =	START_LOAD;
 		break;
 	}
-
+#endif
 }
 
-static	void	menu_tui_level	(void)
+static	void	menu_gui_level	(void)
 {
+#if 0
 	/* Menu dimensions & options */
 	WINDOW	*win;
 	int	h;
@@ -440,11 +493,12 @@ static	void	menu_tui_level	(void)
 		menu_tui_custom();
 		break;
 	}
-
+#endif
 }
 
-static	void	menu_tui_custom	(void)
+static	void	menu_gui_custom	(void)
 {
+#if 0
 	/* Menu dimensions & options */
 	WINDOW	*win;
 	int	h;
@@ -516,10 +570,12 @@ static	void	menu_tui_custom	(void)
 
 	/* Cleanup */
 	alx_win_del(win);
+#endif
 }
 
-static	void	menu_tui_devel	(void)
+static	void	menu_gui_devel	(void)
 {
+#if 0
 	WINDOW	*win;
 	int	h;
 	int	w;
@@ -570,8 +626,8 @@ static	void	menu_tui_devel	(void)
 
 	/* Cleanup */
 	alx_win_del(win);
-}
 #endif
+}
 
 
 /******************************************************************************
