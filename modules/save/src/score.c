@@ -225,7 +225,7 @@ static	void	read_scores_file	(char *file_name)
 			fscanf(fp, "	yday	%*i ");
 			fscanf(fp, "	wday	%*i ");
 			fscanf(fp, "	year	%i ", &year);
-			fscanf(fp, "	mon	%i ", &mon);
+			fscanf(fp, "	mon	%i ", 1 + &mon);
 			fscanf(fp, "	mday	%i ", &day);
 			fscanf(fp, "	hour	%*i ");
 			fscanf(fp, "	min	%*i ");
