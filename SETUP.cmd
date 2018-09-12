@@ -20,7 +20,7 @@ mkdir	"%ProgramFiles(x86)%\mine-sweeper\share\"
 echo	Create %ProgramFiles(x86)%/mine-sweeper/share/
 mkdir	"%ProgramFiles(x86)%\mine-sweeper\var\"
 echo	Create %ProgramFiles(x86)%/mine-sweeper/var/
-echo	
+echo.
 
 copy	"%~dp0\UNINSTALL.cmd"		"%ProgramFiles(x86)%\mine-sweeper"
 echo	Copy UNINSTALL.cmd
@@ -34,7 +34,7 @@ robocopy	"%~dp0\var"		"%ProgramFiles(x86)%\mine-sweeper\var"		/e
 echo	Copy var/*
 copy	"%~dp0\bin\mine-sweeper.exe"	"%ProgramFiles(x86)%\mine-sweeper\bin"
 echo	Copy bin/mine-sweeper.exe
-echo	
+echo.
 
 mkdir	"%userprofile%\Start Menu\Programs\mine-sweeper\"
 mklink	"%userprofile%\Start Menu\Programs\mine-sweeper\mine-sweeper"	"%ProgramFiles(x86)%\mine-sweeper\bin\mine-sweeper.exe"
@@ -42,10 +42,10 @@ mklink	"%userprofile%\Start Menu\Programs\mine-sweeper\UNINSTALL"	"%ProgramFiles
 mklink	"%userprofile%\Start Menu\Programs\mine-sweeper\README"		"%ProgramFiles(x86)%\mine-sweeper\README.txt"
 mklink	"%userprofile%\Start Menu\Programs\mine-sweeper\COPYING"	"%ProgramFiles(x86)%\mine-sweeper\COPYING.txt"
 echo	Create start menu shortcuts
-echo	
+echo.
 
 echo	Done
-echo	
+echo.
 
 pause
 
