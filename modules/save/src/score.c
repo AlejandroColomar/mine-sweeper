@@ -225,7 +225,7 @@ static	void	read_scores_file	(char *file_name)
 			fscanf(fp, "	yday	%*i ");
 			fscanf(fp, "	wday	%*i ");
 			fscanf(fp, "	year	%i ", &year);
-			fscanf(fp, "	mon	%i ", 1 + &mon);
+			fscanf(fp, "	mon	%i ", &mon);
 			fscanf(fp, "	mday	%i ", &day);
 			fscanf(fp, "	hour	%*i ");
 			fscanf(fp, "	min	%*i ");
@@ -244,7 +244,7 @@ static	void	read_scores_file	(char *file_name)
 			/* Print */
 			printf("%s\n\t", name);
 			printf("%4i/%2i/%2i	%i	%i:%02i:%02i	\t%s\n\n",
-				year, mon, day,
+				year, 1 + mon, day,
 						clicks,
 							hours, mins, secs,
 									file);
