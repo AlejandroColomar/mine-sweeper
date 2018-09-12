@@ -108,6 +108,8 @@ static	void	start_load	(void)
 	/* size & game init (sets errno) */
 	int	rows;
 	int	cols;
+
+	errno	= 0;
 	game_init_load(&rows, &cols);
 
 	if (!errno) {
