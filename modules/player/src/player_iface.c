@@ -22,6 +22,8 @@
 	#include "player_clui.h"
 		/* game_tui() */
 	#include "player_tui.h"
+		/* game_gui() */
+	#include "player_gui.h"
 
 	#include "player_iface.h"
 
@@ -84,6 +86,10 @@ void	player_iface_init	(int rows, int cols)
 	case PLAYER_IFACE_TUI:
 		player_tui_init(rows, cols);
 		break;
+
+	case PLAYER_IFACE_GUI:
+		player_gui_init();
+		break;
 	}
 }
 
@@ -112,6 +118,11 @@ int	player_iface_start	(int *pos_row, int *pos_col)
 
 		case PLAYER_IFACE_TUI:
 			player_tui_start(&player_iface_position,
+						title, subtitle, &player_action);
+			break;
+
+		case PLAYER_IFACE_GUI:
+			player_gui_start(&player_iface_position,
 						title, subtitle, &player_action);
 			break;
 		}
@@ -189,6 +200,11 @@ void	player_iface		(const	struct Game_Iface_Out	*game_iface_out,
 		player_tui(game_iface_out, &player_iface_position,
 					title, subtitle, &player_action);
 		break;
+
+	case PLAYER_IFACE_GUI:
+		player_gui(game_iface_out, &player_iface_position,
+					title, subtitle, &player_action);
+		break;
 	}
 
 	player_iface_act(game_iface_in, player_action);
@@ -204,6 +220,10 @@ void	player_iface_save_name	(const char *filepath, char *filename)
 	case PLAYER_IFACE_TUI:
 		player_tui_save_name(filepath, filename);
 		break;
+
+	case PLAYER_IFACE_GUI:
+		player_gui_save_name(filepath, filename);
+		break;
 	}
 }
 
@@ -217,6 +237,10 @@ void	player_iface_score_name	(char *player_name)
 	case PLAYER_IFACE_TUI:
 		player_tui_score_name(player_name);
 		break;
+
+	case PLAYER_IFACE_GUI:
+		player_gui_score_name(player_name);
+		break;
 	}
 }
 
@@ -228,6 +252,10 @@ void	player_iface_cleanup	(void)
 
 	case PLAYER_IFACE_TUI:
 		player_tui_cleanup();
+		break;
+
+	case PLAYER_IFACE_GUI:
+		player_gui_cleanup();
 		break;
 	}
 	fflush(stdout);
