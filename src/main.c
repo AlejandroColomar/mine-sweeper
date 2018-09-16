@@ -91,6 +91,9 @@ void	init_all	(int *argc, char *(*argv[]))
 
 void	cleanup		(void)
 {
+	/* Clean iface */
+	menu_iface_cleanup();
+
 	/* End curses */
 	alx_resume_curses();
 	alx_end_curses();

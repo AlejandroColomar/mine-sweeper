@@ -6,49 +6,74 @@
 /******************************************************************************
  ******* include guard ********************************************************
  ******************************************************************************/
-# ifndef		MSW_MENU_GUI_H
-	# define	MSW_MENU_GUI_H
+# ifndef		MSW_PLAYER_GUI_H
+	# define	MSW_PLAYER_GUI_H
 
 
 /******************************************************************************
  ******* headers **************************************************************
  ******************************************************************************/
-		/* GtkWidget */
-	#include <gtk/gtk.h>
+		/* struct Game_Iface_... */
+	#include "game_iface.h"
+
+	#include "player_iface.h"
 
 
 /******************************************************************************
- ******* macros ***************************************************************
+ ******* enums ****************************************************************
  ******************************************************************************/
-	# define	ROWS_GUI_MAX	(22)
-#if (ROWS_GUI_MAX > ROWS_MAX)
-#	error	"rows max (gui)"
-#endif
-
-	# define	COLS_GUI_MAX	(33)
-#if (COLS_GUI_MAX > COLS_MAX)
-#	error	"cols max (gui)"
-#endif
+	enum	Player_GUI_Char {
+		PLAYER_GUI_CHAR_KBOOM		= '#',
+		PLAYER_GUI_CHAR_HIDDEN_FIELD	= '+',
+		PLAYER_GUI_CHAR_HIDDEN_MINE	= '*',
+		PLAYER_GUI_CHAR_HIDDEN_SAFE	= '-',
+		PLAYER_GUI_CHAR_SAFE_MINE	= 'v',
+		PLAYER_GUI_CHAR_0		= ' ',
+		PLAYER_GUI_CHAR_1		= '1',
+		PLAYER_GUI_CHAR_2		= '2',
+		PLAYER_GUI_CHAR_3		= '3',
+		PLAYER_GUI_CHAR_4		= '4',
+		PLAYER_GUI_CHAR_5		= '5',
+		PLAYER_GUI_CHAR_6		= '6',
+		PLAYER_GUI_CHAR_7		= '7',
+		PLAYER_GUI_CHAR_8		= '8',
+		PLAYER_GUI_CHAR_FLAG		= '!',
+		PLAYER_GUI_CHAR_FLAG_FALSE	= 'F',
+		PLAYER_GUI_CHAR_POSSIBLE	= '?',
+		PLAYER_GUI_CHAR_POSSIBLE_FALSE	= 'f'
+	};
 
 
 /******************************************************************************
  ******* variables ************************************************************
  ******************************************************************************/
-extern	GtkWidget	*window_gui;
 
 
 /******************************************************************************
  ******* functions ************************************************************
  ******************************************************************************/
-	void	menu_gui_init		(void);
-	void	menu_gui_cleanup	(void);
-	void	menu_gui		(void);
+void	player_gui_init		(void);
+
+int	player_gui_start	(struct Player_Iface_Position		*position,
+				const char				*title,
+				const char				*subtitle,
+				int					*action);
+
+int	player_gui		(const struct Game_Iface_Out		*board,
+				struct Player_Iface_Position		*position,
+				const char				*title,
+				const char				*subtitle,
+				int					*action);
+
+void	player_gui_save_name	(const char *filepath, char *filename);
+void	player_gui_score_name	(char *player_name);
+void	player_gui_cleanup	(void);
 
 
 /******************************************************************************
  ******* include guard ********************************************************
  ******************************************************************************/
-# endif			/* menu_gui.h */
+# endif			/* player_gui.h */
 
 
 /******************************************************************************

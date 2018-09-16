@@ -244,7 +244,7 @@ static	void	read_scores_file	(char *file_name)
 			/* Print */
 			printf("%s\n\t", name);
 			printf("%4i/%2i/%2i	%i	%i:%02i:%02i	\t%s\n\n",
-				year, mon, day,
+				year, 1 + mon, day,
 						clicks,
 							hours, mins, secs,
 									file);
