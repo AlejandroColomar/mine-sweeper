@@ -34,20 +34,6 @@
 
 
 /******************************************************************************
- ******* macros ***************************************************************
- ******************************************************************************/
-	# define	ROWS_GUI_MAX	(22)
-#if (ROWS_GUI_MAX > ROWS_MAX)
-#	error	"rows max (tui)"
-#endif
-
-	# define	COLS_GUI_MAX	(33)
-#if (COLS_GUI_MAX > COLS_MAX)
-#	error	"cols max (tui)"
-#endif
-
-
-/******************************************************************************
  ******* structs **************************************************************
  ******************************************************************************/
 struct	Button_Data {
@@ -67,26 +53,27 @@ struct	Label_Data {
  ******* variables ************************************************************
  ******************************************************************************/
 GtkWidget	*window_gui;
-bool		gui_is_open;
 
 
 /******************************************************************************
  ******* static functions *****************************************************
  ******************************************************************************/
 	/* Init & cleanup */
-static	gboolean	delete_event	(GtkWidget	*widget,
-					GdkEvent	*event,
-					void		*data);
+static	gboolean	delete_window		(GtkWidget	*widget,
+						GdkEvent	*event,
+						void		*data);
+static	void		destroy_window		(GtkWidget	*widget,
+						void		*data);
 	/* Selection */
-static	void	callback_button		(GtkWidget	*widget,
-					void		*data);
+static	void		callback_button		(GtkWidget	*widget,
+						void		*data);
 	/* Submenus */
-static	void	menu_gui_continue	(void);
-static	void	menu_gui_select		(void);
-static	void	menu_gui_level		(void);
-static	void	menu_gui_custom		(void);
-static	void	menu_gui_devel		(void);
-static	void	menu_gui_verbose	(void);
+static	void		menu_gui_continue	(void);
+static	void		menu_gui_select		(void);
+static	void		menu_gui_level		(void);
+static	void		menu_gui_custom		(void);
+static	void		menu_gui_devel		(void);
+static	void		menu_gui_verbose	(void);
 
 
 /******************************************************************************
@@ -96,10 +83,10 @@ void	menu_gui_init		(void)
 {
 	/* Window */
 	window_gui	= gtk_window_new(GTK_WINDOW_TOPLEVEL);
-	gui_is_open	= true;
 
 	/* Quit */
-	g_signal_connect(window_gui, "delete-event", G_CALLBACK(delete_event), NULL);
+	g_signal_connect(window_gui, "delete-event", G_CALLBACK(delete_window), NULL);
+	g_signal_connect(window_gui, "destroy", G_CALLBACK(destroy_window), NULL);
 
 	/* Title.  PROG_VERSION defined in Makefile */
 	char		title [80];
@@ -144,7 +131,7 @@ void	menu_gui		(void)
 
 	/* Menu loop */
 	wh	= true;
-	while (wh && gui_is_open) {
+	while (wh) {
 
 		/* Generate widgets */
 		box		= gtk_vbox_new(false, 0);
@@ -224,20 +211,24 @@ void	menu_gui		(void)
 /*	*	*	*	*	*	*	*	*	*
  *	*	Cleanup	*	*	*	*	*	*
  *	*	*	*	*	*	*	*	*	*/
-static	gboolean	delete_event	(GtkWidget	*widget,
+static	gboolean	delete_window	(GtkWidget	*widget,
 					GdkEvent	*event,
 					void		*data)
 {
-	gui_is_open	= false;
 	g_print ("delete event occurred\n");
 
 	gtk_main_quit();
 
-	/*
-	 * true to block closing
-	 * the window will be closed by menu_gui_cleanup()
-	 */
-	return	true;
+	/* false: send destroy signal */
+	return	false;
+}
+
+static	void		destroy_window	(GtkWidget	*widget,
+					void		*data)
+{
+	g_print ("destroy event occurred\n");
+
+	exit(EXIT_SUCCESS);
 }
 
 /*	*	*	*	*	*	*	*	*	*
@@ -249,7 +240,7 @@ static	void	callback_button		(GtkWidget	*widget,
 	struct Button_Data	*button;
 
 	button	= ((struct Button_Data *)data);
-	
+
 	*(button->sw)	= button->num;
 
 	gtk_main_quit();
@@ -294,7 +285,7 @@ static	void	menu_gui_continue	(void)
 
 	/* Menu loop */
 	wh	= true;
-	while (wh && gui_is_open) {
+	while (wh) {
 		/* Text */
 		sprintf(button[4].text, "Change file name (File: \"%s\")", saved_name);
 
@@ -374,7 +365,7 @@ static	void	menu_gui_continue	(void)
 			break;
 		case 1:
 			gtk_widget_destroy(box);
-//			start_switch();
+			start_switch();
 			break;
 		case 2:
 			gtk_widget_destroy(box);
@@ -614,7 +605,7 @@ static	void	menu_gui_custom	(void)
 
 	/* Menu loop */
 	wh	= true;
-	while (wh && gui_is_open) {
+	while (wh) {
 		/* Text */
 		sprintf(button[1].text, "Change rows: rows\t\t(%i)", menu_iface_variables.rows);
 		sprintf(button[2].text, "Change columns: cols\t(%i)", menu_iface_variables.cols);
@@ -717,7 +708,7 @@ static	void	menu_gui_devel	(void)
 	/* Menu loop */
 	int	seed;
 	wh	= true;
-	while (wh && gui_is_open) {
+	while (wh) {
 		/* Generate widgets */
 		box		= gtk_vbox_new(false, 0);
 		label.ptr	= gtk_label_new(label.text);
