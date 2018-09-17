@@ -42,10 +42,14 @@ enum	Buttons {
 	BTN_CH_OFF = 0,
 	BTN_CH_1,
 	BTN_CH_2,
-	BTN_PAUSE,
 	BTN_SAVE,
 	BTN_QUIT,
 	BTN_QTTY
+};
+
+enum	TButtons {
+	TBTN_PAUSE,
+	TBTN_QTTY
 };
 
 
@@ -70,6 +74,15 @@ struct	Button_Data {
 	int		*act;
 };
 
+struct	TButton_Data {
+	GtkWidget	*ptr;
+	char		text [80];
+	char		text2 [80];
+	int		val;
+	int		val2;
+	int		*act;
+};
+
 struct	Label_Data {
 	GtkWidget	*ptr;
 	char		text [80];
@@ -81,6 +94,7 @@ struct	Label_Data {
  ******************************************************************************/
 static	struct Field_Data	field [ROWS_GUI_MAX] [COLS_GUI_MAX];
 static	struct Button_Data	button [BTN_QTTY];
+static	struct TButton_Data	tbutton [TBTN_QTTY];
 static	GtkWidget	*box;
 static	GtkWidget	*box_board;
 static	GtkWidget	*box_board_in;
@@ -133,6 +147,8 @@ static	gboolean	callback_field	(GtkWidget			*widget,
 					void				*data);
 static	gboolean	callback_button	(GtkWidget			*widget,
 					GdkEventButton			*event,
+					void				*data);
+static	gboolean	callback_tbutton (GtkWidget			*widget,
 					void				*data);
 
 
@@ -493,41 +509,45 @@ static	void	help_init		(int				*action)
 	sprintf(button[BTN_CH_OFF].text, "Cheats off");
 	sprintf(button[BTN_CH_1].text, "Cheat 1");
 	sprintf(button[BTN_CH_2].text, "Cheat 2");
-	sprintf(button[BTN_PAUSE].text, "Pause");
+	sprintf(tbutton[TBTN_PAUSE].text, "Pause");
+	sprintf(tbutton[TBTN_PAUSE].text2, "Continue");
 	sprintf(button[BTN_SAVE].text, "Save");
 	sprintf(button[BTN_QUIT].text, "Quit");
 
 	/* Data */
 		/* L click */
-	button[BTN_CH_OFF].val	= PLAYER_IFACE_ACT_XYZZY_OFF;
-	button[BTN_CH_1].val	= PLAYER_IFACE_ACT_XYZZY_LIN;
-	button[BTN_CH_2].val	= PLAYER_IFACE_ACT_XYZZY_P;
-	button[BTN_PAUSE].val	= PLAYER_IFACE_ACT_PAUSE;
-	button[BTN_SAVE].val	= PLAYER_IFACE_ACT_SAVE;
-	button[BTN_QUIT].val	= PLAYER_IFACE_ACT_QUIT;
+	button[BTN_CH_OFF].val		= PLAYER_IFACE_ACT_XYZZY_OFF;
+	button[BTN_CH_1].val		= PLAYER_IFACE_ACT_XYZZY_LIN;
+	button[BTN_CH_2].val		= PLAYER_IFACE_ACT_XYZZY_P;
+	tbutton[TBTN_PAUSE].val		= PLAYER_IFACE_ACT_PAUSE;
+	button[BTN_SAVE].val		= PLAYER_IFACE_ACT_SAVE;
+	button[BTN_QUIT].val		= PLAYER_IFACE_ACT_QUIT;
 		/* R click */
-	button[BTN_CH_OFF].val2	= PLAYER_IFACE_ACT_FOO;
-	button[BTN_CH_1].val2	= PLAYER_IFACE_ACT_FOO;
-	button[BTN_CH_2].val2	= PLAYER_IFACE_ACT_FOO;
-	button[BTN_PAUSE].val2	= PLAYER_IFACE_ACT_FOO;
-	button[BTN_SAVE].val2	= PLAYER_IFACE_ACT_XYZZY_ON;
-	button[BTN_QUIT].val2	= PLAYER_IFACE_ACT_FOO;
+	button[BTN_CH_OFF].val2		= PLAYER_IFACE_ACT_FOO;
+	button[BTN_CH_1].val2		= PLAYER_IFACE_ACT_FOO;
+	button[BTN_CH_2].val2		= PLAYER_IFACE_ACT_FOO;
+	tbutton[TBTN_PAUSE].val2	= PLAYER_IFACE_ACT_PAUSE;
+	button[BTN_SAVE].val2		= PLAYER_IFACE_ACT_XYZZY_ON;
+	button[BTN_QUIT].val2		= PLAYER_IFACE_ACT_FOO;
 
 	/* Action */
-	button[BTN_CH_OFF].act	= action;
-	button[BTN_CH_1].act	= action;
-	button[BTN_CH_2].act	= action;
-	button[BTN_PAUSE].act	= action;
-	button[BTN_SAVE].act	= action;
-	button[BTN_QUIT].act	= action;
+	button[BTN_CH_OFF].act		= action;
+	button[BTN_CH_1].act		= action;
+	button[BTN_CH_2].act		= action;
+	tbutton[TBTN_PAUSE].act		= action;
+	button[BTN_SAVE].act		= action;
+	button[BTN_QUIT].act		= action;
 
 	/* Generate widgets */
-	button[BTN_CH_OFF].ptr	= gtk_button_new_with_label(button[BTN_CH_OFF].text);
-	button[BTN_CH_1].ptr	= gtk_button_new_with_label(button[BTN_CH_1].text);
-	button[BTN_CH_2].ptr	= gtk_button_new_with_label(button[BTN_CH_2].text);
-	button[BTN_PAUSE].ptr	= gtk_button_new_with_label(button[BTN_PAUSE].text);
-	button[BTN_SAVE].ptr	= gtk_button_new_with_label(button[BTN_SAVE].text);
-	button[BTN_QUIT].ptr	= gtk_button_new_with_label(button[BTN_QUIT].text);
+	button[BTN_CH_OFF].ptr		= gtk_button_new_with_label(button[BTN_CH_OFF].text);
+	button[BTN_CH_1].ptr		= gtk_button_new_with_label(button[BTN_CH_1].text);
+	button[BTN_CH_2].ptr		= gtk_button_new_with_label(button[BTN_CH_2].text);
+	tbutton[TBTN_PAUSE].ptr		= gtk_toggle_button_new_with_label(tbutton[TBTN_PAUSE].text);
+	button[BTN_SAVE].ptr		= gtk_button_new_with_label(button[BTN_SAVE].text);
+	button[BTN_QUIT].ptr		= gtk_button_new_with_label(button[BTN_QUIT].text);
+
+	/* Toggle buttons */
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(tbutton[TBTN_PAUSE].ptr), false);
 
 	/* Events */
 	g_signal_connect(button[BTN_CH_OFF].ptr, "button-press-event",
@@ -536,8 +556,8 @@ static	void	help_init		(int				*action)
 			G_CALLBACK(callback_button), (void *)&button[BTN_CH_1]);
 	g_signal_connect(button[BTN_CH_2].ptr, "button-press-event",
 			G_CALLBACK(callback_button), (void *)&button[BTN_CH_2]);
-	g_signal_connect(button[BTN_PAUSE].ptr, "button-press-event",
-			G_CALLBACK(callback_button), (void *)&button[BTN_PAUSE]);
+	g_signal_connect(tbutton[TBTN_PAUSE].ptr, "toggled",
+			G_CALLBACK(callback_tbutton), (void *)&tbutton[TBTN_PAUSE]);
 	g_signal_connect(button[BTN_SAVE].ptr, "button-press-event",
 			G_CALLBACK(callback_button), (void *)&button[BTN_SAVE]);
 	g_signal_connect(button[BTN_QUIT].ptr, "button-press-event",
@@ -547,7 +567,7 @@ static	void	help_init		(int				*action)
 	gtk_box_pack_start(GTK_BOX(box_help_in), button[BTN_CH_OFF].ptr, false, false, 0);
 	gtk_box_pack_start(GTK_BOX(box_help_in), button[BTN_CH_1].ptr, false, false, 0);
 	gtk_box_pack_start(GTK_BOX(box_help_in), button[BTN_CH_2].ptr, false, false, 0);
-	gtk_box_pack_start(GTK_BOX(box_help_in), button[BTN_PAUSE].ptr, false, false, 0);
+	gtk_box_pack_start(GTK_BOX(box_help_in), tbutton[TBTN_PAUSE].ptr, false, false, 0);
 	gtk_box_pack_start(GTK_BOX(box_help_in), button[BTN_SAVE].ptr, false, false, 0);
 	gtk_box_pack_start(GTK_BOX(box_help_in), button[BTN_QUIT].ptr, false, false, 0);
 }
@@ -596,7 +616,7 @@ static	void	show_help_start		(void)
 	gtk_widget_hide(button[BTN_CH_OFF].ptr);
 	gtk_widget_hide(button[BTN_CH_1].ptr);
 	gtk_widget_hide(button[BTN_CH_2].ptr);
-	gtk_widget_hide(button[BTN_PAUSE].ptr);
+	gtk_widget_hide(tbutton[TBTN_PAUSE].ptr);
 	gtk_widget_hide(button[BTN_SAVE].ptr);
 	gtk_widget_show(button[BTN_QUIT].ptr);
 
@@ -610,30 +630,22 @@ static	void	show_help_start		(void)
 
 static	void	show_help_play		(void)
 {
-	/* Text */
-	sprintf(button[BTN_PAUSE].text, "Pause");
-	gtk_button_set_label(GTK_BUTTON(button[BTN_PAUSE].ptr), button[BTN_PAUSE].text);
-
 	/* Show & hide */
 	gtk_widget_hide(button[BTN_CH_OFF].ptr);
 	gtk_widget_hide(button[BTN_CH_1].ptr);
 	gtk_widget_hide(button[BTN_CH_2].ptr);
-	gtk_widget_show(button[BTN_PAUSE].ptr);
+	gtk_widget_show(tbutton[TBTN_PAUSE].ptr);
 	gtk_widget_show(button[BTN_SAVE].ptr);
 	gtk_widget_show(button[BTN_QUIT].ptr);
 }
 
 static	void	show_help_pause		(void)
 {
-	/* Text */
-	sprintf(button[BTN_PAUSE].text, "Continue");
-	gtk_button_set_label(GTK_BUTTON(button[BTN_PAUSE].ptr), button[BTN_PAUSE].text);
-
 	/* Show & hide */
 	gtk_widget_hide(button[BTN_CH_OFF].ptr);
 	gtk_widget_hide(button[BTN_CH_1].ptr);
 	gtk_widget_hide(button[BTN_CH_2].ptr);
-	gtk_widget_show(button[BTN_PAUSE].ptr);
+	gtk_widget_show(tbutton[TBTN_PAUSE].ptr);
 	gtk_widget_show(button[BTN_SAVE].ptr);
 	gtk_widget_show(button[BTN_QUIT].ptr);
 }
@@ -644,7 +656,7 @@ static	void	show_help_xyzzy		(void)
 	gtk_widget_show(button[BTN_CH_OFF].ptr);
 	gtk_widget_show(button[BTN_CH_1].ptr);
 	gtk_widget_show(button[BTN_CH_2].ptr);
-	gtk_widget_hide(button[BTN_PAUSE].ptr);
+	gtk_widget_hide(tbutton[TBTN_PAUSE].ptr);
 	gtk_widget_show(button[BTN_SAVE].ptr);
 	gtk_widget_show(button[BTN_QUIT].ptr);
 }
@@ -655,7 +667,7 @@ static	void	show_help_cheat		(void)
 	gtk_widget_hide(button[BTN_CH_OFF].ptr);
 	gtk_widget_hide(button[BTN_CH_1].ptr);
 	gtk_widget_hide(button[BTN_CH_2].ptr);
-	gtk_widget_hide(button[BTN_PAUSE].ptr);
+	gtk_widget_hide(tbutton[TBTN_PAUSE].ptr);
 	gtk_widget_show(button[BTN_SAVE].ptr);
 	gtk_widget_show(button[BTN_QUIT].ptr);
 }
@@ -666,7 +678,7 @@ static	void	show_help_safe		(void)
 	gtk_widget_hide(button[BTN_CH_OFF].ptr);
 	gtk_widget_hide(button[BTN_CH_1].ptr);
 	gtk_widget_hide(button[BTN_CH_2].ptr);
-	gtk_widget_hide(button[BTN_PAUSE].ptr);
+	gtk_widget_hide(tbutton[TBTN_PAUSE].ptr);
 	gtk_widget_show(button[BTN_SAVE].ptr);
 	gtk_widget_show(button[BTN_QUIT].ptr);
 }
@@ -677,7 +689,7 @@ static	void	show_help_gameover	(void)
 	gtk_widget_hide(button[BTN_CH_OFF].ptr);
 	gtk_widget_hide(button[BTN_CH_1].ptr);
 	gtk_widget_hide(button[BTN_CH_2].ptr);
-	gtk_widget_hide(button[BTN_PAUSE].ptr);
+	gtk_widget_hide(tbutton[TBTN_PAUSE].ptr);
 	gtk_widget_hide(button[BTN_SAVE].ptr);
 	gtk_widget_show(button[BTN_QUIT].ptr);
 }
@@ -723,6 +735,7 @@ static	gboolean	callback_button	(GtkWidget			*widget,
 	struct Button_Data	*button;
 	button			= ((struct Button_Data *)data);
 
+
 	switch (event->button) {
 	case 1:
 		//1 is left mouse btn
@@ -736,6 +749,25 @@ static	gboolean	callback_button	(GtkWidget			*widget,
 		//3 is right mouse btn
 		*(button->act)		= button->val2;
 		break;
+	}
+
+	gtk_main_quit();
+}
+
+static	gboolean	callback_tbutton (GtkWidget			*widget,
+					void				*data)
+{
+	struct TButton_Data	*tbutton;
+	tbutton			= ((struct TButton_Data *)data);
+
+	if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget))) {
+		/* If control reaches here, the toggle button is down */
+		*(tbutton->act)		= tbutton->val;
+		gtk_button_set_label(GTK_BUTTON(tbutton[TBTN_PAUSE].ptr), tbutton[TBTN_PAUSE].text2);
+	} else {
+		/* If control reaches here, the toggle button is up */
+		*(tbutton->act)		= tbutton->val2;
+		gtk_button_set_label(GTK_BUTTON(tbutton[TBTN_PAUSE].ptr), tbutton[TBTN_PAUSE].text);
 	}
 
 	gtk_main_quit();
