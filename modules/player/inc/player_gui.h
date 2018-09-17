@@ -52,18 +52,17 @@
 /******************************************************************************
  ******* functions ************************************************************
  ******************************************************************************/
-void	player_gui_init		(void);
+void	player_gui_init		(struct Player_Iface_Position		*position,
+				int					*action);
 
 int	player_gui_start	(struct Player_Iface_Position		*position,
 				const char				*title,
-				const char				*subtitle,
-				int					*action);
+				const char				*subtitle);
 
 int	player_gui		(const struct Game_Iface_Out		*board,
 				struct Player_Iface_Position		*position,
 				const char				*title,
-				const char				*subtitle,
-				int					*action);
+				const char				*subtitle);
 
 void	player_gui_save_name	(const char *filepath, char *filename);
 void	player_gui_score_name	(char *player_name);

@@ -46,6 +46,7 @@ int	player_iface_mode;
  *	*	* Static	*	*	*	*	*	*
  *	*	*	*	*	*	*	*	*	*/
 static	struct Player_Iface_Position	player_iface_position;
+static	int				player_action;
 
 
 /******************************************************************************
@@ -88,7 +89,7 @@ void	player_iface_init	(int rows, int cols)
 		break;
 
 	case PLAYER_IFACE_GUI:
-		player_gui_init();
+		player_gui_init(&player_iface_position, &player_action);
 		break;
 	}
 }
@@ -108,7 +109,6 @@ int	player_iface_start	(int *pos_row, int *pos_col)
 	player_iface_position.highlight	= false;
 
 	/* Loop until first step */
-	int	player_action;
 	do {
 		switch (player_iface_mode) {
 		case PLAYER_IFACE_CLUI:
@@ -123,7 +123,7 @@ int	player_iface_start	(int *pos_row, int *pos_col)
 
 		case PLAYER_IFACE_GUI:
 			player_gui_start(&player_iface_position,
-						title, subtitle, &player_action);
+						title, subtitle);
 			break;
 		}
 
@@ -189,7 +189,6 @@ void	player_iface		(const	struct Game_Iface_Out	*game_iface_out,
 	}
 
 	/* Request player action */
-	int	player_action;
 	switch (player_iface_mode) {
 	case PLAYER_IFACE_CLUI:
 		player_clui(game_iface_out, &player_iface_position,
@@ -203,7 +202,7 @@ void	player_iface		(const	struct Game_Iface_Out	*game_iface_out,
 
 	case PLAYER_IFACE_GUI:
 		player_gui(game_iface_out, &player_iface_position,
-					title, subtitle, &player_action);
+					title, subtitle);
 		break;
 	}
 

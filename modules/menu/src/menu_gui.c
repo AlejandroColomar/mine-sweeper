@@ -167,17 +167,8 @@ void	menu_gui		(void)
 		gtk_box_pack_start(GTK_BOX(box), separator[2], false, false, 5);
 		gtk_box_pack_start(GTK_BOX(box), button[0].ptr, true, true, 0);
 
-		/* Show */
-		gtk_widget_show(label.ptr);
-		gtk_widget_show(separator[0]);
-		gtk_widget_show(button[1].ptr);
-		gtk_widget_show(separator[1]);
-		gtk_widget_show(button[2].ptr);
-		gtk_widget_show(button[3].ptr);
-		gtk_widget_show(separator[2]);
-		gtk_widget_show(button[0].ptr);
-		gtk_widget_show(box);
-		gtk_widget_show(window_gui);
+		/* Refresh */
+		gtk_widget_show_all(window_gui);
 
 		/* GTK loop */
 		sw	= 0;
@@ -337,21 +328,8 @@ static	void	menu_gui_continue	(void)
 		gtk_box_pack_start(GTK_BOX(box), separator[3], false, false, 5);
 		gtk_box_pack_start(GTK_BOX(box), button[0].ptr, true, true, 0);
 
-		/* Show */
-		gtk_widget_show(label.ptr);
-		gtk_widget_show(separator[0]);
-		gtk_widget_show(button[1].ptr);
-		gtk_widget_show(separator[1]);
-		gtk_widget_show(button[2].ptr);
-		gtk_widget_show(button[3].ptr);
-		gtk_widget_show(button[4].ptr);
-		gtk_widget_show(button[5].ptr);
-		gtk_widget_show(separator[2]);
-		gtk_widget_show(button[6].ptr);
-		gtk_widget_show(separator[3]);
-		gtk_widget_show(button[0].ptr);
-		gtk_widget_show(box);
-		gtk_widget_show(window_gui);
+		/* Refresh */
+		gtk_widget_show_all(window_gui);
 
 		/* GTK loop */
 		sw	= 0;
@@ -445,16 +423,8 @@ static	void	menu_gui_select	(void)
 	gtk_box_pack_start(GTK_BOX(box), separator[2], false, false, 5);
 	gtk_box_pack_start(GTK_BOX(box), button[0].ptr, true, true, 0);
 
-	/* Show */
-	gtk_widget_show(label.ptr);
-	gtk_widget_show(separator[0]);
-	gtk_widget_show(button[1].ptr);
-	gtk_widget_show(separator[1]);
-	gtk_widget_show(button[2].ptr);
-	gtk_widget_show(separator[2]);
-	gtk_widget_show(button[0].ptr);
-	gtk_widget_show(box);
-	gtk_widget_show(window_gui);
+	/* Refresh */
+	gtk_widget_show_all(window_gui);
 
 	/* GTK loop */
 	sw	= 0;
@@ -542,18 +512,8 @@ static	void	menu_gui_level	(void)
 	gtk_box_pack_start(GTK_BOX(box), separator[2], false, false, 5);
 	gtk_box_pack_start(GTK_BOX(box), button[0].ptr, true, true, 0);
 
-	/* Show */
-	gtk_widget_show(label.ptr);
-	gtk_widget_show(separator[0]);
-	gtk_widget_show(button[1].ptr);
-	gtk_widget_show(button[2].ptr);
-	gtk_widget_show(button[3].ptr);
-	gtk_widget_show(separator[1]);
-	gtk_widget_show(button[4].ptr);
-	gtk_widget_show(separator[2]);
-	gtk_widget_show(button[0].ptr);
-	gtk_widget_show(box);
-	gtk_widget_show(window_gui);
+	/* Refresh */
+	gtk_widget_show_all(window_gui);
 
 	/* GTK loop */
 	sw	= 0;
@@ -645,17 +605,8 @@ static	void	menu_gui_custom	(void)
 		gtk_box_pack_start(GTK_BOX(box), separator[2], false, false, 5);
 		gtk_box_pack_start(GTK_BOX(box), button[0].ptr, true, true, 0);
 
-		/* Show */
-		gtk_widget_show(label.ptr);
-		gtk_widget_show(separator[0]);
-		gtk_widget_show(button[1].ptr);
-		gtk_widget_show(button[2].ptr);
-		gtk_widget_show(separator[1]);
-		gtk_widget_show(button[3].ptr);
-		gtk_widget_show(separator[2]);
-		gtk_widget_show(button[0].ptr);
-		gtk_widget_show(box);
-		gtk_widget_show(window_gui);
+		/* Refresh */
+		gtk_widget_show_all(window_gui);
 
 		/* GTK loop */
 		sw	= 0;
@@ -733,14 +684,8 @@ static	void	menu_gui_devel	(void)
 		gtk_box_pack_start(GTK_BOX(box), separator[1], false, false, 5);
 		gtk_box_pack_start(GTK_BOX(box), button[0].ptr, true, true, 0);
 
-		/* Show */
-		gtk_widget_show(label.ptr);
-		gtk_widget_show(separator[0]);
-		gtk_widget_show(button[1].ptr);
-		gtk_widget_show(separator[1]);
-		gtk_widget_show(button[0].ptr);
-		gtk_widget_show(box);
-		gtk_widget_show(window_gui);
+		/* Refresh */
+		gtk_widget_show_all(window_gui);
 
 		/* GTK loop */
 		sw	= 0;

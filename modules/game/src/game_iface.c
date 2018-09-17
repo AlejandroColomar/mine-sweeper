@@ -424,13 +424,32 @@ static	void	game_iface_update_vis	(int r, int c)
 	int	field_vis;
 
 	switch (game_iface_out.state) {
-	case GAME_IFACE_STATE_SAFE:
 	case GAME_IFACE_STATE_CHEATED:
 	case GAME_IFACE_STATE_XYZZY:
 	case GAME_IFACE_STATE_PLAYING:
 		switch (game_board.usr[r][c]) {
 		case GAME_USR_HIDDEN:
 			field_vis	= GAME_IFACE_VIS_HIDDEN_FIELD;
+			break;
+
+		case GAME_USR_CLEAR:
+			field_vis	= GAME_IFACE_VIS_0 + game_board.gnd[r][c];
+			break;
+
+		case GAME_USR_FLAG:
+			field_vis	= GAME_IFACE_VIS_FLAG;
+			break;
+
+		case GAME_USR_POSSIBLE:
+			field_vis	= GAME_IFACE_VIS_POSSIBLE;
+			break;
+		}
+		break;
+
+	case GAME_IFACE_STATE_SAFE:
+		switch (game_board.usr[r][c]) {
+		case GAME_USR_HIDDEN:
+			field_vis	= GAME_IFACE_VIS_SAFE_MINE;
 			break;
 
 		case GAME_USR_CLEAR:
