@@ -70,7 +70,6 @@ struct	Button_Data {
 	GtkWidget	*ptr;
 	char		text [80];
 	int		val;
-	int		val2;
 	int		*act;
 };
 
@@ -83,6 +82,12 @@ struct	TButton_Data {
 	int		*act;
 };
 
+struct	EvBox_Data {
+	GtkWidget	*ptr;
+	int		val;
+	int		*act;
+};
+
 struct	Label_Data {
 	GtkWidget	*ptr;
 	char		text [80];
@@ -92,28 +97,29 @@ struct	Label_Data {
 /******************************************************************************
  ******* variables ************************************************************
  ******************************************************************************/
-static	struct Field_Data	field [ROWS_GUI_MAX] [COLS_GUI_MAX];
 static	struct Button_Data	button [BTN_QTTY];
 static	struct TButton_Data	tbutton [TBTN_QTTY];
-static	GtkWidget	*box;
-static	GtkWidget	*box_board;
-static	GtkWidget	*box_board_in;
-static	GtkWidget	*box_board_tit;
-static	GtkWidget	*box_board_tit_in;
-static	GtkWidget	*box_board_tab;
-static	GtkWidget	*box_board_stit;
-static	GtkWidget	*box_board_stit_in;
-static	GtkWidget	*table_board;
-static	GtkWidget	*box_help;
-static	GtkWidget	*box_help_in;
-static	int		last_help;
+static	struct EvBox_Data	box_cheat;
+static	struct Field_Data	field [ROWS_GUI_MAX] [COLS_GUI_MAX];
+static	struct Label_Data	label [2];
+static	GtkWidget		*box;
+static	GtkWidget		*box_help;
+static	GtkWidget		*box_help_in;
+static	GtkWidget		*box_board;
+static	GtkWidget		*box_board_in;
+//	static	GtkWidget		*box_board_tit;
+static	GtkWidget		*box_board_tab;
+static	GtkWidget		*box_board_stit;
+static	GtkWidget		*table_board;
+static	int			last_help;
 
 
 /******************************************************************************
  ******* static functions *****************************************************
  ******************************************************************************/
 	/* Start */
-static	void	board_init	(struct Player_Iface_Position		*position);
+static	void	board_init	(struct Player_Iface_Position		*position,
+				int					*action);
 static	void	show_board_start(struct Player_Iface_Position		*position,
 				const char				*title,
 				const char				*subtitle);
@@ -145,8 +151,10 @@ static	void	show_help_gameover	(void);
 static	gboolean	callback_field	(GtkWidget			*widget,
 					GdkEventButton			*event,
 					void				*data);
-static	gboolean	callback_button	(GtkWidget			*widget,
+static	gboolean	callback_evbox	(GtkWidget			*widget,
 					GdkEventButton			*event,
+					void				*data);
+static	void		callback_button	(GtkWidget			*widget,
 					void				*data);
 static	gboolean	callback_tbutton (GtkWidget			*widget,
 					void				*data);
@@ -171,7 +179,7 @@ void	player_gui_init		(struct Player_Iface_Position		*position,
 	gtk_box_pack_start(GTK_BOX(box), box_board, true, true, 5);
 
 	help_init(action);
-	board_init(position);
+	board_init(position, action);
 
 	/* Board fields */
 	int	i;
@@ -270,22 +278,29 @@ void	player_gui_cleanup	(void)
 /*	*	*	*	*	*	*	*	*	*
  *	*	* Start	*	*	*	*	*	*	*
  *	*	*	*	*	*	*	*	*	*/
-static	void	board_init	(struct Player_Iface_Position		*position)
+static	void	board_init	(struct Player_Iface_Position		*position,
+				int					*action)
 {
 	GtkWidget		*separator[2];
-	struct Label_Data	label[2];
 
 	/* Box */
 	box_board_in	= gtk_vbox_new(false, 0);
 	gtk_box_pack_start(GTK_BOX(box_board), box_board_in, true, true, 5);
 
 	/* Title */
-	box_board_tit		= gtk_vbox_new(false, 0);
-	box_board_tit_in	= gtk_vbox_new(false, 0);
-	gtk_box_pack_start(GTK_BOX(box_board_in), box_board_tit, false, false, 0);
-	gtk_box_pack_start(GTK_BOX(box_board_tit), box_board_tit_in, false, false, 0);
+	box_cheat.ptr		= gtk_event_box_new();
+//	box_board_tit		= gtk_vbox_new(false, 0);
+	gtk_box_pack_start(GTK_BOX(box_board_in), box_cheat.ptr, false, false, 0);
+//	gtk_box_pack_start(GTK_BOX(box_board_in), box_board_tit, false, false, 0);
 	label[0].ptr	= gtk_label_new("NEW");
-	gtk_box_pack_start(GTK_BOX(box_board_tit_in), label[0].ptr, false, false, 0);
+	gtk_container_add(GTK_CONTAINER(box_cheat.ptr), label[0].ptr);
+//	gtk_box_pack_start(GTK_BOX(box_board_tit), label[0].ptr, false, false, 0);
+
+	/* Cheats */
+	box_cheat.val	= PLAYER_IFACE_ACT_XYZZY_ON;
+	box_cheat.act	= action;
+	g_signal_connect(box_cheat.ptr, "button-press-event",
+			G_CALLBACK(callback_evbox), (void *)&box_cheat);
 
 	/* Separator */
 	separator[0]	= gtk_hseparator_new();
@@ -303,11 +318,9 @@ static	void	board_init	(struct Player_Iface_Position		*position)
 
 	/* Subtitle */
 	box_board_stit		= gtk_vbox_new(false, 0);
-	box_board_stit_in	= gtk_vbox_new(false, 0);
 	gtk_box_pack_start(GTK_BOX(box_board_in), box_board_stit, false, false, 0);
-	gtk_box_pack_start(GTK_BOX(box_board_stit), box_board_stit_in, false, false, 0);
 	label[1].ptr	= gtk_label_new("NEW");
-	gtk_box_pack_start(GTK_BOX(box_board_stit_in), label[1].ptr, false, false, 0);
+	gtk_box_pack_start(GTK_BOX(box_board_stit), label[1].ptr, false, false, 0);
 
 	/* Refresh */
 	gtk_widget_show_all(box_board);
@@ -317,28 +330,16 @@ static	void	show_board_start(struct Player_Iface_Position		*position,
 				const char				*title,
 				const char				*subtitle)
 {
-	struct Label_Data	label[2];
-
-	/* Clear */
-	gtk_widget_destroy(box_board_tit_in);
-	gtk_widget_destroy(box_board_stit_in);
-
 	/* Title */
-	box_board_tit_in	= gtk_vbox_new(false, 0);
-	gtk_box_pack_start(GTK_BOX(box_board_tit), box_board_tit_in, false, false, 0);
 	strcpy(label[0].text, title);
-	label[0].ptr	= gtk_label_new(label[0].text);
-	gtk_box_pack_start(GTK_BOX(box_board_tit_in), label[0].ptr, false, false, 0);
+	gtk_label_set_text(GTK_LABEL(label[0].ptr), label[0].text);
 
 	/* Board */
 	board_loop_start(position);
 
 	/* Subtitle */
-	box_board_stit_in	= gtk_vbox_new(false, 0);
-	gtk_box_pack_start(GTK_BOX(box_board_stit), box_board_stit_in, false, false, 0);
 	strcpy(label[1].text, subtitle);
-	label[1].ptr	= gtk_label_new(label[1].text);
-	gtk_box_pack_start(GTK_BOX(box_board_stit_in), label[1].ptr, false, false, 0);
+	gtk_label_set_text(GTK_LABEL(label[1].ptr), label[1].text);
 
 	/* Refresh */
 	gtk_widget_show_all(box_board);
@@ -368,28 +369,16 @@ static	void	show_board	(const struct Game_Iface_Out		*board,
 				const char				*title,
 				const char				*subtitle)
 {
-	struct Label_Data	label[2];
-
-	/* Clear */
-	gtk_widget_destroy(box_board_tit_in);
-	gtk_widget_destroy(box_board_stit_in);
-
 	/* Title */
-	box_board_tit_in	= gtk_vbox_new(false, 0);
-	gtk_box_pack_start(GTK_BOX(box_board_tit), box_board_tit_in, false, false, 0);
 	strcpy(label[0].text, title);
-	label[0].ptr	= gtk_label_new(label[0].text);
-	gtk_box_pack_start(GTK_BOX(box_board_tit_in), label[0].ptr, false, false, 0);
+	gtk_label_set_text(GTK_LABEL(label[0].ptr), label[0].text);
 
 	/* Board */
 	board_loop(board, position);
 
 	/* Subtitle */
-	box_board_stit_in	= gtk_vbox_new(false, 0);
-	gtk_box_pack_start(GTK_BOX(box_board_stit), box_board_stit_in, false, false, 0);
 	strcpy(label[1].text, subtitle);
-	label[1].ptr	= gtk_label_new(label[1].text);
-	gtk_box_pack_start(GTK_BOX(box_board_stit_in), label[1].ptr, false, false, 0);
+	gtk_label_set_text(GTK_LABEL(label[1].ptr), label[1].text);
 
 	/* Refresh */
 	gtk_widget_show_all(box_board);
@@ -506,13 +495,13 @@ static	void	help_init		(int				*action)
 	gtk_box_pack_start(GTK_BOX(box_help), box_help_in, false, false, 5);
 
 	/* Text */
-	sprintf(button[BTN_CH_OFF].text, "Cheats off");
-	sprintf(button[BTN_CH_1].text, "Cheat 1");
-	sprintf(button[BTN_CH_2].text, "Cheat 2");
-	sprintf(tbutton[TBTN_PAUSE].text, "Pause");
-	sprintf(tbutton[TBTN_PAUSE].text2, "Continue");
-	sprintf(button[BTN_SAVE].text, "Save");
-	sprintf(button[BTN_QUIT].text, "Quit");
+	sprintf(button[BTN_CH_OFF].text, "[_0] Cheats off");
+	sprintf(button[BTN_CH_1].text, "Cheat _1");
+	sprintf(button[BTN_CH_2].text, "Cheat _2");
+	sprintf(tbutton[TBTN_PAUSE].text, "_Pause");
+	sprintf(tbutton[TBTN_PAUSE].text2, "[_P] Continue");
+	sprintf(button[BTN_SAVE].text, "_Save");
+	sprintf(button[BTN_QUIT].text, "_Quit");
 
 	/* Data */
 		/* L click */
@@ -523,12 +512,7 @@ static	void	help_init		(int				*action)
 	button[BTN_SAVE].val		= PLAYER_IFACE_ACT_SAVE;
 	button[BTN_QUIT].val		= PLAYER_IFACE_ACT_QUIT;
 		/* R click */
-	button[BTN_CH_OFF].val2		= PLAYER_IFACE_ACT_FOO;
-	button[BTN_CH_1].val2		= PLAYER_IFACE_ACT_FOO;
-	button[BTN_CH_2].val2		= PLAYER_IFACE_ACT_FOO;
 	tbutton[TBTN_PAUSE].val2	= PLAYER_IFACE_ACT_PAUSE;
-	button[BTN_SAVE].val2		= PLAYER_IFACE_ACT_XYZZY_ON;
-	button[BTN_QUIT].val2		= PLAYER_IFACE_ACT_FOO;
 
 	/* Action */
 	button[BTN_CH_OFF].act		= action;
@@ -539,28 +523,28 @@ static	void	help_init		(int				*action)
 	button[BTN_QUIT].act		= action;
 
 	/* Generate widgets */
-	button[BTN_CH_OFF].ptr		= gtk_button_new_with_label(button[BTN_CH_OFF].text);
-	button[BTN_CH_1].ptr		= gtk_button_new_with_label(button[BTN_CH_1].text);
-	button[BTN_CH_2].ptr		= gtk_button_new_with_label(button[BTN_CH_2].text);
-	tbutton[TBTN_PAUSE].ptr		= gtk_toggle_button_new_with_label(tbutton[TBTN_PAUSE].text);
-	button[BTN_SAVE].ptr		= gtk_button_new_with_label(button[BTN_SAVE].text);
-	button[BTN_QUIT].ptr		= gtk_button_new_with_label(button[BTN_QUIT].text);
+	button[BTN_CH_OFF].ptr		= gtk_button_new_with_mnemonic(button[BTN_CH_OFF].text);
+	button[BTN_CH_1].ptr		= gtk_button_new_with_mnemonic(button[BTN_CH_1].text);
+	button[BTN_CH_2].ptr		= gtk_button_new_with_mnemonic(button[BTN_CH_2].text);
+	tbutton[TBTN_PAUSE].ptr		= gtk_toggle_button_new_with_mnemonic(tbutton[TBTN_PAUSE].text);
+	button[BTN_SAVE].ptr		= gtk_button_new_with_mnemonic(button[BTN_SAVE].text);
+	button[BTN_QUIT].ptr		= gtk_button_new_with_mnemonic(button[BTN_QUIT].text);
 
 	/* Toggle buttons */
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(tbutton[TBTN_PAUSE].ptr), false);
 
 	/* Events */
-	g_signal_connect(button[BTN_CH_OFF].ptr, "button-press-event",
+	g_signal_connect(button[BTN_CH_OFF].ptr, "clicked",
 			G_CALLBACK(callback_button), (void *)&button[BTN_CH_OFF]);
-	g_signal_connect(button[BTN_CH_1].ptr, "button-press-event",
+	g_signal_connect(button[BTN_CH_1].ptr, "clicked",
 			G_CALLBACK(callback_button), (void *)&button[BTN_CH_1]);
-	g_signal_connect(button[BTN_CH_2].ptr, "button-press-event",
+	g_signal_connect(button[BTN_CH_2].ptr, "clicked",
 			G_CALLBACK(callback_button), (void *)&button[BTN_CH_2]);
 	g_signal_connect(tbutton[TBTN_PAUSE].ptr, "toggled",
 			G_CALLBACK(callback_tbutton), (void *)&tbutton[TBTN_PAUSE]);
-	g_signal_connect(button[BTN_SAVE].ptr, "button-press-event",
+	g_signal_connect(button[BTN_SAVE].ptr, "clicked",
 			G_CALLBACK(callback_button), (void *)&button[BTN_SAVE]);
-	g_signal_connect(button[BTN_QUIT].ptr, "button-press-event",
+	g_signal_connect(button[BTN_QUIT].ptr, "clicked",
 			G_CALLBACK(callback_button), (void *)&button[BTN_QUIT]);
 
 	/* Box */
@@ -728,30 +712,41 @@ static	gboolean	callback_field	(GtkWidget			*widget,
 	return	false;
 }
 
-static	gboolean	callback_button	(GtkWidget			*widget,
+static	gboolean	callback_evbox	(GtkWidget			*widget,
 					GdkEventButton			*event,
 					void				*data)
 {
-	struct Button_Data	*button;
-	button			= ((struct Button_Data *)data);
-
+	struct EvBox_Data	*evbox;
+	evbox			= ((struct EvBox_Data *)data);
 
 	switch (event->button) {
 	case 1:
 		//1 is left mouse btn
 		if (event->type == GDK_BUTTON_PRESS) {
-			*(button->act)		= button->val;
+			*(evbox->act)		= evbox->val;
 		} else if (event->type == GDK_2BUTTON_PRESS) {
 		}
 		break;
 
 	case 3:
 		//3 is right mouse btn
-		*(button->act)		= button->val2;
 		break;
 	}
 
 	gtk_main_quit();
+
+}
+
+static	void		callback_button	(GtkWidget			*widget,
+					void				*data)
+{
+	struct Button_Data	*button;
+	button			= ((struct Button_Data *)data);
+
+	*(button->act)		= button->val;
+
+	gtk_main_quit();
+
 }
 
 static	gboolean	callback_tbutton (GtkWidget			*widget,

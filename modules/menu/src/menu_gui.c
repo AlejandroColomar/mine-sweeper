@@ -114,10 +114,10 @@ void	menu_gui		(void)
 
 	/* Text */
 	sprintf(label.text, "Main menu");
-	sprintf(button[1].text, "Continue");
-	sprintf(button[2].text, "Disclaimer of warranty");
-	sprintf(button[3].text, "Terms and conditions");
-	sprintf(button[0].text, "Exit program");
+	sprintf(button[1].text, "[_1] Continue");
+	sprintf(button[2].text, "[_2] Disclaimer of warranty");
+	sprintf(button[3].text, "[_3] Terms and conditions");
+	sprintf(button[0].text, "[_0] Exit program");
 
 	/* Data */
 	button[1].num	= 1;
@@ -137,12 +137,12 @@ void	menu_gui		(void)
 		box		= gtk_vbox_new(false, 0);
 		label.ptr	= gtk_label_new(label.text);
 		separator[0]	= gtk_hseparator_new();
-		button[1].ptr	= gtk_button_new_with_label(button[1].text);
+		button[1].ptr	= gtk_button_new_with_mnemonic(button[1].text);
 		separator[1]	= gtk_hseparator_new();
-		button[2].ptr	= gtk_button_new_with_label(button[2].text);
-		button[3].ptr	= gtk_button_new_with_label(button[3].text);
+		button[2].ptr	= gtk_button_new_with_mnemonic(button[2].text);
+		button[3].ptr	= gtk_button_new_with_mnemonic(button[3].text);
 		separator[2]	= gtk_hseparator_new();
-		button[0].ptr	= gtk_button_new_with_label(button[0].text);
+		button[0].ptr	= gtk_button_new_with_mnemonic(button[0].text);
 
 		/* Events */
 		g_signal_connect(button[1].ptr, "clicked",
@@ -251,12 +251,12 @@ static	void	menu_gui_continue	(void)
 
 	/* Text */
 	sprintf(label.text, "Game menu");
-	sprintf(button[1].text, "Start");
-	sprintf(button[2].text, "Select map");
-	sprintf(button[3].text, "Change difficulty");
-	sprintf(button[5].text, "Hi scores");
-	sprintf(button[6].text, "DEVEL");
-	sprintf(button[0].text, "Back");
+	sprintf(button[1].text, "[_1] Start");
+	sprintf(button[2].text, "[_2] Select map");
+	sprintf(button[3].text, "[_3] Change difficulty");
+	sprintf(button[5].text, "[_5] Hi scores");
+	sprintf(button[6].text, "[_6] DEVEL");
+	sprintf(button[0].text, "[_0] Back");
 
 	/* Data */
 	button[1].num	= 1;
@@ -278,22 +278,22 @@ static	void	menu_gui_continue	(void)
 	wh	= true;
 	while (wh) {
 		/* Text */
-		sprintf(button[4].text, "Change file name (File: \"%s\")", saved_name);
+		sprintf(button[4].text, "[_4] Change file name (File: \"%s\")", saved_name);
 
 		/* Generate widgets */
 		box		= gtk_vbox_new(false, 0);
 		label.ptr	= gtk_label_new(label.text);
 		separator[0]	= gtk_hseparator_new();
-		button[1].ptr	= gtk_button_new_with_label(button[1].text);
+		button[1].ptr	= gtk_button_new_with_mnemonic(button[1].text);
 		separator[1]	= gtk_hseparator_new();
-		button[2].ptr	= gtk_button_new_with_label(button[2].text);
-		button[3].ptr	= gtk_button_new_with_label(button[3].text);
-		button[4].ptr	= gtk_button_new_with_label(button[4].text);
-		button[5].ptr	= gtk_button_new_with_label(button[5].text);
+		button[2].ptr	= gtk_button_new_with_mnemonic(button[2].text);
+		button[3].ptr	= gtk_button_new_with_mnemonic(button[3].text);
+		button[4].ptr	= gtk_button_new_with_mnemonic(button[4].text);
+		button[5].ptr	= gtk_button_new_with_mnemonic(button[5].text);
 		separator[2]	= gtk_hseparator_new();
-		button[6].ptr	= gtk_button_new_with_label(button[6].text);
+		button[6].ptr	= gtk_button_new_with_mnemonic(button[6].text);
 		separator[3]	= gtk_hseparator_new();
-		button[0].ptr	= gtk_button_new_with_label(button[0].text);
+		button[0].ptr	= gtk_button_new_with_mnemonic(button[0].text);
 
 		/* Events */
 		g_signal_connect(button[1].ptr, "clicked",
@@ -381,9 +381,9 @@ static	void	menu_gui_select	(void)
 
 	/* Text */
 	sprintf(label.text, "Select map");
-	sprintf(button[1].text, "New map");
-	sprintf(button[2].text, "Load map (File: \"%s\")", saved_name);
-	sprintf(button[0].text, "Back");
+	sprintf(button[1].text, "[_1] New map");
+	sprintf(button[2].text, "[_2] Load map (File: \"%s\")", saved_name);
+	sprintf(button[0].text, "[_0] Back");
 
 	/* Data */
 	button[1].num	= 1;
@@ -397,11 +397,11 @@ static	void	menu_gui_select	(void)
 	box		= gtk_vbox_new(false, 0);
 	label.ptr	= gtk_label_new(label.text);
 	separator[0]	= gtk_hseparator_new();
-	button[1].ptr	= gtk_button_new_with_label(button[1].text);
+	button[1].ptr	= gtk_button_new_with_mnemonic(button[1].text);
 	separator[1]	= gtk_hseparator_new();
-	button[2].ptr	= gtk_button_new_with_label(button[2].text);
+	button[2].ptr	= gtk_button_new_with_mnemonic(button[2].text);
 	separator[2]	= gtk_hseparator_new();
-	button[0].ptr	= gtk_button_new_with_label(button[0].text);
+	button[0].ptr	= gtk_button_new_with_mnemonic(button[0].text);
 
 	/* Events */
 	g_signal_connect(button[1].ptr, "clicked",
@@ -456,11 +456,11 @@ static	void	menu_gui_level	(void)
 
 	/* Text */
 	sprintf(label.text, "Select level");
-	sprintf(button[1].text, "Beginner");
-	sprintf(button[2].text, "Intermediate");
-	sprintf(button[3].text, "Expert");
-	sprintf(button[4].text, "Custom");
-	sprintf(button[0].text, "Back");
+	sprintf(button[1].text, "[_1] Beginner");
+	sprintf(button[2].text, "[_2] Intermediate");
+	sprintf(button[3].text, "[_3] Expert");
+	sprintf(button[4].text, "[_4] Custom");
+	sprintf(button[0].text, "[_0] Back");
 
 	/* Data */
 	button[1].num	= 1;
@@ -478,13 +478,13 @@ static	void	menu_gui_level	(void)
 	box		= gtk_vbox_new(false, 0);
 	label.ptr	= gtk_label_new(label.text);
 	separator[0]	= gtk_hseparator_new();
-	button[1].ptr	= gtk_button_new_with_label(button[1].text);
-	button[2].ptr	= gtk_button_new_with_label(button[2].text);
-	button[3].ptr	= gtk_button_new_with_label(button[3].text);
+	button[1].ptr	= gtk_button_new_with_mnemonic(button[1].text);
+	button[2].ptr	= gtk_button_new_with_mnemonic(button[2].text);
+	button[3].ptr	= gtk_button_new_with_mnemonic(button[3].text);
 	separator[1]	= gtk_hseparator_new();
-	button[4].ptr	= gtk_button_new_with_label(button[4].text);
+	button[4].ptr	= gtk_button_new_with_mnemonic(button[4].text);
 	separator[2]	= gtk_hseparator_new();
-	button[0].ptr	= gtk_button_new_with_label(button[0].text);
+	button[0].ptr	= gtk_button_new_with_mnemonic(button[0].text);
 
 	/* Events */
 	g_signal_connect(button[1].ptr, "clicked",
@@ -551,7 +551,7 @@ static	void	menu_gui_custom	(void)
 
 	/* Text */
 	sprintf(label.text, "Custom");
-	sprintf(button[0].text, "Back");
+	sprintf(button[0].text, "[_0] Back");
 
 	/* Data */
 	button[1].num	= 1;
@@ -567,20 +567,20 @@ static	void	menu_gui_custom	(void)
 	wh	= true;
 	while (wh) {
 		/* Text */
-		sprintf(button[1].text, "Change rows: rows\t\t(%i)", menu_iface_variables.rows);
-		sprintf(button[2].text, "Change columns: cols\t(%i)", menu_iface_variables.cols);
-		sprintf(button[3].text, "Change proportion of mines: p\t(%lf)", menu_iface_variables.p);
+		sprintf(button[1].text, "[_1] Change rows: rows\t\t(%i)", menu_iface_variables.rows);
+		sprintf(button[2].text, "[_2] Change columns: cols\t(%i)", menu_iface_variables.cols);
+		sprintf(button[3].text, "[_3] Change proportion of mines: p\t(%lf)", menu_iface_variables.p);
 
 		/* Generate widgets */
 		box		= gtk_vbox_new(false, 0);
 		label.ptr	= gtk_label_new(label.text);
 		separator[0]	= gtk_hseparator_new();
-		button[1].ptr	= gtk_button_new_with_label(button[1].text);
-		button[2].ptr	= gtk_button_new_with_label(button[2].text);
+		button[1].ptr	= gtk_button_new_with_mnemonic(button[1].text);
+		button[2].ptr	= gtk_button_new_with_mnemonic(button[2].text);
 		separator[1]	= gtk_hseparator_new();
-		button[3].ptr	= gtk_button_new_with_label(button[3].text);
+		button[3].ptr	= gtk_button_new_with_mnemonic(button[3].text);
 		separator[2]	= gtk_hseparator_new();
-		button[0].ptr	= gtk_button_new_with_label(button[0].text);
+		button[0].ptr	= gtk_button_new_with_mnemonic(button[0].text);
 
 		/* Events */
 		g_signal_connect(button[1].ptr, "clicked",
@@ -647,8 +647,8 @@ static	void	menu_gui_devel	(void)
 
 	/* Text */
 	sprintf(label.text, "DEVELOPER OPTIONS");
-	sprintf(button[1].text, "Change seed (srand)");
-	sprintf(button[0].text, "Back");
+	sprintf(button[1].text, "[_1] Change seed (srand)");
+	sprintf(button[0].text, "[_0] Back");
 
 	/* Data */
 	button[1].num	= 1;
@@ -664,9 +664,9 @@ static	void	menu_gui_devel	(void)
 		box		= gtk_vbox_new(false, 0);
 		label.ptr	= gtk_label_new(label.text);
 		separator[0]	= gtk_hseparator_new();
-		button[1].ptr	= gtk_button_new_with_label(button[1].text);
+		button[1].ptr	= gtk_button_new_with_mnemonic(button[1].text);
 		separator[1]	= gtk_hseparator_new();
-		button[0].ptr	= gtk_button_new_with_label(button[0].text);
+		button[0].ptr	= gtk_button_new_with_mnemonic(button[0].text);
 
 		/* Events */
 		g_signal_connect(button[1].ptr, "clicked",
