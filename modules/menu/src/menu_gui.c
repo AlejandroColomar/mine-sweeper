@@ -37,6 +37,7 @@
  ******* macros ***************************************************************
  ******************************************************************************/
 	# define	LINE_SIZE	(80)
+	# define	BUFF_SIZE_TEXT	(1048576)
 
 
 /******************************************************************************
@@ -58,7 +59,15 @@ struct	Label_Data {
 /******************************************************************************
  ******* variables ************************************************************
  ******************************************************************************/
-GtkWidget	*window_gui;
+/*	*	*	*	*	*	*	*	*	*
+ *	*	* Global	*	*	*	*	*	*
+ *	*	*	*	*	*	*	*	*	*/
+	GtkWidget	*window_gui;
+
+/*	*	*	*	*	*	*	*	*	*
+ *	*	* Static	*	*	*	*	*	*
+ *	*	*	*	*	*	*	*	*	*/
+static	GtkWidget	*box;
 
 
 /******************************************************************************
@@ -73,6 +82,10 @@ static	void		destroy_window		(GtkWidget	*widget,
 	/* Selection */
 static	void		callback_button		(GtkWidget	*widget,
 						void		*data);
+	/* Text */
+static	void		menu_gui_disclaim	(void);
+static	void		menu_gui_license	(void);
+static	void		menu_gui_hiscores	(void);
 	/* Submenus */
 static	void		menu_gui_continue	(void);
 static	void		menu_gui_select		(void);
@@ -113,7 +126,6 @@ void	menu_gui		(void)
 {
 	bool			wh;
 	int			sw;
-	GtkWidget		*box;
 	GtkWidget		*separator[3];
 	struct Label_Data	label;
 	struct Button_Data	button [4];
@@ -192,10 +204,10 @@ void	menu_gui		(void)
 			menu_gui_continue();
 			break;
 		case 2:
-			print_share_file(SHARE_DISCLAIMER);
+			menu_gui_disclaim();
 			break;
 		case 3:
-			print_share_file(SHARE_LICENSE);
+			menu_gui_license();
 			break;
 		}
 	}
@@ -231,7 +243,7 @@ static	void		destroy_window	(GtkWidget	*widget,
 /*	*	*	*	*	*	*	*	*	*
  *	*	Selection	*	*	*	*	*	*
  *	*	*	*	*	*	*	*	*	*/
-static	void	callback_button		(GtkWidget	*widget,
+static	void		callback_button	(GtkWidget	*widget,
 					void		*data)
 {
 	struct Button_Data	*button;
@@ -244,13 +256,165 @@ static	void	callback_button		(GtkWidget	*widget,
 }
 
 /*	*	*	*	*	*	*	*	*	*
+ *	*	Text	*	*	*	*	*	*	*
+ *	*	*	*	*	*	*	*	*	*/
+static	void	menu_gui_disclaim	(void)
+{
+	int			sw;
+	GtkWidget		*separator[2];
+	struct Label_Data	label;
+	struct Button_Data	button [1];
+	GtkWidget		*label_file;
+	char			label_file_txt [BUFF_SIZE_TEXT];
+
+	/* Text */
+	snprintf(label.text, LINE_SIZE, "Disclaimer of warranty");
+	snprint_share_file(label_file_txt, BUFF_SIZE_TEXT, SHARE_DISCLAIMER);
+	snprintf(button[0].text, LINE_SIZE, "[_0] Back");
+
+	/* Data */
+	button[0].num	= 0;
+	button[0].sw	= &sw;
+
+	/* Generate widgets */
+	box		= gtk_vbox_new(false, 0);
+	label.ptr	= gtk_label_new(label.text);
+	separator[0]	= gtk_hseparator_new();
+	label_file	= gtk_label_new(label_file_txt);
+	separator[1]	= gtk_hseparator_new();
+	button[0].ptr	= gtk_button_new_with_mnemonic(button[0].text);
+
+	/* Events */
+	g_signal_connect(button[0].ptr, "clicked",
+			G_CALLBACK(callback_button), (void *)&button[0]);
+
+	/* Container */
+	gtk_container_add(GTK_CONTAINER(window_gui), box);
+
+	/* Box */
+	gtk_box_pack_start(GTK_BOX(box), label.ptr, false, false, 0);
+	gtk_box_pack_start(GTK_BOX(box), separator[0], false, false, 5);
+	gtk_box_pack_start(GTK_BOX(box), label_file, true, true, 0);
+	gtk_box_pack_start(GTK_BOX(box), separator[1], false, false, 5);
+	gtk_box_pack_start(GTK_BOX(box), button[0].ptr, true, true, 0);
+
+	/* Refresh */
+	gtk_widget_show_all(window_gui);
+
+	/* GTK loop */
+	gtk_main();
+
+	/* Clear window */
+	gtk_widget_destroy(box);
+}
+
+static	void	menu_gui_license	(void)
+{
+	int			sw;
+	GtkWidget		*separator[2];
+	struct Label_Data	label;
+	struct Button_Data	button [1];
+	GtkWidget		*label_file;
+	char			label_file_txt [BUFF_SIZE_TEXT];
+
+	/* Text */
+	snprintf(label.text, LINE_SIZE, "Terms and conditions");
+	snprint_share_file(label_file_txt, BUFF_SIZE_TEXT, SHARE_LICENSE);
+	snprintf(button[0].text, LINE_SIZE, "[_0] Back");
+
+	/* Data */
+	button[0].num	= 0;
+	button[0].sw	= &sw;
+
+	/* Generate widgets */
+	box		= gtk_vbox_new(false, 0);
+	label.ptr	= gtk_label_new(label.text);
+	separator[0]	= gtk_hseparator_new();
+	label_file	= gtk_label_new(label_file_txt);
+	separator[1]	= gtk_hseparator_new();
+	button[0].ptr	= gtk_button_new_with_mnemonic(button[0].text);
+
+	/* Events */
+	g_signal_connect(button[0].ptr, "clicked",
+			G_CALLBACK(callback_button), (void *)&button[0]);
+
+	/* Container */
+	gtk_container_add(GTK_CONTAINER(window_gui), box);
+
+	/* Box */
+	gtk_box_pack_start(GTK_BOX(box), label.ptr, false, false, 0);
+	gtk_box_pack_start(GTK_BOX(box), separator[0], false, false, 5);
+	gtk_box_pack_start(GTK_BOX(box), label_file, true, true, 0);
+	gtk_box_pack_start(GTK_BOX(box), separator[1], false, false, 5);
+	gtk_box_pack_start(GTK_BOX(box), button[0].ptr, true, true, 0);
+
+	/* Refresh */
+	gtk_widget_show_all(window_gui);
+
+	/* GTK loop */
+	gtk_main();
+
+	/* Clear window */
+	gtk_widget_destroy(box);
+}
+
+static	void	menu_gui_hiscores	(void)
+{
+	int			sw;
+	GtkWidget		*separator[2];
+	struct Label_Data	label;
+	struct Button_Data	button [1];
+	GtkWidget		*label_file;
+	char			label_file_txt [BUFF_SIZE_TEXT];
+
+	/* Text */
+	snprintf(label.text, LINE_SIZE, "Hi scores");
+//	snprint_scores(label_file_txt, BUFF_SIZE_TEXT, SHARE_LICENSE);
+	snprintf(button[0].text, LINE_SIZE, "[_0] Back");
+
+	/* Data */
+	button[0].num	= 0;
+	button[0].sw	= &sw;
+
+	/* Generate widgets */
+	box		= gtk_vbox_new(false, 0);
+	label.ptr	= gtk_label_new(label.text);
+	separator[0]	= gtk_hseparator_new();
+	label_file	= gtk_label_new(label_file_txt);
+	separator[1]	= gtk_hseparator_new();
+	button[0].ptr	= gtk_button_new_with_mnemonic(button[0].text);
+
+	/* Events */
+	g_signal_connect(button[0].ptr, "clicked",
+			G_CALLBACK(callback_button), (void *)&button[0]);
+
+	/* Container */
+	gtk_container_add(GTK_CONTAINER(window_gui), box);
+
+	/* Box */
+	gtk_box_pack_start(GTK_BOX(box), label.ptr, false, false, 0);
+	gtk_box_pack_start(GTK_BOX(box), separator[0], false, false, 5);
+	gtk_box_pack_start(GTK_BOX(box), label_file, true, true, 0);
+	gtk_box_pack_start(GTK_BOX(box), separator[1], false, false, 5);
+	gtk_box_pack_start(GTK_BOX(box), button[0].ptr, true, true, 0);
+
+	/* Refresh */
+	gtk_widget_show_all(window_gui);
+
+	/* GTK loop */
+	gtk_main();
+
+	/* Clear window */
+	gtk_widget_destroy(box);
+}
+
+/*	*	*	*	*	*	*	*	*	*
  *	*	Submenus	*	*	*	*	*	*
  *	*	*	*	*	*	*	*	*	*/
 static	void	menu_gui_continue	(void)
 {
 	bool			wh;
 	int			sw;
-	GtkWidget		*box;
 	GtkWidget		*separator[4];
 	struct Label_Data	label;
 	struct Button_Data	button [7];
@@ -367,7 +531,7 @@ static	void	menu_gui_continue	(void)
 			break;
 		case 5:
 			gtk_widget_destroy(box);
-			read_scores();
+			menu_gui_hiscores();
 			break;
 		case 6:
 			gtk_widget_destroy(box);
@@ -380,7 +544,6 @@ static	void	menu_gui_continue	(void)
 static	void	menu_gui_select	(void)
 {
 	int			sw;
-	GtkWidget		*box;
 	GtkWidget		*separator[3];
 	struct Label_Data	label;
 	struct Button_Data	button [3];
@@ -455,7 +618,6 @@ static	void	menu_gui_select	(void)
 static	void	menu_gui_level	(void)
 {
 	int			sw;
-	GtkWidget		*box;
 	GtkWidget		*separator[3];
 	struct Label_Data	label;
 	struct Button_Data	button [5];
@@ -550,7 +712,6 @@ static	void	menu_gui_custom	(void)
 {
 	bool			wh;
 	int			sw;
-	GtkWidget		*box;
 	GtkWidget		*separator[3];
 	struct Label_Data	label;
 	struct Button_Data	button [4];
@@ -646,7 +807,6 @@ static	void	menu_gui_devel	(void)
 {
 	bool			wh;
 	int			sw;
-	GtkWidget		*box;
 	GtkWidget		*separator[2];
 	struct Label_Data	label;
 	struct Button_Data	button [2];
