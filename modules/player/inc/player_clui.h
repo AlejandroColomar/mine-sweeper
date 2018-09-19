@@ -58,8 +58,8 @@ void	player_clui		(const struct Game_Iface_Out		*board,
 				const char				*subtitle,
 				int					*action);
 
-void	player_clui_save_name	(const char *filepath, char *filename);
-void	player_clui_score_name	(char *player_name);
+void	player_clui_save_name	(const char *filepath, char *filename, int destsize);
+void	player_clui_score_name	(char *player_name, int destsize);
 
 
 /******************************************************************************

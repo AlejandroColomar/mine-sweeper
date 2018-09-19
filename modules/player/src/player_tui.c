@@ -169,7 +169,7 @@ int	player_tui		(const struct Game_Iface_Out		*board,
 	*action	= usr_input();
 }
 
-void	player_tui_save_name	(const char *filepath, char *filename)
+void	player_tui_save_name	(const char *filepath, char *filename, int destsize)
 {
 	/* Input box */
 	int	w;
@@ -181,7 +181,7 @@ void	player_tui_save_name	(const char *filepath, char *filename)
 	alx_w_getfname(filepath, filename, false, w, r, "File name:", NULL);
 }
 
-void	player_tui_score_name	(char *player_name)
+void	player_tui_score_name	(char *player_name, int destsize)
 {
 	/* Input box */
 	int	w;
@@ -190,7 +190,7 @@ void	player_tui_score_name	(char *player_name)
 	r	= 10;
 
 	/* Request name */
-	alx_w_getstr(player_name, w, r, "Your name:", NULL);
+	alx_w_getstr(player_name, destsize, w, r, "Your name:", NULL);
 }
 
 void	player_tui_cleanup	(void)

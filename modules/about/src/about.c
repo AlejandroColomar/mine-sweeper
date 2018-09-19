@@ -11,8 +11,6 @@
  *	*	*	*	*	*	*	*	*	*/
 		/* printf() */
 	#include <stdio.h>
-		/* strcpy() & strcat() */
-	#include <string.h>
 
 /*	*	*	*	*	*	*	*	*	*
  *	*	* Other	*	*	*	*	*	*	*
@@ -21,6 +19,20 @@
 	#include "alx_file.h"
 
 	#include "about.h"
+
+
+/******************************************************************************
+ ******* macros ***************************************************************
+ ******************************************************************************/
+	# define	BUFF_SIZE_TEXT	(1048576)
+
+#if defined	OS_LINUX
+	# define	BEGINNING	"\n┌──────────────────────────────────────────────────────────────────────────────┐\n"
+	# define	ENDING		"└──────────────────────────────────────────────────────────────────────────────┘\n\n"
+#elif defined	OS_WIN
+	# define	BEGINNING	"\n________________________________________________________________________________\n"
+	# define	ENDING		"________________________________________________________________________________\n\n"
+#endif
 
 
 /******************************************************************************
@@ -34,65 +46,43 @@ char	share_path [FILENAME_MAX];
  ******************************************************************************/
 void	about_init		(void)
 {
-	strcpy(share_path, INSTALL_SHARE_DIR);
-	strcat(share_path, "/");
-	strcat(share_path, SHARE_DIR);
-	strcat(share_path, "/");
+	snprintf(share_path, FILENAME_MAX, "%s/%s/", INSTALL_SHARE_DIR, SHARE_DIR);
 }
 
-void	print_cpright		(void)
+void	snprint_share_file	(char *dest, int destsize, int share_file)
 {
 	char	file_name [FILENAME_MAX];
 
-	strcpy(file_name, share_path);
-	strcat(file_name, "/");
-	strcat(file_name, "COPYRIGHT.txt");
+	switch (share_file) {
+	case SHARE_COPYRIGHT:
+		snprintf(file_name, FILENAME_MAX, "%s/%s", share_path, "COPYRIGHT.txt");
+		break;
+	case SHARE_DISCLAIMER:
+		snprintf(file_name, FILENAME_MAX, "%s/%s", share_path, "DISCLAIMER.txt");
+		break;
+	case SHARE_HELP:
+		snprintf(file_name, FILENAME_MAX, "%s/%s", share_path, "HELP.txt");
+		break;
+	case SHARE_LICENSE:
+		snprintf(file_name, FILENAME_MAX, "%s/%s", share_path, "LICENSE.txt");
+		break;
+	case SHARE_USAGE:
+		snprintf(file_name, FILENAME_MAX, "%s/%s", share_path, "USAGE.txt");
+		break;
+	}
 
-	alx_prn_file(file_name);
+	alx_snprint_file(dest, destsize, file_name);
 }
 
-void	print_disclaim		(void)
+void	print_share_file	(int share_file)
 {
-	char	file_name [FILENAME_MAX];
+	char	str [BUFF_SIZE_TEXT];
 
-	strcpy(file_name, share_path);
-	strcat(file_name, "/");
-	strcat(file_name, "DISCLAIMER.txt");
+	snprint_share_file(str, BUFF_SIZE_TEXT, share_file);
 
-	alx_prn_file(file_name);
-}
-
-void	print_help		(void)
-{
-	char	file_name [FILENAME_MAX];
-
-	strcpy(file_name, share_path);
-	strcat(file_name, "/");
-	strcat(file_name, "HELP.txt");
-
-	alx_prn_file(file_name);
-}
-
-void	print_license		(void)
-{
-	char	file_name [FILENAME_MAX];
-
-	strcpy(file_name, share_path);
-	strcat(file_name, "/");
-	strcat(file_name, "LICENSE.txt");
-
-	alx_prn_file(file_name);
-}
-
-void	print_usage		(void)
-{
-	char	file_name [FILENAME_MAX];
-
-	strcpy(file_name, share_path);
-	strcat(file_name, "/");
-	strcat(file_name, "USAGE.txt");
-
-	alx_prn_file(file_name);
+	printf(BEGINNING);
+	printf("%s", str);
+	printf(ENDING);
 }
 
 void	print_version		(void)

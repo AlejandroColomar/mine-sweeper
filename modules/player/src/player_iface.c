@@ -9,7 +9,7 @@
 /*	*	*	*	*	*	*	*	*	*
  *	*	* Standard	*	*	*	*	*	*
  *	*	*	*	*	*	*	*	*	*/
-		/* sprintf() & fflush() */
+		/* snprintf() & fflush() */
 	#include <stdio.h>
 
 /*	*	*	*	*	*	*	*	*	*
@@ -46,6 +46,7 @@ int	player_iface_mode;
  *	*	* Static	*	*	*	*	*	*
  *	*	*	*	*	*	*	*	*	*/
 static	struct Player_Iface_Position	player_iface_position;
+static	int				player_action;
 
 
 /******************************************************************************
@@ -88,7 +89,7 @@ void	player_iface_init	(int rows, int cols)
 		break;
 
 	case PLAYER_IFACE_GUI:
-		player_gui_init();
+		player_gui_init(&player_iface_position, &player_action);
 		break;
 	}
 }
@@ -97,10 +98,10 @@ int	player_iface_start	(int *pos_row, int *pos_col)
 {
 	/* Title */
 	char	title[TITLE_SIZE];
-	sprintf(title, "Start:");
+	snprintf(title, TITLE_SIZE, "Start:");
 	/* Subtitle */
 	char	subtitle[TITLE_SIZE];
-	sprintf(subtitle, "00:00 | 0");
+	snprintf(subtitle, TITLE_SIZE, "00:00 | 0");
 
 	/* Start position */
 	player_iface_position.row	= 0;
@@ -108,7 +109,6 @@ int	player_iface_start	(int *pos_row, int *pos_col)
 	player_iface_position.highlight	= false;
 
 	/* Loop until first step */
-	int	player_action;
 	do {
 		switch (player_iface_mode) {
 		case PLAYER_IFACE_CLUI:
@@ -123,7 +123,7 @@ int	player_iface_start	(int *pos_row, int *pos_col)
 
 		case PLAYER_IFACE_GUI:
 			player_gui_start(&player_iface_position,
-						title, subtitle, &player_action);
+						title, subtitle);
 			break;
 		}
 
@@ -158,15 +158,15 @@ void	player_iface		(const	struct Game_Iface_Out	*game_iface_out,
 	case GAME_IFACE_STATE_CHEATED:
 	case GAME_IFACE_STATE_PLAYING:
 	case GAME_IFACE_STATE_PAUSE:
-		sprintf(title, "Mines: %i/%i", game_iface_out->flags, game_iface_out->mines);
+		snprintf(title, TITLE_SIZE, "Mines: %i/%i", game_iface_out->flags, game_iface_out->mines);
 		break;
 
 	case GAME_IFACE_STATE_GAMEOVER:
-		sprintf(title, "GAME OVER");
+		snprintf(title, TITLE_SIZE, "GAME OVER");
 		break;
 
 	case GAME_IFACE_STATE_SAFE:
-		sprintf(title, "You win!");
+		snprintf(title, TITLE_SIZE, "You win!");
 		break;
 	}
 	/* Subtitle */
@@ -180,16 +180,15 @@ void	player_iface		(const	struct Game_Iface_Out	*game_iface_out,
 		secs	= ((int)game_iface_score->time % 60);
 
 		if (game_iface_score->time >= 3600) {
-			sprintf(subtitle, "%02i:%02i:%02i | %i", hours, mins, secs, game_iface_score->clicks);
+			snprintf(subtitle, TITLE_SIZE, "%02i:%02i:%02i | %i", hours, mins, secs, game_iface_score->clicks);
 		} else {
-			sprintf(subtitle, "%02i:%02i | %i", mins, secs, game_iface_score->clicks);
+			snprintf(subtitle, TITLE_SIZE, "%02i:%02i | %i", mins, secs, game_iface_score->clicks);
 		}
 	} else {
-		sprintf(subtitle, "N/A");
+		snprintf(subtitle, TITLE_SIZE, "N/A");
 	}
 
 	/* Request player action */
-	int	player_action;
 	switch (player_iface_mode) {
 	case PLAYER_IFACE_CLUI:
 		player_clui(game_iface_out, &player_iface_position,
@@ -203,43 +202,43 @@ void	player_iface		(const	struct Game_Iface_Out	*game_iface_out,
 
 	case PLAYER_IFACE_GUI:
 		player_gui(game_iface_out, &player_iface_position,
-					title, subtitle, &player_action);
+					title, subtitle);
 		break;
 	}
 
 	player_iface_act(game_iface_in, player_action);
 }
 
-void	player_iface_save_name	(const char *filepath, char *filename)
+void	player_iface_save_name	(const char *filepath, char *filename, int destsize)
 {
 	switch (player_iface_mode) {
 	case PLAYER_IFACE_CLUI:
-		player_clui_save_name(filepath, filename);
+		player_clui_save_name(filepath, filename, destsize);
 		break;
 
 	case PLAYER_IFACE_TUI:
-		player_tui_save_name(filepath, filename);
+		player_tui_save_name(filepath, filename, destsize);
 		break;
 
 	case PLAYER_IFACE_GUI:
-		player_gui_save_name(filepath, filename);
+		player_gui_save_name(filepath, filename, destsize);
 		break;
 	}
 }
 
-void	player_iface_score_name	(char *player_name)
+void	player_iface_score_name	(char *player_name, int destsize)
 {
 	switch (player_iface_mode) {
 	case PLAYER_IFACE_CLUI:
-		player_clui_score_name(player_name);
+		player_clui_score_name(player_name, destsize);
 		break;
 
 	case PLAYER_IFACE_TUI:
-		player_tui_score_name(player_name);
+		player_tui_score_name(player_name, destsize);
 		break;
 
 	case PLAYER_IFACE_GUI:
-		player_gui_score_name(player_name);
+		player_gui_score_name(player_name, destsize);
 		break;
 	}
 }
