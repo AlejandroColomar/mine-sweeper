@@ -48,6 +48,7 @@
  ******* functions ************************************************************
  ******************************************************************************/
 	void	about_init		(void);
+	void	snprint_share_file	(char *dest, int destsize, int share_file);
 	void	print_share_file	(int share_file);
 	void	print_version		(void);
 

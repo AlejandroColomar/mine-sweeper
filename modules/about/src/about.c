@@ -49,10 +49,9 @@ void	about_init		(void)
 	snprintf(share_path, FILENAME_MAX, "%s/%s/", INSTALL_SHARE_DIR, SHARE_DIR);
 }
 
-void	print_share_file	(int share_file)
+void	snprint_share_file	(char *dest, int destsize, int share_file)
 {
 	char	file_name [FILENAME_MAX];
-	char	str [BUFF_SIZE_TEXT];
 
 	switch (share_file) {
 	case SHARE_COPYRIGHT:
@@ -72,7 +71,14 @@ void	print_share_file	(int share_file)
 		break;
 	}
 
-	alx_snprint_file(str, BUFF_SIZE_TEXT, file_name);
+	alx_snprint_file(dest, destsize, file_name);
+}
+
+void	print_share_file	(int share_file)
+{
+	char	str [BUFF_SIZE_TEXT];
+
+	snprint_share_file(str, BUFF_SIZE_TEXT, share_file);
 
 	printf(BEGINNING);
 	printf("%s", str);
