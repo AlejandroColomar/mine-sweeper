@@ -24,6 +24,20 @@
 
 
 /******************************************************************************
+ ******* macros ***************************************************************
+ ******************************************************************************/
+	# define	BUFF_SIZE_TEXT	(1048576)
+
+#if defined	OS_LINUX
+	# define	BEGINNING	"\n┌──────────────────────────────────────────────────────────────────────────────┐\n"
+	# define	ENDING		"└──────────────────────────────────────────────────────────────────────────────┘\n\n"
+#elif defined	OS_WIN
+	# define	BEGINNING	"\n________________________________________________________________________________\n"
+	# define	ENDING		"________________________________________________________________________________\n\n"
+#endif
+
+
+/******************************************************************************
  ******* variables ************************************************************
  ******************************************************************************/
 char	share_path [FILENAME_MAX];
@@ -43,56 +57,81 @@ void	about_init		(void)
 void	print_cpright		(void)
 {
 	char	file_name [FILENAME_MAX];
+	char	str [BUFF_SIZE_TEXT];
 
 	strcpy(file_name, share_path);
 	strcat(file_name, "/");
 	strcat(file_name, "COPYRIGHT.txt");
 
-	alx_prn_file(file_name);
+	alx_snprint_file(str, BUFF_SIZE_TEXT, file_name);
+
+	printf(BEGINNING);
+	printf("%s", str);
+	printf(ENDING);
 }
 
 void	print_disclaim		(void)
 {
 	char	file_name [FILENAME_MAX];
+	char	str [BUFF_SIZE_TEXT];
 
 	strcpy(file_name, share_path);
 	strcat(file_name, "/");
 	strcat(file_name, "DISCLAIMER.txt");
 
-	alx_prn_file(file_name);
+	alx_snprint_file(str, BUFF_SIZE_TEXT, file_name);
+
+	printf(BEGINNING);
+	printf("%s", str);
+	printf(ENDING);
 }
 
 void	print_help		(void)
 {
 	char	file_name [FILENAME_MAX];
+	char	str [BUFF_SIZE_TEXT];
 
 	strcpy(file_name, share_path);
 	strcat(file_name, "/");
 	strcat(file_name, "HELP.txt");
 
-	alx_prn_file(file_name);
+	alx_snprint_file(str, BUFF_SIZE_TEXT, file_name);
+
+	printf(BEGINNING);
+	printf("%s", str);
+	printf(ENDING);
 }
 
 void	print_license		(void)
 {
 	char	file_name [FILENAME_MAX];
+	char	str [BUFF_SIZE_TEXT];
 
 	strcpy(file_name, share_path);
 	strcat(file_name, "/");
 	strcat(file_name, "LICENSE.txt");
 
-	alx_prn_file(file_name);
+	alx_snprint_file(str, BUFF_SIZE_TEXT, file_name);
+
+	printf(BEGINNING);
+	printf("%s", str);
+	printf(ENDING);
 }
 
 void	print_usage		(void)
 {
 	char	file_name [FILENAME_MAX];
+	char	str [BUFF_SIZE_TEXT];
 
 	strcpy(file_name, share_path);
 	strcat(file_name, "/");
 	strcat(file_name, "USAGE.txt");
 
-	alx_prn_file(file_name);
+	alx_snprint_file(str, BUFF_SIZE_TEXT, file_name);
+
+	printf(BEGINNING);
+	printf("%s", str);
+	printf(ENDING);
 }
 
 void	print_version		(void)
