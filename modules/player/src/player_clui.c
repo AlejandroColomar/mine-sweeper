@@ -10,7 +10,7 @@
  *	*	* Standard	*	*	*	*	*	*
  *	*	*	*	*	*	*	*	*	*/
 	#include <stdbool.h>
-		/* sprintf() */
+		/* printf() & sscanf() */
 	#include <stdio.h>
 	#include <wchar.h>
 
@@ -104,16 +104,16 @@ void	player_clui		(const struct Game_Iface_Out		*board,
 	oldaction	= *action;
 }
 
-void	player_clui_save_name	(const char *filepath, char *filename)
+void	player_clui_save_name	(const char *filepath, char *filename, int destsize)
 {
 	puts("File name:");
-	scanf(" %100c ", filename);
+	fgets(filename, destsize, stdin);
 }
 
-void	player_clui_score_name	(char *player_name)
+void	player_clui_score_name	(char *player_name, int destsize)
 {
 	puts("Your name:");
-	scanf(" %100c ", player_name);
+	fgets(player_name, destsize, stdin);
 }
 
 

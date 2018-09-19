@@ -44,7 +44,7 @@ int	main	(int argc, char *argv[])
 	init_all(&argc, &argv);
 
 	/* Print copyright () and wait for any key to continue */
-	print_cpright();
+	print_share_file(SHARE_COPYRIGHT);
 	getchar();
 
 	/* Start () */
