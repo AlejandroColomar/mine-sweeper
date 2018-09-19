@@ -99,7 +99,7 @@ void	load_game_file	(void)
 	int	i;
 	int	j;
 
-	snprintf(file_name, FILENAME_MAX, "%s/%s/", saved_path, saved_name);
+	snprintf(file_name, FILENAME_MAX, "%s/%s", saved_path, saved_name);
 
 	fp	= fopen(file_name, "r");
 	if (fp) {
@@ -131,6 +131,7 @@ void	load_game_file	(void)
 void	save_game_file	(char *filepath)
 {
 	char	file_name [FILENAME_MAX];
+	char	tmp [FILENAME_MAX];
 	char	file_num [6]	= "";
 	FILE	*fp;
 
@@ -172,8 +173,9 @@ void	save_game_file	(char *filepath)
 			file_num[4] =	'\0';
 		} else {
 			x	= false;
-			snprintf(saved_name, FILENAME_MAX, "%s%s%s",
+			snprintf(tmp, FILENAME_MAX, "%s%s%s",
 					saved_name, file_num, FILE_EXTENSION);
+			snprintf(saved_name, FILENAME_MAX, "%s", tmp);
 		}
 	}
 
