@@ -39,6 +39,10 @@
 	If you make a version, please tell me.
 	I would like to see it. Thank you.
 
+site:
+	https://github.com/AlejandroColomar/mine-sweeper
+
+
 COMPILE:
 	 - linux:
 		$ make
