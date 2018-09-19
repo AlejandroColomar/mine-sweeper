@@ -35,6 +35,7 @@
  ******* macros ***************************************************************
  ******************************************************************************/
 	# define	BUFF_SIZE	(1024)
+	# define	BUFF_SIZE_TEXT	(1048576)
 
 
 /******************************************************************************
@@ -55,7 +56,7 @@ char	var_hiscores_expert_name [FILENAME_MAX];
 /******************************************************************************
  ******* static functions *****************************************************
  ******************************************************************************/
-static	void	read_scores_file	(char *file_name);
+static	void	snprint_scores_file	(char *dest, int destsize, char *file_name);
 
 
 /******************************************************************************
@@ -142,36 +143,47 @@ void	save_score	(const struct Game_Iface_Score  *game_iface_score)
 	}
 }
 
-void	read_scores	(void)
+void	snprint_scores	(char *dest, int destsize)
 {
 	/* File */
 	char	file_name [FILENAME_MAX];
 
+	/* Tmp strings */
+	char	tmp1 [BUFF_SIZE_TEXT];
+	char	tmp2 [BUFF_SIZE_TEXT];
+
 	/* Beginner */
 	snprintf(file_name, FILENAME_MAX, "%s/%s",
 			var_hiscores_path, var_hiscores_beginner_name);
-	read_scores_file(file_name);
+	snprint_scores_file(dest, destsize, file_name);
 
 	/* Intermediate */
 	snprintf(file_name, FILENAME_MAX, "%s/%s",
 			var_hiscores_path, var_hiscores_intermediate_name);
-	read_scores_file(file_name);
+	snprint_scores_file(tmp1, destsize, file_name);
+	snprintf(tmp2, destsize, "%s%s", dest, tmp1);
+	snprintf(dest, destsize, "%s", tmp2);
 
 	/* Expert */
 	snprintf(file_name, FILENAME_MAX, "%s/%s",
 			var_hiscores_path, var_hiscores_expert_name);
-	read_scores_file(file_name);
+	snprint_scores_file(tmp1, destsize, file_name);
+	snprintf(tmp2, destsize, "%s%s", dest, tmp1);
+	snprintf(dest, destsize, "%s", tmp2);
 }
 
 
 /******************************************************************************
  ******* static functions *****************************************************
  ******************************************************************************/
-static	void	read_scores_file	(char *file_name)
+static	void	snprint_scores_file	(char *dest, int destsize, char *file_name)
 {
 	/* File */
 	FILE	*fp;
 	int	c;
+
+	/* Tmp string */
+	char	tmp [BUFF_SIZE_TEXT];
 
 	/* Score variables */
 	char	title [BUFF_SIZE];
@@ -195,9 +207,11 @@ static	void	read_scores_file	(char *file_name)
 		fscanf(fp, " ");
 
 		/* Print */
-		printf("_______________________________________________________\n");
-		printf("%s\n\n", title);
-		printf("name	date		clicks	time		file\n\n");
+		snprintf(dest, destsize,
+				"_______________________________________________________\n"
+				"%s\n\n"
+				"name	date		clicks	time		file\n\n",
+				title);
 
 		while ((c = getc(fp)) != EOF){
 			ungetc(c, fp);
@@ -227,12 +241,17 @@ static	void	read_scores_file	(char *file_name)
 			secs	= (time % 60);
 
 			/* Print */
-			printf("%s\n\t", name);
-			printf("%4i/%2i/%2i	%i	%i:%02i:%02i	\t%s\n\n",
-				year, 1 + mon, day,
-						clicks,
-							hours, mins, secs,
-									file);
+			snprintf(tmp, BUFF_SIZE_TEXT,
+					"%s"
+					"%s\n"
+					"	%4i/%2i/%2i	%i	%i:%02i:%02i	\t%s\n\n",
+					dest,
+					name,
+						year, 1 + mon, day,
+								clicks,
+									hours, mins, secs,
+											file);
+			snprintf(dest, BUFF_SIZE_TEXT, "%s", tmp);
 		}
 
 		fclose(fp);

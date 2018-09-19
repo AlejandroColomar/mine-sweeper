@@ -369,7 +369,7 @@ static	void	menu_gui_hiscores	(void)
 
 	/* Text */
 	snprintf(label.text, LINE_SIZE, "Hi scores");
-//	snprint_scores(label_file_txt, BUFF_SIZE_TEXT, SHARE_LICENSE);
+	snprint_scores(label_file_txt, BUFF_SIZE_TEXT);
 	snprintf(button[0].text, LINE_SIZE, "[_0] Back");
 
 	/* Data */

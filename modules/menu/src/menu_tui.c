@@ -45,6 +45,8 @@
 #	error	"cols max (tui)"
 #endif
 
+	# define	BUFF_SIZE_TEXT	(1048576)
+
 
 /******************************************************************************
  ******* static functions *****************************************************
@@ -121,6 +123,9 @@ void	menu_tui		(void)
  ******************************************************************************/
 static	void	menu_tui_continue	(void)
 {
+	/* Hi scores tmp string */
+	char	str [BUFF_SIZE_TEXT];
+
 	/* Menu dimensions & options */
 	WINDOW	*win;
 	int	h;
@@ -196,7 +201,8 @@ static	void	menu_tui_continue	(void)
 		case 5:
 			alx_win_del(win);
 			alx_pause_curses();
-			read_scores();
+			snprint_scores(str, BUFF_SIZE_TEXT);
+			printf("%s", str);
 			getchar();
 			alx_resume_curses();
 			break;
