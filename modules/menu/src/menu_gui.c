@@ -14,7 +14,7 @@
 	#include <math.h>
 		/* true & false */
 	#include <stdbool.h>
-		/* sprintf() */
+		/* snprintf() */
 	#include <stdio.h>
 		/* srand() */
 	#include <stdlib.h>
@@ -34,18 +34,24 @@
 
 
 /******************************************************************************
+ ******* macros ***************************************************************
+ ******************************************************************************/
+	# define	LINE_SIZE	(80)
+
+
+/******************************************************************************
  ******* structs **************************************************************
  ******************************************************************************/
 struct	Button_Data {
 	GtkWidget	*ptr;
-	char		text [80];
+	char		text [LINE_SIZE];
 	int		num;
 	int		*sw;
 };
 
 struct	Label_Data {
 	GtkWidget	*ptr;
-	char		text [80];
+	char		text [LINE_SIZE];
 };
 
 
@@ -89,8 +95,8 @@ void	menu_gui_init		(void)
 	g_signal_connect(window_gui, "destroy", G_CALLBACK(destroy_window), NULL);
 
 	/* Title.  PROG_VERSION defined in Makefile */
-	char		title [80];
-	sprintf(title, "mine-sweeper %s", PROG_VERSION);
+	char		title [LINE_SIZE];
+	snprintf(title, LINE_SIZE, "mine-sweeper %s", PROG_VERSION);
 	gtk_window_set_title(GTK_WINDOW(window_gui), title);
 
 	/* Border */
@@ -113,11 +119,11 @@ void	menu_gui		(void)
 	struct Button_Data	button [4];
 
 	/* Text */
-	sprintf(label.text, "Main menu");
-	sprintf(button[1].text, "[_1] Continue");
-	sprintf(button[2].text, "[_2] Disclaimer of warranty");
-	sprintf(button[3].text, "[_3] Terms and conditions");
-	sprintf(button[0].text, "[_0] Exit program");
+	snprintf(label.text, LINE_SIZE, "Main menu");
+	snprintf(button[1].text, LINE_SIZE, "[_1] Continue");
+	snprintf(button[2].text, LINE_SIZE, "[_2] Disclaimer of warranty");
+	snprintf(button[3].text, LINE_SIZE, "[_3] Terms and conditions");
+	snprintf(button[0].text, LINE_SIZE, "[_0] Exit program");
 
 	/* Data */
 	button[1].num	= 1;
@@ -250,13 +256,13 @@ static	void	menu_gui_continue	(void)
 	struct Button_Data	button [7];
 
 	/* Text */
-	sprintf(label.text, "Game menu");
-	sprintf(button[1].text, "[_1] Start");
-	sprintf(button[2].text, "[_2] Select map");
-	sprintf(button[3].text, "[_3] Change difficulty");
-	sprintf(button[5].text, "[_5] Hi scores");
-	sprintf(button[6].text, "[_6] DEVEL");
-	sprintf(button[0].text, "[_0] Back");
+	snprintf(label.text, LINE_SIZE, "Game menu");
+	snprintf(button[1].text, LINE_SIZE, "[_1] Start");
+	snprintf(button[2].text, LINE_SIZE, "[_2] Select map");
+	snprintf(button[3].text, LINE_SIZE, "[_3] Change difficulty");
+	snprintf(button[5].text, LINE_SIZE, "[_5] Hi scores");
+	snprintf(button[6].text, LINE_SIZE, "[_6] DEVEL");
+	snprintf(button[0].text, LINE_SIZE, "[_0] Back");
 
 	/* Data */
 	button[1].num	= 1;
@@ -278,7 +284,7 @@ static	void	menu_gui_continue	(void)
 	wh	= true;
 	while (wh) {
 		/* Text */
-		sprintf(button[4].text, "[_4] Change file name (File: \"%s\")", saved_name);
+		snprintf(button[4].text, LINE_SIZE, "[_4] Change file name (File: \"%s\")", saved_name);
 
 		/* Generate widgets */
 		box		= gtk_vbox_new(false, 0);
@@ -380,10 +386,10 @@ static	void	menu_gui_select	(void)
 	struct Button_Data	button [3];
 
 	/* Text */
-	sprintf(label.text, "Select map");
-	sprintf(button[1].text, "[_1] New map");
-	sprintf(button[2].text, "[_2] Load map (File: \"%s\")", saved_name);
-	sprintf(button[0].text, "[_0] Back");
+	snprintf(label.text, LINE_SIZE, "Select map");
+	snprintf(button[1].text, LINE_SIZE, "[_1] New map");
+	snprintf(button[2].text, LINE_SIZE, "[_2] Load map (File: \"%s\")", saved_name);
+	snprintf(button[0].text, LINE_SIZE, "[_0] Back");
 
 	/* Data */
 	button[1].num	= 1;
@@ -455,12 +461,12 @@ static	void	menu_gui_level	(void)
 	struct Button_Data	button [5];
 
 	/* Text */
-	sprintf(label.text, "Select level");
-	sprintf(button[1].text, "[_1] Beginner");
-	sprintf(button[2].text, "[_2] Intermediate");
-	sprintf(button[3].text, "[_3] Expert");
-	sprintf(button[4].text, "[_4] Custom");
-	sprintf(button[0].text, "[_0] Back");
+	snprintf(label.text, LINE_SIZE, "Select level");
+	snprintf(button[1].text, LINE_SIZE, "[_1] Beginner");
+	snprintf(button[2].text, LINE_SIZE, "[_2] Intermediate");
+	snprintf(button[3].text, LINE_SIZE, "[_3] Expert");
+	snprintf(button[4].text, LINE_SIZE, "[_4] Custom");
+	snprintf(button[0].text, LINE_SIZE, "[_0] Back");
 
 	/* Data */
 	button[1].num	= 1;
@@ -550,8 +556,8 @@ static	void	menu_gui_custom	(void)
 	struct Button_Data	button [4];
 
 	/* Text */
-	sprintf(label.text, "Custom");
-	sprintf(button[0].text, "[_0] Back");
+	snprintf(label.text, LINE_SIZE, "Custom");
+	snprintf(button[0].text, LINE_SIZE, "[_0] Back");
 
 	/* Data */
 	button[1].num	= 1;
@@ -567,9 +573,9 @@ static	void	menu_gui_custom	(void)
 	wh	= true;
 	while (wh) {
 		/* Text */
-		sprintf(button[1].text, "[_1] Change rows: rows\t\t(%i)", menu_iface_variables.rows);
-		sprintf(button[2].text, "[_2] Change columns: cols\t(%i)", menu_iface_variables.cols);
-		sprintf(button[3].text, "[_3] Change proportion of mines: p\t(%lf)", menu_iface_variables.p);
+		snprintf(button[1].text, LINE_SIZE, "[_1] Change rows: rows\t\t(%i)", menu_iface_variables.rows);
+		snprintf(button[2].text, LINE_SIZE, "[_2] Change columns: cols\t(%i)", menu_iface_variables.cols);
+		snprintf(button[3].text, LINE_SIZE, "[_3] Change proportion of mines: p\t(%lf)", menu_iface_variables.p);
 
 		/* Generate widgets */
 		box		= gtk_vbox_new(false, 0);
@@ -646,9 +652,9 @@ static	void	menu_gui_devel	(void)
 	struct Button_Data	button [2];
 
 	/* Text */
-	sprintf(label.text, "DEVELOPER OPTIONS");
-	sprintf(button[1].text, "[_1] Change seed (srand)");
-	sprintf(button[0].text, "[_0] Back");
+	snprintf(label.text, LINE_SIZE, "DEVELOPER OPTIONS");
+	snprintf(button[1].text, LINE_SIZE, "[_1] Change seed (srand)");
+	snprintf(button[0].text, LINE_SIZE, "[_0] Back");
 
 	/* Data */
 	button[1].num	= 1;

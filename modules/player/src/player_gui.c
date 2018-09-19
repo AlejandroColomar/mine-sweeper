@@ -32,6 +32,7 @@
 /******************************************************************************
  ******* macros ***************************************************************
  ******************************************************************************/
+	# define	LINE_SIZE		(80)
 	# define	REFRESH_TIME_MS		(100)
 
 
@@ -68,15 +69,15 @@ struct	Field_Data {
 
 struct	Button_Data {
 	GtkWidget	*ptr;
-	char		text [80];
+	char		text [LINE_SIZE];
 	int		val;
 	int		*act;
 };
 
 struct	TButton_Data {
 	GtkWidget	*ptr;
-	char		text [80];
-	char		text2 [80];
+	char		text [LINE_SIZE];
+	char		text2 [LINE_SIZE];
 	int		val;
 	int		val2;
 	int		*act;
@@ -90,7 +91,7 @@ struct	EvBox_Data {
 
 struct	Label_Data {
 	GtkWidget	*ptr;
-	char		text [80];
+	char		text [LINE_SIZE];
 };
 
 
@@ -495,13 +496,13 @@ static	void	help_init		(int				*action)
 	gtk_box_pack_start(GTK_BOX(box_help), box_help_in, false, false, 5);
 
 	/* Text */
-	sprintf(button[BTN_CH_OFF].text, "[_0] Cheats off");
-	sprintf(button[BTN_CH_1].text, "Cheat _1");
-	sprintf(button[BTN_CH_2].text, "Cheat _2");
-	sprintf(tbutton[TBTN_PAUSE].text, "_Pause");
-	sprintf(tbutton[TBTN_PAUSE].text2, "[_P] Continue");
-	sprintf(button[BTN_SAVE].text, "_Save");
-	sprintf(button[BTN_QUIT].text, "_Quit");
+	snprintf(button[BTN_CH_OFF].text, LINE_SIZE, "[_0] Cheats off");
+	snprintf(button[BTN_CH_1].text, LINE_SIZE, "Cheat _1");
+	snprintf(button[BTN_CH_2].text, LINE_SIZE, "Cheat _2");
+	snprintf(tbutton[TBTN_PAUSE].text, LINE_SIZE, "_Pause");
+	snprintf(tbutton[TBTN_PAUSE].text2, LINE_SIZE, "[_P] Continue");
+	snprintf(button[BTN_SAVE].text, LINE_SIZE, "_Save");
+	snprintf(button[BTN_QUIT].text, LINE_SIZE, "_Quit");
 
 	/* Data */
 		/* L click */

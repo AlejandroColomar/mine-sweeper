@@ -9,7 +9,7 @@
 /*	*	*	*	*	*	*	*	*	*
  *	*	* Standard	*	*	*	*	*	*
  *	*	*	*	*	*	*	*	*	*/
-		/* sprintf() & fflush() */
+		/* snprintf() & fflush() */
 	#include <stdio.h>
 
 /*	*	*	*	*	*	*	*	*	*
@@ -98,10 +98,10 @@ int	player_iface_start	(int *pos_row, int *pos_col)
 {
 	/* Title */
 	char	title[TITLE_SIZE];
-	sprintf(title, "Start:");
+	snprintf(title, TITLE_SIZE, "Start:");
 	/* Subtitle */
 	char	subtitle[TITLE_SIZE];
-	sprintf(subtitle, "00:00 | 0");
+	snprintf(subtitle, TITLE_SIZE, "00:00 | 0");
 
 	/* Start position */
 	player_iface_position.row	= 0;
@@ -158,15 +158,15 @@ void	player_iface		(const	struct Game_Iface_Out	*game_iface_out,
 	case GAME_IFACE_STATE_CHEATED:
 	case GAME_IFACE_STATE_PLAYING:
 	case GAME_IFACE_STATE_PAUSE:
-		sprintf(title, "Mines: %i/%i", game_iface_out->flags, game_iface_out->mines);
+		snprintf(title, TITLE_SIZE, "Mines: %i/%i", game_iface_out->flags, game_iface_out->mines);
 		break;
 
 	case GAME_IFACE_STATE_GAMEOVER:
-		sprintf(title, "GAME OVER");
+		snprintf(title, TITLE_SIZE, "GAME OVER");
 		break;
 
 	case GAME_IFACE_STATE_SAFE:
-		sprintf(title, "You win!");
+		snprintf(title, TITLE_SIZE, "You win!");
 		break;
 	}
 	/* Subtitle */
@@ -180,12 +180,12 @@ void	player_iface		(const	struct Game_Iface_Out	*game_iface_out,
 		secs	= ((int)game_iface_score->time % 60);
 
 		if (game_iface_score->time >= 3600) {
-			sprintf(subtitle, "%02i:%02i:%02i | %i", hours, mins, secs, game_iface_score->clicks);
+			snprintf(subtitle, TITLE_SIZE, "%02i:%02i:%02i | %i", hours, mins, secs, game_iface_score->clicks);
 		} else {
-			sprintf(subtitle, "%02i:%02i | %i", mins, secs, game_iface_score->clicks);
+			snprintf(subtitle, TITLE_SIZE, "%02i:%02i | %i", mins, secs, game_iface_score->clicks);
 		}
 	} else {
-		sprintf(subtitle, "N/A");
+		snprintf(subtitle, TITLE_SIZE, "N/A");
 	}
 
 	/* Request player action */

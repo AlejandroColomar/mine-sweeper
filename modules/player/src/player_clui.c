@@ -10,7 +10,7 @@
  *	*	* Standard	*	*	*	*	*	*
  *	*	*	*	*	*	*	*	*	*/
 	#include <stdbool.h>
-		/* sprintf() */
+		/* printf() & sscanf() */
 	#include <stdio.h>
 	#include <wchar.h>
 
