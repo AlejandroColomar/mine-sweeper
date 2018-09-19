@@ -34,8 +34,6 @@
 		SHARE_LICENSE,
 		SHARE_USAGE
 	};
-	# define	PROG_NAME	"mine-sweeper"
-	# define	PROG_YEAR	"2015"
 
 
 /******************************************************************************
