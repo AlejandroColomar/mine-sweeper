@@ -9,12 +9,10 @@
 /*	*	*	*	*	*	*	*	*	*
  *	*	* Standard	*	*	*	*	*	*
  *	*	*	*	*	*	*	*	*	*/
-		/* fscanf() & fprintf() & FILE & FILENAME_MAX */
+		/* fscanf() & fprintf() & FILE & FILENAME_MAX & snprintf() */
 	#include <stdio.h>
 		/* exit() */
 	#include <stdlib.h>
-		/* strcpy() & strcat() */
-	#include <string.h>
 		/* time_t & time() & struct tm & localtime() */
 	#include <time.h>
 
@@ -65,57 +63,44 @@ static	void	read_scores_file	(char *file_name);
  ******************************************************************************/
 void	score_init	(void)
 {
-	strcpy(var_path, INSTALL_VAR_DIR);
-	strcat(var_path, "/");
-	strcat(var_path, VAR_DIR);
-	strcat(var_path, "/");
-
-	strcpy(var_hiscores_path, var_path);
-	strcat(var_hiscores_path, "/");
-	strcat(var_hiscores_path, HISCORES_DIR);
-	strcat(var_hiscores_path, "/");
-
-	strcpy(var_boards_beginner_path, var_path);
-	strcat(var_boards_beginner_path, "/");
-	strcat(var_boards_beginner_path, BOARDS_BEGINNER_DIR);
-	strcat(var_boards_beginner_path, "/");
-
-	strcpy(var_boards_intermediate_path, var_path);
-	strcat(var_boards_intermediate_path, "/");
-	strcat(var_boards_intermediate_path, BOARDS_INTERMEDIATE_DIR);
-	strcat(var_boards_intermediate_path, "/");
-
-	strcpy(var_boards_expert_path, var_path);
-	strcat(var_boards_expert_path, "/");
-	strcat(var_boards_expert_path, BOARDS_EXPERT_DIR);
-	strcat(var_boards_expert_path, "/");
-
-	strcpy(var_boards_custom_path, var_path);
-	strcat(var_boards_custom_path, "/");
-	strcat(var_boards_custom_path, BOARDS_CUSTOM_DIR);
-	strcat(var_boards_custom_path, "/");
-
-	strcpy(var_hiscores_beginner_name, HISCORES_BEGINNER_NAME);
-	strcpy(var_hiscores_intermediate_name, HISCORES_INTERMEDIATE_NAME);
-	strcpy(var_hiscores_expert_name, HISCORES_EXPERT_NAME);
+	snprintf(var_path, FILENAME_MAX, "%s/%s/",
+				INSTALL_VAR_DIR, VAR_DIR);
+	snprintf(var_hiscores_path, FILENAME_MAX, "%s/%s/",
+				var_path, HISCORES_DIR);
+	snprintf(var_boards_beginner_path, FILENAME_MAX, "%s/%s/",
+				var_path, BOARDS_BEGINNER_DIR);
+	snprintf(var_boards_intermediate_path, FILENAME_MAX, "%s/%s/",
+				var_path, BOARDS_INTERMEDIATE_DIR);
+	snprintf(var_boards_expert_path, FILENAME_MAX, "%s/%s/",
+				var_path, BOARDS_EXPERT_DIR);
+	snprintf(var_boards_custom_path, FILENAME_MAX, "%s/%s/",
+				var_path, BOARDS_CUSTOM_DIR);
+	snprintf(var_hiscores_beginner_name, FILENAME_MAX, "%s",
+				HISCORES_BEGINNER_NAME);
+	snprintf(var_hiscores_intermediate_name, FILENAME_MAX, "%s",
+				HISCORES_INTERMEDIATE_NAME);
+	snprintf(var_hiscores_expert_name, FILENAME_MAX, "%s",
+				HISCORES_EXPERT_NAME);
 }
 
 void	save_score	(const struct Game_Iface_Score  *game_iface_score)
 {
 	/* File name */
 	char	file_name [FILENAME_MAX];
-	strcpy(file_name, var_hiscores_path);
 	switch (game_iface_score->level) {
 	case GAME_IFACE_LEVEL_BEGINNER:
-		strcat(file_name, var_hiscores_beginner_name);
+		snprintf(file_name, FILENAME_MAX, "%s/%s",
+				var_hiscores_path, var_hiscores_beginner_name);
 		break;
 
 	case GAME_IFACE_LEVEL_INTERMEDIATE:
-		strcat(file_name, var_hiscores_intermediate_name);
+		snprintf(file_name, FILENAME_MAX, "%s/%s",
+				var_hiscores_path, var_hiscores_intermediate_name);
 		break;
 
 	case GAME_IFACE_LEVEL_EXPERT:
-		strcat(file_name, var_hiscores_expert_name);
+		snprintf(file_name, FILENAME_MAX, "%s/%s",
+				var_hiscores_path, var_hiscores_expert_name);
 		break;
 	}
 
@@ -127,7 +112,7 @@ void	save_score	(const struct Game_Iface_Score  *game_iface_score)
 
 	/* Player name (foo is default) */
 	char	player_name [BUFF_SIZE];
-	player_iface_score_name(player_name);
+	player_iface_score_name(player_name, BUFF_SIZE);
 
 	/* Write to file (append) */
 	FILE	*fp;
@@ -163,18 +148,18 @@ void	read_scores	(void)
 	char	file_name [FILENAME_MAX];
 
 	/* Beginner */
-	strcpy(file_name, var_hiscores_path);
-	strcat(file_name, var_hiscores_beginner_name);
+	snprintf(file_name, FILENAME_MAX, "%s/%s",
+			var_hiscores_path, var_hiscores_beginner_name);
 	read_scores_file(file_name);
 
 	/* Intermediate */
-	strcpy(file_name, var_hiscores_path);
-	strcat(file_name, var_hiscores_intermediate_name);
+	snprintf(file_name, FILENAME_MAX, "%s/%s",
+			var_hiscores_path, var_hiscores_intermediate_name);
 	read_scores_file(file_name);
 
 	/* Expert */
-	strcpy(file_name, var_hiscores_path);
-	strcat(file_name, var_hiscores_expert_name);
+	snprintf(file_name, FILENAME_MAX, "%s/%s",
+			var_hiscores_path, var_hiscores_expert_name);
 	read_scores_file(file_name);
 }
 

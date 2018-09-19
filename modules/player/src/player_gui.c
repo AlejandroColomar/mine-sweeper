@@ -12,8 +12,8 @@
 	#include <gtk/gtk.h>
 		/* true & false */
 	#include <stdbool.h>
-		/* strcpy() */
-	#include <string.h>
+		/* snprintf() */
+	#include <stdio.h>
 
 /*	*	*	*	*	*	*	*	*	*
  *	*	* Other	*	*	*	*	*	*	*
@@ -238,7 +238,7 @@ int	player_gui		(const struct Game_Iface_Out		*board,
 	return	0;
 }
 
-void	player_gui_save_name	(const char *filepath, char *filename)
+void	player_gui_save_name	(const char *filepath, char *filename, int destsize)
 {
 #if 0
 	/* Input box */
@@ -252,7 +252,7 @@ void	player_gui_save_name	(const char *filepath, char *filename)
 #endif
 }
 
-void	player_gui_score_name	(char *player_name)
+void	player_gui_score_name	(char *player_name, int destsize)
 {
 #if 0
 	/* Input box */
@@ -332,14 +332,14 @@ static	void	show_board_start(struct Player_Iface_Position		*position,
 				const char				*subtitle)
 {
 	/* Title */
-	strcpy(label[0].text, title);
+	snprintf(label[0].text, LINE_SIZE, title);
 	gtk_label_set_text(GTK_LABEL(label[0].ptr), label[0].text);
 
 	/* Board */
 	board_loop_start(position);
 
 	/* Subtitle */
-	strcpy(label[1].text, subtitle);
+	snprintf(label[1].text, LINE_SIZE, subtitle);
 	gtk_label_set_text(GTK_LABEL(label[1].ptr), label[1].text);
 
 	/* Refresh */
@@ -371,14 +371,14 @@ static	void	show_board	(const struct Game_Iface_Out		*board,
 				const char				*subtitle)
 {
 	/* Title */
-	strcpy(label[0].text, title);
+	snprintf(label[0].text, LINE_SIZE, title);
 	gtk_label_set_text(GTK_LABEL(label[0].ptr), label[0].text);
 
 	/* Board */
 	board_loop(board, position);
 
 	/* Subtitle */
-	strcpy(label[1].text, subtitle);
+	snprintf(label[1].text, LINE_SIZE, subtitle);
 	gtk_label_set_text(GTK_LABEL(label[1].ptr), label[1].text);
 
 	/* Refresh */

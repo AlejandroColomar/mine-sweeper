@@ -10,10 +10,10 @@
  *	*	* Standard	*	*	*	*	*	*
  *	*	*	*	*	*	*	*	*	*/
 	#include <getopt.h>
+		/* FILE & fopen() & snprintf() & FILENAME_MAX */
 	#include <stdio.h>
 		/* exit() */
 	#include <stdlib.h>
-	#include <string.h>
 
 /*	*	*	*	*	*	*	*	*	*
  *	*	* Other	*	*	*	*	*	*	*
@@ -176,8 +176,8 @@ static	void	parse_file		(char* argument)
 	} else {
 		fclose(fp);
 
-		strcpy(saved_path, "");
-		strcpy(saved_name, argument);
+		sprintf(saved_path, "");
+		snprintf(saved_name, FILENAME_MAX, argument);
 	}
 }
 

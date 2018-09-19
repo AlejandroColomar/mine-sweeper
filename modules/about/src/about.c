@@ -11,8 +11,6 @@
  *	*	*	*	*	*	*	*	*	*/
 		/* printf() */
 	#include <stdio.h>
-		/* strcpy() & strcat() */
-	#include <string.h>
 
 /*	*	*	*	*	*	*	*	*	*
  *	*	* Other	*	*	*	*	*	*	*
@@ -48,10 +46,7 @@ char	share_path [FILENAME_MAX];
  ******************************************************************************/
 void	about_init		(void)
 {
-	strcpy(share_path, INSTALL_SHARE_DIR);
-	strcat(share_path, "/");
-	strcat(share_path, SHARE_DIR);
-	strcat(share_path, "/");
+	snprintf(share_path, FILENAME_MAX, "%s/%s/", INSTALL_SHARE_DIR, SHARE_DIR);
 }
 
 void	print_cpright		(void)
@@ -59,9 +54,7 @@ void	print_cpright		(void)
 	char	file_name [FILENAME_MAX];
 	char	str [BUFF_SIZE_TEXT];
 
-	strcpy(file_name, share_path);
-	strcat(file_name, "/");
-	strcat(file_name, "COPYRIGHT.txt");
+	snprintf(file_name, FILENAME_MAX, "%s/%s", share_path, "COPYRIGHT.txt");
 
 	alx_snprint_file(str, BUFF_SIZE_TEXT, file_name);
 
@@ -75,9 +68,7 @@ void	print_disclaim		(void)
 	char	file_name [FILENAME_MAX];
 	char	str [BUFF_SIZE_TEXT];
 
-	strcpy(file_name, share_path);
-	strcat(file_name, "/");
-	strcat(file_name, "DISCLAIMER.txt");
+	snprintf(file_name, FILENAME_MAX, "%s/%s", share_path, "DISCLAIMER.txt");
 
 	alx_snprint_file(str, BUFF_SIZE_TEXT, file_name);
 
@@ -91,9 +82,7 @@ void	print_help		(void)
 	char	file_name [FILENAME_MAX];
 	char	str [BUFF_SIZE_TEXT];
 
-	strcpy(file_name, share_path);
-	strcat(file_name, "/");
-	strcat(file_name, "HELP.txt");
+	snprintf(file_name, FILENAME_MAX, "%s/%s", share_path, "HELP.txt");
 
 	alx_snprint_file(str, BUFF_SIZE_TEXT, file_name);
 
@@ -107,9 +96,7 @@ void	print_license		(void)
 	char	file_name [FILENAME_MAX];
 	char	str [BUFF_SIZE_TEXT];
 
-	strcpy(file_name, share_path);
-	strcat(file_name, "/");
-	strcat(file_name, "LICENSE.txt");
+	snprintf(file_name, FILENAME_MAX, "%s/%s", share_path, "LICENSE.txt");
 
 	alx_snprint_file(str, BUFF_SIZE_TEXT, file_name);
 
@@ -123,9 +110,7 @@ void	print_usage		(void)
 	char	file_name [FILENAME_MAX];
 	char	str [BUFF_SIZE_TEXT];
 
-	strcpy(file_name, share_path);
-	strcat(file_name, "/");
-	strcat(file_name, "USAGE.txt");
+	snprintf(file_name, FILENAME_MAX, "%s/%s", share_path, "USAGE.txt");
 
 	alx_snprint_file(str, BUFF_SIZE_TEXT, file_name);
 
