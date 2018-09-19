@@ -86,15 +86,15 @@ void	parser	(int argc, char *argv[])
 			break;
 
 		case 'h':
-			print_help();
+			print_share_file(SHARE_HELP);
 			exit(EXIT_SUCCESS);
 
 		case 'L':
-			print_license();
+			print_share_file(SHARE_LICENSE);
 			exit(EXIT_SUCCESS);
 
 		case 'u':
-			print_usage();
+			print_share_file(SHARE_USAGE);
 			exit(EXIT_SUCCESS);
 
 		case 'v':
@@ -134,7 +134,7 @@ void	parser	(int argc, char *argv[])
 			/* getopt_long already printed an error message. */
 
 		default:
-			print_usage();
+			print_share_file(SHARE_USAGE);
 			exit(EXIT_FAILURE);
 		}
 	}

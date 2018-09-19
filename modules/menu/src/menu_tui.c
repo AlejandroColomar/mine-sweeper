@@ -98,14 +98,14 @@ void	menu_tui		(void)
 
 		case 2:
 			alx_pause_curses();
-			print_disclaim();
+			print_share_file(SHARE_DISCLAIMER);
 			getchar();
 			alx_resume_curses();
 			break;
 
 		case 3:
 			alx_pause_curses();
-			print_license();
+			print_share_file(SHARE_LICENSE);
 			getchar();
 			alx_resume_curses();
 			break;

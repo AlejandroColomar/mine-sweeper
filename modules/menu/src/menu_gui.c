@@ -192,10 +192,10 @@ void	menu_gui		(void)
 			menu_gui_continue();
 			break;
 		case 2:
-			print_disclaim();
+			print_share_file(SHARE_DISCLAIMER);
 			break;
 		case 3:
-			print_license();
+			print_share_file(SHARE_LICENSE);
 			break;
 		}
 	}

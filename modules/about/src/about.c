@@ -49,68 +49,28 @@ void	about_init		(void)
 	snprintf(share_path, FILENAME_MAX, "%s/%s/", INSTALL_SHARE_DIR, SHARE_DIR);
 }
 
-void	print_cpright		(void)
+void	print_share_file	(int share_file)
 {
 	char	file_name [FILENAME_MAX];
 	char	str [BUFF_SIZE_TEXT];
 
-	snprintf(file_name, FILENAME_MAX, "%s/%s", share_path, "COPYRIGHT.txt");
-
-	alx_snprint_file(str, BUFF_SIZE_TEXT, file_name);
-
-	printf(BEGINNING);
-	printf("%s", str);
-	printf(ENDING);
-}
-
-void	print_disclaim		(void)
-{
-	char	file_name [FILENAME_MAX];
-	char	str [BUFF_SIZE_TEXT];
-
-	snprintf(file_name, FILENAME_MAX, "%s/%s", share_path, "DISCLAIMER.txt");
-
-	alx_snprint_file(str, BUFF_SIZE_TEXT, file_name);
-
-	printf(BEGINNING);
-	printf("%s", str);
-	printf(ENDING);
-}
-
-void	print_help		(void)
-{
-	char	file_name [FILENAME_MAX];
-	char	str [BUFF_SIZE_TEXT];
-
-	snprintf(file_name, FILENAME_MAX, "%s/%s", share_path, "HELP.txt");
-
-	alx_snprint_file(str, BUFF_SIZE_TEXT, file_name);
-
-	printf(BEGINNING);
-	printf("%s", str);
-	printf(ENDING);
-}
-
-void	print_license		(void)
-{
-	char	file_name [FILENAME_MAX];
-	char	str [BUFF_SIZE_TEXT];
-
-	snprintf(file_name, FILENAME_MAX, "%s/%s", share_path, "LICENSE.txt");
-
-	alx_snprint_file(str, BUFF_SIZE_TEXT, file_name);
-
-	printf(BEGINNING);
-	printf("%s", str);
-	printf(ENDING);
-}
-
-void	print_usage		(void)
-{
-	char	file_name [FILENAME_MAX];
-	char	str [BUFF_SIZE_TEXT];
-
-	snprintf(file_name, FILENAME_MAX, "%s/%s", share_path, "USAGE.txt");
+	switch (share_file) {
+	case SHARE_COPYRIGHT:
+		snprintf(file_name, FILENAME_MAX, "%s/%s", share_path, "COPYRIGHT.txt");
+		break;
+	case SHARE_DISCLAIMER:
+		snprintf(file_name, FILENAME_MAX, "%s/%s", share_path, "DISCLAIMER.txt");
+		break;
+	case SHARE_HELP:
+		snprintf(file_name, FILENAME_MAX, "%s/%s", share_path, "HELP.txt");
+		break;
+	case SHARE_LICENSE:
+		snprintf(file_name, FILENAME_MAX, "%s/%s", share_path, "LICENSE.txt");
+		break;
+	case SHARE_USAGE:
+		snprintf(file_name, FILENAME_MAX, "%s/%s", share_path, "USAGE.txt");
+		break;
+	}
 
 	alx_snprint_file(str, BUFF_SIZE_TEXT, file_name);
 
