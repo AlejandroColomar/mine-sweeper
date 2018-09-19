@@ -415,7 +415,7 @@ static	void	show_board	(const struct Game_Iface_Out		*board,
 
 	/* Timeout */
 	if (board->state == GAME_IFACE_STATE_PLAYING) {
-		timeout.id	= g_timeout_add(500, callback_timeout, (void *)&timeout);
+		timeout.id	= g_timeout_add_seconds(1, callback_timeout, (void *)&timeout);
 	}
 
 	/* Refresh */
