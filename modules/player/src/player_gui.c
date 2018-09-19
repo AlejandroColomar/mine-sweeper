@@ -10,6 +10,8 @@
  *	*	* Standard	*	*	*	*	*	*
  *	*	*	*	*	*	*	*	*	*/
 	#include <gtk/gtk.h>
+		/* fmod */
+	#include <math.h>
 		/* true & false */
 	#include <stdbool.h>
 		/* snprintf() */
@@ -128,6 +130,8 @@ static	struct Label_Data	label_stit;
 static	int			last_help;
 static	struct Timeout_Data	timeout;
 
+static	int			state;
+
 
 /******************************************************************************
  ******* static functions *****************************************************
@@ -241,6 +245,8 @@ int	player_gui		(const struct Game_Iface_Out		*board,
 				const char				*title,
 				const char				*subtitle)
 {
+	state	= board->state;
+
 	show_help(board);
 	show_board(board, position, title, subtitle);
 
@@ -346,6 +352,7 @@ static	void	board_init	(struct Player_Iface_Position		*position,
 	/* Timeout */
 	timeout.val		= PLAYER_IFACE_ACT_FOO;
 	timeout.act		= action;
+	timeout.id		= 0;
 
 	/* Refresh */
 	gtk_widget_show_all(box_board);
@@ -403,7 +410,15 @@ static	void	show_board	(const struct Game_Iface_Out		*board,
 	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(pbar_board_tit.ptr), pbar_board_tit.text);
 
 	/* Progress bar */
-	pbar_board_tit.frac	= ((double)board->flags) / ((double)board->mines);
+	if (board->flags % board->mines) {
+		/* This is a trick to have (frac <= 1) instead of (frac < 1) */
+		pbar_board_tit.frac	= ((double)board->flags) / ((double)board->mines);
+		pbar_board_tit.frac	= fmod(pbar_board_tit.frac, 1);
+	} else if (board->flags) {
+		pbar_board_tit.frac	= 1;
+	} else {
+		pbar_board_tit.frac	= 0;
+	}
 	gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(pbar_board_tit.ptr), pbar_board_tit.frac);
 
 	/* Board */
@@ -723,6 +738,10 @@ static	gboolean	callback_field	(GtkWidget			*widget,
 					GdkEventButton			*event,
 					void				*data)
 {
+	if (state == GAME_IFACE_STATE_PLAYING && timeout.id) {
+		g_source_remove(timeout.id);
+	}
+
 	struct Field_Data	*field_ij;
 	field_ij		= ((struct Field_Data *)data);
 
@@ -754,6 +773,10 @@ static	gboolean	callback_ebox	(GtkWidget			*widget,
 					GdkEventButton			*event,
 					void				*data)
 {
+	if (state == GAME_IFACE_STATE_PLAYING && timeout.id) {
+		g_source_remove(timeout.id);
+	}
+
 	struct EBox_Data	*ebox;
 	ebox			= ((struct EBox_Data *)data);
 
@@ -778,6 +801,10 @@ static	gboolean	callback_ebox	(GtkWidget			*widget,
 static	void		callback_button	(GtkWidget			*widget,
 					void				*data)
 {
+	if (state == GAME_IFACE_STATE_PLAYING && timeout.id) {
+		g_source_remove(timeout.id);
+	}
+
 	struct Button_Data	*button;
 	button			= ((struct Button_Data *)data);
 
@@ -790,6 +817,10 @@ static	void		callback_button	(GtkWidget			*widget,
 static	gboolean	callback_tbutton (GtkWidget			*widget,
 					void				*data)
 {
+	if (state == GAME_IFACE_STATE_PLAYING && timeout.id) {
+		g_source_remove(timeout.id);
+	}
+
 	struct TButton_Data	*tbutton;
 	tbutton			= ((struct TButton_Data *)data);
 
