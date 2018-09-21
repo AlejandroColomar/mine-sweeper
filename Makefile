@@ -4,7 +4,7 @@ VERSION	= 3
 PATCHLEVEL = .2
 SUBLEVEL = 
 EXTRAVERSION =
-NAME = graphic
+NAME = installable
 
 export	VERSION
 export	PATCHLEVEL
