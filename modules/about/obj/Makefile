@@ -30,14 +30,13 @@ all: $(ALL)
 
 about_mod.o: $(_ALL)
 	$(Q)$(LD) -r $^ -o $@
-	@echo  "\tLD $@"
+	@echo  "\tLD	$@"
 	@echo  ""
 
 
 about.o: $(ABOU_DEPS)
-	$(Q)$(CC) $(CFLAGS) $(ABOU_INC_DIRS) -c $< -o $@ $(LIBS)
-	@echo  "\tCC $<"
-	@echo  ""
+	$(Q)$(CC) $(CFLAGS) $(ABOU_INC_DIRS) -c $< -o $@
+	@echo  "\tCC	$@"
 
 
 clean:

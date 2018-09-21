@@ -14,6 +14,7 @@
 	#include <stdarg.h>
 	#include <stdbool.h>
 	#include <stdio.h>
+		/* strlen() */
 	#include <string.h>
 		/* wchar_t */
 	#include <wchar.h>
@@ -54,7 +55,7 @@ static	double	loop_w_getdbl		(WINDOW *win,
 					double m, double def, double M);
 static	int64_t	loop_w_getint		(WINDOW *win,
 					double m, int64_t def, double M);
-static	void	loop_w_getstr		(char *str, WINDOW *win);
+static	void	loop_w_getstr		(char *dest, int destsize, WINDOW *win);
 
 static	void	loop_w_getfname		(const char *fpath, char *fname, bool exist,
 					WINDOW *win);
@@ -289,7 +290,7 @@ int64_t	alx_w_getint		(int w, int r, const char *title,
 	return	Z;
 }
 
-void	alx_w_getstr		(char *str,
+void	alx_w_getstr		(char *dest, int destsize,
 				int w, int r, const char *title,
 				const char *format, ...)
 {
@@ -346,7 +347,7 @@ void	alx_w_getstr		(char *str,
 	win3 =	newwin(h3, w3, r3, c3);
 	wbkgd(win3, A_REVERSE);
 	wrefresh(win3);
-	loop_w_getstr(str, win3);
+	loop_w_getstr(dest, destsize, win3);
 
 	/* Delete window */
 	alx_win_del(win3);
@@ -612,7 +613,7 @@ static	int64_t	loop_w_getint		(WINDOW *win,
 	return	Z;
 }
 
-static	void	loop_w_getstr		(char *str, WINDOW *win)
+static	void	loop_w_getstr		(char *dest, int destsize, WINDOW *win)
 {
 	int	i;
 	char	buff [BUFF_SIZE];
@@ -637,7 +638,7 @@ static	void	loop_w_getstr		(char *str, WINDOW *win)
 	}
 
 	if (!err) {
-		strcpy(str, buff);
+		snprintf(dest, destsize, buff);
 	}
 }
 
@@ -665,8 +666,7 @@ static	void	loop_w_getfname		(const char *fpath, char *fname, bool exist,
 		} else if (sscanf(buff, " %s ", buff2) != 1) {
 			err	= ERR_SSCANF;
 		} else {
-			strcpy(file_path, fpath);
-			strcat(file_path, buff2);
+			snprintf(file_path, FILENAME_MAX, "%s%s", fpath, buff2);
 
 			fp =	fopen(file_path, "r");
 
@@ -691,7 +691,7 @@ static	void	loop_w_getfname		(const char *fpath, char *fname, bool exist,
 	}
 
 	if (!err) {
-		strcpy(fname, buff2);
+		snprintf(fname, FILENAME_MAX, buff2);
 	}
 }
 

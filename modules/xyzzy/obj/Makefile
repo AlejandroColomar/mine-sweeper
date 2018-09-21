@@ -30,14 +30,13 @@ all: $(ALL)
 
 xyzzy_mod.o: $(_ALL)
 	$(Q)$(LD) -r $^ -o $@
-	@echo  "\tLD $@"
+	@echo  "\tLD	$@"
 	@echo  ""
 	
 
 xyzzy.o: $(XYZZY_DEPS)
-	$(Q)$(CC) $(CFLAGS) $(XYZZY_INC_DIRS) -c $< -o $@ $(LIBS)
-	@echo  "\tCC $<"
-	@echo  ""
+	$(Q)$(CC) $(CFLAGS) $(XYZZY_INC_DIRS) -c $< -o $@
+	@echo  "\tCC	$@"
 
 
 clean:

@@ -10,7 +10,8 @@ SRC_DIR = $(LIBALX_DIR)/src/
 
 # dependencies
 
-ALL = alx_cmp.o alx_file.o alx_getnum.o alx_mask.o alx_math.o alx_ncur.o alx_seed.o
+_ALL = alx_cmp.o alx_file.o alx_getnum.o alx_mask.o alx_math.o alx_ncur.o alx_seed.o
+ALL	= $(_ALL) alx_lib.o
 
 CMP_INC = alx_cmp.h
 CMP_DEPS = $(SRC_DIR)/alx_cmp.c $(patsubst %,$(INC_DIR)/%,$(CMP_INC))
@@ -46,40 +47,39 @@ SEED_INC_DIRS = -I $(INC_DIR)
 all: $(ALL)
 
 
-alx_cmp.o: $(CMP_DEPS)
-	$(Q)$(CC) $(CFLAGS) $(CMP_INC_DIRS) -c $< -o $@ $(LIBS)
-	@echo  "\tCC $<"
+alx_lib.o: $(_ALL)
+	$(Q)$(LD) -r $^ -o $@
+	@echo  "\tLD	$@"
 	@echo  ""
+
+
+alx_cmp.o: $(CMP_DEPS)
+	$(Q)$(CC) $(CFLAGS) $(CMP_INC_DIRS) -c $< -o $@
+	@echo  "\tCC	$@"
 
 alx_file.o: $(FILE_DEPS)
-	$(Q)$(CC) $(CFLAGS) $(FILE_INC_DIRS) -c $< -o $@ $(LIBS)
-	@echo  "\tCC $<"
-	@echo  ""
+	$(Q)$(CC) $(CFLAGS) $(FILE_INC_DIRS) -c $< -o $@
+	@echo  "\tCC	$@"
 
 alx_getnum.o: $(GETN_DEPS)
-	$(Q)$(CC) $(CFLAGS) $(GETN_INC_DIRS) -c $< -o $@ $(LIBS)
-	@echo  "\tCC $<"
-	@echo  ""
+	$(Q)$(CC) $(CFLAGS) $(GETN_INC_DIRS) -c $< -o $@
+	@echo  "\tCC	$@"
 
 alx_mask.o: $(MASK_DEPS)
-	$(Q)$(CC) $(CFLAGS) $(MASK_INC_DIRS) -c $< -o $@ $(LIBS)
-	@echo  "\tCC $<"
-	@echo  ""
+	$(Q)$(CC) $(CFLAGS) $(MASK_INC_DIRS) -c $< -o $@
+	@echo  "\tCC	$@"
 
 alx_math.o: $(MATH_DEPS)
-	$(Q)$(CC) $(CFLAGS) $(MATH_INC_DIRS) -c $< -o $@ $(LIBS)
-	@echo  "\tCC $<"
-	@echo  ""
+	$(Q)$(CC) $(CFLAGS) $(MATH_INC_DIRS) -c $< -o $@
+	@echo  "\tCC	$@"
 
 alx_ncur.o: $(NCUR_DEPS)
-	$(Q)$(CC) $(CFLAGS) $(NCUR_INC_DIRS) -c $< -o $@ $(LIBS)
-	@echo  "\tCC $<"
-	@echo  ""
+	$(Q)$(CC) $(CFLAGS) $(NCUR_INC_DIRS) -c $< -o $@
+	@echo  "\tCC	$@"
 
 alx_seed.o: $(SEED_DEPS)
-	$(Q)$(CC) $(CFLAGS) $(SEED_INC_DIRS) -c $< -o $@ $(LIBS)
-	@echo  "\tCC $<"
-	@echo  ""
+	$(Q)$(CC) $(CFLAGS) $(SEED_INC_DIRS) -c $< -o $@
+	@echo  "\tCC	$@"
 
 
 clean:

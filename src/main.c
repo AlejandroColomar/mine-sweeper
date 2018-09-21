@@ -9,6 +9,7 @@
 /*	*	*	*	*	*	*	*	*	*
  *	*	* Standard	*	*	*	*	*	*
  *	*	*	*	*	*	*	*	*	*/
+	#include <gtk/gtk.h>
 		/* getchar() */
 	#include <stdio.h>
 
@@ -31,7 +32,7 @@
 /******************************************************************************
  ******* static functions *****************************************************
  ******************************************************************************/
-void	init_all	(void);
+void	init_all	(int *argc, char *(*argv[]));
 void	cleanup		(void);
 
 
@@ -40,13 +41,10 @@ void	cleanup		(void);
  ******************************************************************************/
 int	main	(int argc, char *argv[])
 {
-	init_all();
-	
-	/* Parse command line options */
-	parser(argc, argv);
+	init_all(&argc, &argv);
 
 	/* Print copyright () and wait for any key to continue */
-	print_cpright();
+	print_share_file(SHARE_COPYRIGHT);
 	getchar();
 
 	/* Start () */
@@ -64,12 +62,15 @@ int	main	(int argc, char *argv[])
 /******************************************************************************
  ******* static functions *****************************************************
  ******************************************************************************/
-void	init_all	(void)
+void	init_all	(int *argc, char *(*argv[]))
 {
-	/* Init modules */
+	/* Init gtk & curses */
+	gtk_init_check(argc, argv);
 	alx_start_curses();
-	menu_iface_init();
 	alx_pause_curses();
+
+	/* Init modules */
+	menu_iface_init();
 	game_init();
 	about_init();
 	save_init();
@@ -80,10 +81,19 @@ void	init_all	(void)
 	flag_exit		= false;
 	menu_iface_mode		= MENU_IFACE_TUI;
 	player_iface_mode	= PLAYER_IFACE_TUI;
+
+	/* Parse command line options */
+	parser(*argc, *argv);
+
+	/* Init iface */
+	menu_iface_init_iface();
 }
 
 void	cleanup		(void)
 {
+	/* Clean iface */
+	menu_iface_cleanup();
+
 	/* End curses */
 	alx_resume_curses();
 	alx_end_curses();

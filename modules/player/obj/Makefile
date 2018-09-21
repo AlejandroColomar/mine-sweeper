@@ -7,6 +7,7 @@
 LIBALX_INC_DIR = $(LIBALX_DIR)/inc/
 
 GAME_INC_DIR = $(GAME_DIR)/inc/
+MENU_INC_DIR = $(MENU_DIR)/inc/
 
 INC_DIR = $(PLAY_DIR)/inc/
 SRC_DIR = $(PLAY_DIR)/src/
@@ -38,7 +39,7 @@ PLAYTUI_INC =	player_tui.h	player_iface.h
 PLAYTUI_DEPS = $(SRC_DIR)/player_tui.c \
 			$(patsubst %,$(INC_DIR)/%,$(PLAYTUI_INC)) \
 			$(patsubst %,$(LIBALX_INC_DIR)/%,$(PLAYTUI_INC_LIBALX)) \
-			$(patsubst %,$(GAME_INC_DIR)/%,$(PLAYCLUI_INC_GAME))
+			$(patsubst %,$(GAME_INC_DIR)/%,$(PLAYTUI_INC_GAME))
 PLAYTUI_INC_DIRS = -I $(INC_DIR) \
 			-I $(LIBALX_INC_DIR) \
 			-I $(GAME_INC_DIR)
@@ -51,24 +52,21 @@ all: $(ALL)
 
 player_mod.o: $(_ALL)
 	$(Q)$(LD) -r $^ -o $@
-	@echo  "\tLD $@"
+	@echo  "\tLD	$@"
 	@echo  ""
 
 
 player_iface.o: $(PLAYI_DEPS)
-	$(Q)$(CC) $(CFLAGS) $(PLAYI_INC_DIRS) -c $< -o $@ $(LIBS)
-	@echo  "\tCC $<"
-	@echo  ""
+	$(Q)$(CC) $(CFLAGS) $(PLAYI_INC_DIRS) -c $< -o $@
+	@echo  "\tCC	$@"
 
 player_clui.o: $(PLAYCLUI_DEPS)
-	$(Q)$(CC) $(CFLAGS) $(PLAYCLUI_INC_DIRS) -c $< -o $@ $(LIBS)
-	@echo  "\tCC $<"
-	@echo  ""
+	$(Q)$(CC) $(CFLAGS) $(PLAYCLUI_INC_DIRS) -c $< -o $@
+	@echo  "\tCC	$@"
 
 player_tui.o: $(PLAYTUI_DEPS)
-	$(Q)$(CC) $(CFLAGS) $(PLAYTUI_INC_DIRS) -c $< -o $@ $(LIBS)
-	@echo  "\tCC $<"
-	@echo  ""
+	$(Q)$(CC) $(CFLAGS) $(PLAYTUI_INC_DIRS) -c $< -o $@
+	@echo  "\tCC	$@"
 
 
 clean:

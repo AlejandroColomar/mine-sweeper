@@ -13,12 +13,10 @@
 	#include <errno.h>
 		/* bool */
 	#include <stdbool.h>
-		/* fscanf() & fprintf() & FILE & FILENAME_MAX */
+		/* fscanf() & fprintf() & FILE & FILENAME_MAX & snprintf() */
 	#include <stdio.h>
 		/* getenv() */
 	#include <stdlib.h>
-		/* strcpy() & strcat() */
-	#include <string.h>
 		/* mkdir */
 #if defined	OS_LINUX
 	#include <sys/stat.h>
@@ -51,19 +49,10 @@ char	saved_name [FILENAME_MAX];
  ******************************************************************************/
 void	save_init	(void)
 {
-	strcpy(home_path, getenv(ENV_HOME));
-
-	strcpy(user_game_path, home_path);
-	strcat(user_game_path, "/");
-	strcat(user_game_path, USER_GAME_DIR);
-	strcat(user_game_path, "/");
-
-	strcpy(saved_path, home_path);
-	strcat(saved_path, "/");
-	strcat(saved_path, USER_SAVED_DIR);
-	strcat(saved_path, "/");
-
-	strcpy(saved_name, "");
+	snprintf(home_path, FILENAME_MAX, "%s/", getenv(ENV_HOME));
+	snprintf(user_game_path, FILENAME_MAX, "%s/%s/", home_path, USER_GAME_DIR);
+	snprintf(saved_path, FILENAME_MAX, "%s/%s/", home_path, USER_SAVED_DIR);
+	sprintf(saved_name, "");
 
 	int	err;
 #if defined	OS_LINUX
@@ -99,10 +88,7 @@ void	save_init	(void)
 
 void	save_clr	(void)
 {
-	strcpy(saved_path, home_path);
-	strcat(saved_path, "/");
-	strcat(saved_path, USER_SAVED_DIR);
-	strcat(saved_path, "/");
+	snprintf(saved_path, FILENAME_MAX, "%s/%s/", home_path, USER_SAVED_DIR);
 }
 
 void	load_game_file	(void)
@@ -113,8 +99,7 @@ void	load_game_file	(void)
 	int	i;
 	int	j;
 
-	strcpy(file_name, saved_path);
-	strcat(file_name, saved_name);
+	snprintf(file_name, FILENAME_MAX, "%s/%s", saved_path, saved_name);
 
 	fp	= fopen(file_name, "r");
 	if (fp) {
@@ -146,6 +131,7 @@ void	load_game_file	(void)
 void	save_game_file	(char *filepath)
 {
 	char	file_name [FILENAME_MAX];
+	char	tmp [FILENAME_MAX];
 	char	file_num [6]	= "";
 	FILE	*fp;
 
@@ -160,23 +146,22 @@ void	save_game_file	(char *filepath)
 
 	/* Default path & name */
 	save_clr();
-	strcpy(saved_name, SAVED_NAME_DEFAULT);
+	snprintf(saved_name, FILENAME_MAX, "%s", SAVED_NAME_DEFAULT);
 
 	/* Request file name */
-	player_iface_save_name(filepath, saved_name);
+	player_iface_save_name(filepath, saved_name, FILENAME_MAX);
 
 	/* Look for an unused name of the type 'name_XXX.mine'. */
 	bool	x;
 	x	= true;
 	for (i = 0; x; i++) {
 		if (filepath == NULL) {
-			strcpy(file_name, saved_path);
+			snprintf(file_name, FILENAME_MAX, "%s/%s%s%s",
+					saved_path, saved_name, file_num, FILE_EXTENSION);
 		} else {
-			strcpy(file_name, filepath);
+			snprintf(file_name, FILENAME_MAX, "%s/%s%s%s",
+					filepath, saved_name, file_num, FILE_EXTENSION);
 		}
-		strcat(file_name, saved_name);
-		strcat(file_name, file_num);
-		strcat(file_name, FILE_EXTENSION);
 
 		fp =	fopen(file_name, "r");
 		if (fp) {
@@ -188,8 +173,9 @@ void	save_game_file	(char *filepath)
 			file_num[4] =	'\0';
 		} else {
 			x	= false;
-			strcat(saved_name, file_num);
-			strcat(saved_name, FILE_EXTENSION);
+			snprintf(tmp, FILENAME_MAX, "%s%s%s",
+					saved_name, file_num, FILE_EXTENSION);
+			snprintf(saved_name, FILENAME_MAX, "%s", tmp);
 		}
 	}
 

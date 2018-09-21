@@ -65,7 +65,8 @@
 					const char	*format,
 							...);
 
-	void	alx_w_getstr		(char		*str,
+	void	alx_w_getstr		(char		*dest,
+					int		destsize,
 					int		w,
 					int		r,
 					const char	*title,

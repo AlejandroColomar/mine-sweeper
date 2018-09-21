@@ -1,10 +1,10 @@
 #!/usr/bin/make -f
 
-VERSION	= 3
-PATCHLEVEL = .1
+VERSION	= 4
+PATCHLEVEL = ~a3
 SUBLEVEL = 
 EXTRAVERSION =
-NAME = instalable
+NAME = graphic
 
 export	VERSION
 export	PATCHLEVEL
@@ -141,23 +141,25 @@ export	LD
 
 ################################################################################
 CFLAGS		= -std=c11
+CFLAGS	       += `pkg-config --cflags gtk+-2.0`
 CFLAGS	       += -D PROG_VERSION=\"$(PROGRAMVERSION)\"
 CFLAGS	       += -D 'INSTALL_SHARE_DIR="$(INSTALL_SHARE_DIR)"'
 CFLAGS	       += -D SHARE_DIR=\"$(SHARE_DIR)\"
 CFLAGS	       += -D 'INSTALL_VAR_DIR="$(INSTALL_VAR_DIR)"'
 CFLAGS	       += -D VAR_DIR=\"$(VAR_DIR)\"
 
+GTK_LIBS	= `pkg-config --libs gtk+-2.0`
 ifeq ($(OS), linux)
   CFLAGS       += -D OS_LINUX
 
-  LIBS		= -l m -l ncursesw
+  LIBS		= -l m -l ncursesw $(GTK_LIBS)
 else ifeq ($(OS), win)
   CFLAGS       += -D OS_WIN
   # curses
   CFLAGS       += -D _XOPEN_SOURCE=500 -I /mingw/include/ncursesw -I /mingw/include
 
   CURSES_LIBS	= -L /mingw/lib -l ncursesw -l psapi
-  LIBS		= -static -l m $(CURSES_LIBS)
+  LIBS		= -static -l m $(CURSES_LIBS) $(GTK_LIBS)
 endif
 
 export	CFLAGS
@@ -264,10 +266,6 @@ help:
 
 
 
-################################################################################
-######## End of file ###########################################################
-################################################################################
-######## End of file ###########################################################
 ################################################################################
 ######## End of file ###########################################################
 ################################################################################
