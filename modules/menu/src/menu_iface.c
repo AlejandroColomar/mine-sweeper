@@ -43,6 +43,28 @@ void	menu_iface_init		(void)
 	menu_iface_variables.p		= 0.16;
 }
 
+void	menu_iface_init_iface	(void)
+{
+	switch (menu_iface_mode) {
+	case MENU_IFACE_CLUI:
+		break;
+
+	case MENU_IFACE_TUI:
+		break;
+	}
+}
+
+void	menu_iface_cleanup	(void)
+{
+	switch (menu_iface_mode) {
+	case MENU_IFACE_CLUI:
+		break;
+
+	case MENU_IFACE_TUI:
+		break;
+	}
+}
+
 void	menu_iface_board	(int *level, int *rows, int *cols, int *mines)
 {
 	*level	= menu_iface_variables.level;
@@ -100,9 +122,6 @@ void	menu_iface		(void)
 
 		case MENU_IFACE_TUI:
 			menu_tui();
-			break;
-
-		case MENU_IFACE_GUI:
 			break;
 		}
 	}

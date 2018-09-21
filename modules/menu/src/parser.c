@@ -10,10 +10,10 @@
  *	*	* Standard	*	*	*	*	*	*
  *	*	*	*	*	*	*	*	*	*/
 	#include <getopt.h>
+		/* FILE & fopen() & snprintf() & FILENAME_MAX */
 	#include <stdio.h>
 		/* exit() */
 	#include <stdlib.h>
-	#include <string.h>
 
 /*	*	*	*	*	*	*	*	*	*
  *	*	* Other	*	*	*	*	*	*	*
@@ -86,15 +86,15 @@ void	parser	(int argc, char *argv[])
 			break;
 
 		case 'h':
-			print_help();
+			print_share_file(SHARE_HELP);
 			exit(EXIT_SUCCESS);
 
 		case 'L':
-			print_license();
+			print_share_file(SHARE_LICENSE);
 			exit(EXIT_SUCCESS);
 
 		case 'u':
-			print_usage();
+			print_share_file(SHARE_USAGE);
 			exit(EXIT_SUCCESS);
 
 		case 'v':
@@ -134,7 +134,7 @@ void	parser	(int argc, char *argv[])
 			/* getopt_long already printed an error message. */
 
 		default:
-			print_usage();
+			print_share_file(SHARE_USAGE);
 			exit(EXIT_FAILURE);
 		}
 	}
@@ -176,8 +176,8 @@ static	void	parse_file		(char* argument)
 	} else {
 		fclose(fp);
 
-		strcpy(saved_path, "");
-		strcpy(saved_name, argument);
+		sprintf(saved_path, "");
+		snprintf(saved_name, FILENAME_MAX, argument);
 	}
 }
 
@@ -185,9 +185,9 @@ static	void	parse_iface		(char* argument)
 {
 	menu_iface_mode		= atoi(argument);
 	player_iface_mode	= menu_iface_mode;
-	if (menu_iface_mode < MENU_IFACE_CLUI || menu_iface_mode > MENU_IFACE_TUI) {
+	if (menu_iface_mode < MENU_IFACE_CLUI || menu_iface_mode > MENU_IFACE_GUI) {
 		printf("--iface argument not valid\n");
-		printf("It must be an integer [%i U %i]\n", MENU_IFACE_CLUI, MENU_IFACE_TUI);
+		printf("It must be an integer [%i U %i]\n", MENU_IFACE_CLUI, MENU_IFACE_GUI);
 		exit(EXIT_FAILURE);
 	}
 }

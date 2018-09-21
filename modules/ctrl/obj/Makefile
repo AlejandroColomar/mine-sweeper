@@ -39,14 +39,13 @@ all: $(ALL)
 
 ctrl_mod.o: $(_ALL)
 	$(Q)$(LD) -r $^ -o $@
-	@echo  "\tLD $@"
+	@echo  "\tLD	$@"
 	@echo  ""
 
 
 start.o: $(STRT_DEPS)
-	$(Q)$(CC) $(CFLAGS) $(STRT_INC_DIRS) -c $< -o $@ $(LIBS)
-	@echo  "\tCC $<"
-	@echo  ""
+	$(Q)$(CC) $(CFLAGS) $(STRT_INC_DIRS) -c $< -o $@
+	@echo  "\tCC	$@"
 
 
 clean:

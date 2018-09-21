@@ -68,7 +68,7 @@ void	menu_clui	(void)
 	sscanf(buff, " %c", &ch);
 	if (ch == 'y' || ch == 'Y') {
 		puts (" >yes");
-		print_disclaim();
+		print_share_file(SHARE_DISCLAIMER);
 	} else {
 		puts (" >NO");
 	}
@@ -79,7 +79,7 @@ void	menu_clui	(void)
 	sscanf(buff, " %c", &ch);
 	if (ch == 'y' || ch == 'Y') {
 		puts (" >yes");
-		print_license();
+		print_share_file(SHARE_LICENSE);
 	} else {
 		puts (" >NO");
 	}

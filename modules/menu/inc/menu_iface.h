@@ -50,6 +50,8 @@ extern	struct Menu_Iface_Variables	menu_iface_variables;
  ******* functions ************************************************************
  ******************************************************************************/
 void	menu_iface_init		(void);
+void	menu_iface_init_iface	(void);
+void	menu_iface_cleanup	(void);
 void	menu_iface_board	(int *level, int *rows, int *cols, int *mines);
 void	menu_iface		(void);
 

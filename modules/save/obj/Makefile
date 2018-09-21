@@ -45,19 +45,17 @@ all: $(ALL)
 
 save_mod.o: $(_ALL)
 	$(Q)$(LD) -r $^ -o $@
-	@echo  "\tLD $@"
+	@echo  "\tLD	$@"
 	@echo  ""
 	
 
 save.o: $(SAVE_DEPS)
-	$(Q)$(CC) $(CFLAGS) $(SAVE_INC_DIRS) -c $< -o $@ $(LIBS)
-	@echo  "\tCC $<"
-	@echo  ""
+	$(Q)$(CC) $(CFLAGS) $(SAVE_INC_DIRS) -c $< -o $@
+	@echo  "\tCC	$@"
 
 score.o: $(SCORE_DEPS)
-	$(Q)$(CC) $(CFLAGS) $(SCORE_INC_DIRS) -c $< -o $@ $(LIBS)
-	@echo  "\tCC $<"
-	@echo  ""
+	$(Q)$(CC) $(CFLAGS) $(SCORE_INC_DIRS) -c $< -o $@
+	@echo  "\tCC	$@"
 
 
 clean:

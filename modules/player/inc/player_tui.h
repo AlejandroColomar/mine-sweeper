@@ -103,8 +103,8 @@ int	player_tui		(const struct Game_Iface_Out		*board,
 				const char				*subtitle,
 				int					*action);
 
-void	player_tui_save_name	(const char *filepath, char *filename);
-void	player_tui_score_name	(char *player_name);
+void	player_tui_save_name	(const char *filepath, char *filename, int destsize);
+void	player_tui_score_name	(char *player_name, int destsize);
 void	player_tui_cleanup	(void);
 
 
