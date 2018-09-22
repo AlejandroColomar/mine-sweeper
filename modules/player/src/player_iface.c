@@ -53,16 +53,12 @@ static	int				player_action;
  ******* static functions *****************************************************
  ******************************************************************************/
 	/* Actions */
-static	void	player_iface_act	(struct Game_Iface_In	*game_iface_in,
-					int			action);
+static	void	player_iface_act	(struct Game_Iface_In	*game_iface_in);
 
 	/* Actions:  game iface */
-static	void	player_iface_act_start	(int action);
-
-static	void	player_iface_act_play	(struct Game_Iface_In	*game_iface_in,
-					int			action);
-static	void	player_iface_act_game	(struct Game_Iface_In	*game_iface_in,
-					int			action);
+static	void	player_iface_act_start	(void);
+static	void	player_iface_act_play	(struct Game_Iface_In	*game_iface_in);
+static	void	player_iface_act_game	(struct Game_Iface_In	*game_iface_in);
 
 	/* Actions:  player iface */
 static	void	player_iface_move_up	(void);
@@ -127,7 +123,7 @@ int	player_iface_start	(int *pos_row, int *pos_col)
 			break;
 		}
 
-		player_iface_act_start(player_action);
+		player_iface_act_start();
 	} while (player_action != PLAYER_IFACE_ACT_STEP &&
 					player_action != PLAYER_IFACE_ACT_QUIT);
 
@@ -206,7 +202,7 @@ void	player_iface		(const	struct Game_Iface_Out	*game_iface_out,
 		break;
 	}
 
-	player_iface_act(game_iface_in, player_action);
+	player_iface_act(game_iface_in);
 }
 
 void	player_iface_save_name	(const char *filepath, char *filename, int destsize)
@@ -267,15 +263,14 @@ void	player_iface_cleanup	(void)
 /*	*	*	*	*	*	*	*	*	*
  *	*	* Actions	*	*	*	*	*	*
  *	*	*	*	*	*	*	*	*	*/
-static	void	player_iface_act	(struct Game_Iface_In	*game_iface_in,
-					int			player_action)
+static	void	player_iface_act	(struct Game_Iface_In	*game_iface_in)
 {
 	switch (player_action) {
 	case PLAYER_IFACE_ACT_STEP:
 	case PLAYER_IFACE_ACT_FLAG:
 	case PLAYER_IFACE_ACT_FLAG_POSSIBLE:
 	case PLAYER_IFACE_ACT_RM_FLAG:
-		player_iface_act_play(game_iface_in, player_action);
+		player_iface_act_play(game_iface_in);
 		break;
 
 	case PLAYER_IFACE_ACT_PAUSE:
@@ -286,7 +281,7 @@ static	void	player_iface_act	(struct Game_Iface_In	*game_iface_in,
 	case PLAYER_IFACE_ACT_XYZZY_P:
 	case PLAYER_IFACE_ACT_XYZZY_NP:
 	case PLAYER_IFACE_ACT_QUIT:
-		player_iface_act_game(game_iface_in, player_action);
+		player_iface_act_game(game_iface_in);
 		break;
 
 	case PLAYER_IFACE_ACT_MOVE_UP:
@@ -311,7 +306,7 @@ static	void	player_iface_act	(struct Game_Iface_In	*game_iface_in,
 	}
 }
 
-static	void	player_iface_act_start	(int player_action)
+static	void	player_iface_act_start	(void)
 {
 	switch (player_action) {
 	case PLAYER_IFACE_ACT_STEP:
@@ -343,8 +338,7 @@ static	void	player_iface_act_start	(int player_action)
 /*	*	*	*	*	*	*	*	*	*
  *	*	* Actions:  game iface	*	*	*	*	*
  *	*	*	*	*	*	*	*	*	*/
-static	void	player_iface_act_play	(struct Game_Iface_In	*game_iface_in,
-					int			player_action)
+static	void	player_iface_act_play	(struct Game_Iface_In	*game_iface_in)
 {
 	switch (player_action) {
 	case PLAYER_IFACE_ACT_STEP:
@@ -371,8 +365,7 @@ static	void	player_iface_act_play	(struct Game_Iface_In	*game_iface_in,
 	game_iface_in->action	= GAME_IFACE_ACT_PLAY;
 }
 
-static	void	player_iface_act_game	(struct Game_Iface_In	*game_iface_in,
-					int			player_action)
+static	void	player_iface_act_game	(struct Game_Iface_In	*game_iface_in)
 {
 	switch (player_action) {
 	case PLAYER_IFACE_ACT_PAUSE:

@@ -47,6 +47,54 @@ static	void	manage_error	(int err);
  ******* main *****************************************************************
  ******************************************************************************/
 	/*
+	 * Scan a double in the range [m, M].
+	 * return:	0	if correct
+	 *		non 0	if there is an error
+	 */
+int	alx_sscan_dbl	(double *dest, double m, double def, double M, const char *str)
+{
+	int	err;
+
+	if (sscanf(str, " %lf", dest) != 1) {
+		err	= ERR_SSCANF;
+	} else if ((*dest < m) || (*dest > M)) {
+		err	= ERR_RANGE;
+	} else {
+		err	= 0;
+	}
+
+	if (err) {
+		*dest = def;
+	}
+
+	return	err;
+}
+
+	/*
+	 * Scan an int64_t in the range [m, M].
+	 * return:	0	if correct
+	 *		non 0	if there is an error
+	 */
+int	alx_sscan_int	(int64_t *dest, double m, int64_t def, double M, const char *str)
+{
+	int	err;
+
+	if (sscanf(str, " %"SCNi64"", dest) != 1) {
+		err	= ERR_SSCANF;
+	} else if ((*dest < m) || (*dest > M)) {
+		err	= ERR_RANGE;
+	} else {
+		err	= 0;
+	}
+
+	if (err) {
+		*dest = def;
+	}
+
+	return	err;
+}
+
+	/*
 	 * Ask for a double in the range [m, M].
 	 *
 	 * If the user enters a non valid number, it repeats to ask for
@@ -123,16 +171,16 @@ static	double	loop_getdbl	(double m, double def, double M)
 
 		if (x == NULL) {
 			err	= ERR_FGETS;
-		} else if (sscanf(buff, " %lf", &R) != 1) {
-			err	= ERR_SSCANF;
-		} else if (R < m || R > M) {
-			err	= ERR_RANGE;
+		} else {
+			err	= alx_sscan_dbl(&R, m, def, M, buff);
+		}
+
+		if (err) {
+			manage_error(err);
+			R	= def;
 		} else {
 			break;
 		}
-
-		manage_error(err);
-		R = def;
 	}
 
 	return	R;
@@ -151,16 +199,16 @@ static	int64_t	loop_getint	(double m, int64_t def, double M)
 
 		if (x == NULL) {
 			err	= ERR_FGETS;
-		} else if (sscanf(buff, " %"SCNi64, &Z) != 1) {
-			err	= ERR_SSCANF;
-		} else if (Z < m || Z > M) {
-			err	= ERR_RANGE;
+		} else {
+			err	= alx_sscan_int(&Z, m, def, M, buff);
+		}
+
+		if (err) {
+			manage_error(err);
+			Z	= def;
 		} else {
 			break;
 		}
-
-		manage_error(err);
-		Z	= def;
 	}
 
 	return	Z;

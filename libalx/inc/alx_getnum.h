@@ -21,6 +21,18 @@
 /******************************************************************************
  ******* functions ************************************************************
  ******************************************************************************/
+	int	alx_sscan_dbl	(double		*dest,
+				double		m,
+				double		def,
+				double		M,
+				const char	*str);
+
+	int	alx_sscan_int	(int64_t	*dest,
+				double		m,
+				int64_t		def,
+				double		M,
+				const char	*str);
+
 	double	alx_getdbl	(double		m,
 				double		def,
 				double		M,

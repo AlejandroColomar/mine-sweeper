@@ -94,7 +94,7 @@ MENUTUI_INC_DIRS	= -I $(INC_DIR) \
 			-I $(GAME_INC_DIR) \
 			-I $(SAVE_INC_DIR)
 
-MENUGUI_INC_LIBALX	= alx_ncur.h
+MENUGUI_INC_LIBALX	= alx_getnum.h
 MENUGUI_INC_ABOUT	= about.h
 MENUGUI_INC_CTRL	= start.h
 MENUGUI_INC_GAME	= game_iface.h
