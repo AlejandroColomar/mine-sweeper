@@ -132,21 +132,21 @@ void	save_game_file	(char *filepath)
 {
 	char	file_name [FILENAME_MAX];
 	char	tmp [FILENAME_MAX];
-	char	file_num [6]	= "";
+	char	old_saved [FILENAME_MAX];
+	char	file_num [6];
 	FILE	*fp;
-
 	int	i;
 	int	j;
 
-	/* Input box size */
-	int	w;
-	int	r;
-	w	= 70;
-	r	= 10;
+	/* Don't change saved_name variable if not in default dir */
+	if (filepath != NULL) {
+		snprintf(old_saved, FILENAME_MAX, "%s", saved_name);
+	}
 
 	/* Default path & name */
 	save_clr();
 	snprintf(saved_name, FILENAME_MAX, "%s", SAVED_NAME_DEFAULT);
+	sprintf(file_num, "");
 
 	/* Request file name */
 	player_iface_save_name(filepath, saved_name, FILENAME_MAX);
@@ -206,6 +206,11 @@ void	save_game_file	(char *filepath)
 		fprintf(fp, "cleared %i\n", game_board.clr);
 
 		fclose(fp);
+	}
+
+	/* Don't change saved_name variable if not in default dir */
+	if (filepath != NULL) {
+		snprintf(saved_name, FILENAME_MAX, "%s", old_saved);
 	}
 }
 

@@ -358,6 +358,7 @@ static	void	game_iface_xyzzy_off	(void)
 
 static	void	game_iface_save_score	(void)
 {
+	/* Save board and score */
 	switch (game_iface_score.level) {
 	case GAME_IFACE_LEVEL_BEGINNER:
 		save_game_file(var_boards_beginner_path);
