@@ -221,7 +221,7 @@ void	menu_gui		(void)
 		gtk_widget_show_all(window_gui);
 
 		/* GTK loop */
-		sw	= 0;
+		sw	= -1;
 		gtk_main();
 
 		/* Clear window */
@@ -256,8 +256,6 @@ static	gboolean	delete_window	(GtkWidget	*widget,
 					GdkEvent	*event,
 					void		*data)
 {
-	g_print ("delete event occurred\n");
-
 	gtk_main_quit();
 
 	/* false: send destroy signal */
@@ -267,8 +265,6 @@ static	gboolean	delete_window	(GtkWidget	*widget,
 static	void		destroy_window	(GtkWidget	*widget,
 					void		*data)
 {
-	g_print ("destroy event occurred\n");
-
 	exit(EXIT_SUCCESS);
 }
 
@@ -540,8 +536,8 @@ static	void	menu_gui_continue	(void)
 	button[1].num		= 1;
 	button[2].num		= 2;
 	button[3].num		= 3;
-	button[4].num		= 5;
-	button[5].num		= 6;
+	button[4].num		= 4;
+	button[5].num		= 5;
 	button[0].num		= 0;
 	button[1].sw		= &sw;
 	button[2].sw		= &sw;
@@ -568,9 +564,9 @@ static	void	menu_gui_continue	(void)
 		button[3].ptr		= gtk_button_new_with_mnemonic(button[3].text);
 		entry_fname[0].lbl.ptr	= gtk_label_new(entry_fname[0].lbl.text);
 		entry_fname[0].ptr	= gtk_entry_new();
-		button[4].ptr		= gtk_button_new_with_mnemonic(button[5].text);
+		button[4].ptr		= gtk_button_new_with_mnemonic(button[4].text);
 		separator[2]		= gtk_hseparator_new();
-		button[5].ptr		= gtk_button_new_with_mnemonic(button[6].text);
+		button[5].ptr		= gtk_button_new_with_mnemonic(button[5].text);
 		separator[3]		= gtk_hseparator_new();
 		button[0].ptr		= gtk_button_new_with_mnemonic(button[0].text);
 

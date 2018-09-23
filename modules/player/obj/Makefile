@@ -44,14 +44,17 @@ PLAYTUI_INC_DIRS = -I $(INC_DIR) \
 			-I $(LIBALX_INC_DIR) \
 			-I $(GAME_INC_DIR)
 
+PLAYGUI_INC_LIBALX =	alx_input.h
 PLAYGUI_INC_GAME =	game_iface.h
 PLAYGUI_INC_MENU =	menu_gui.h
 PLAYGUI_INC =	player_gui.h	player_iface.h
 PLAYGUI_DEPS = $(SRC_DIR)/player_gui.c \
 			$(patsubst %,$(INC_DIR)/%,$(PLAYGUI_INC)) \
+			$(patsubst %,$(LIBALX_INC_DIR)/%,$(PLAYGUI_INC_LIBALX)) \
 			$(patsubst %,$(GAME_INC_DIR)/%,$(PLAYGUI_INC_GAME)) \
 			$(patsubst %,$(MENU_INC_DIR)/%,$(PLAYGUI_INC_MENU))
 PLAYGUI_INC_DIRS = -I $(INC_DIR) \
+			-I $(LIBALX_INC_DIR) \
 			-I $(GAME_INC_DIR) \
 			-I $(MENU_INC_DIR)
 

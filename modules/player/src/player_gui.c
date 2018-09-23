@@ -20,6 +20,9 @@
 /*	*	*	*	*	*	*	*	*	*
  *	*	* Other	*	*	*	*	*	*	*
  *	*	*	*	*	*	*	*	*	*/
+		/* alx_sscan_fname() */
+	#include "alx_input.h"
+
 		/* struct Game_Iface_Out */
 	#include "game_iface.h"
 		/* window_gui */
@@ -59,53 +62,67 @@ enum	TButtons {
 /******************************************************************************
  ******* structs **************************************************************
  ******************************************************************************/
+struct	Label_Data {
+	GtkWidget		*ptr;
+	char			text [LINE_SIZE];
+};
+
 struct	Field_Data {
-	GtkWidget	*ptr;
-	char		ch;
-	int		r;
-	int		c;
-	int		*row;
-	int		*col;
-	int		*act;
+	GtkWidget		*ptr;
+	char			ch;
+	int			r;
+	int			c;
+	int			*row;
+	int			*col;
+	int			*act;
 };
 
 struct	Button_Data {
-	GtkWidget	*ptr;
-	char		text [LINE_SIZE];
-	int		val;
-	int		*act;
+	GtkWidget		*ptr;
+	char			text [LINE_SIZE];
+	int			val;
+	int			*act;
 };
 
 struct	TButton_Data {
-	GtkWidget	*ptr;
-	char		text [LINE_SIZE];
-	char		text2 [LINE_SIZE];
-	int		val;
-	int		val2;
-	int		*act;
+	GtkWidget		*ptr;
+	char			text [LINE_SIZE];
+	char			text2 [LINE_SIZE];
+	int			val;
+	int			val2;
+	int			*act;
+};
+
+struct	Entry_fname_Data {
+	GtkWidget		*ptr;
+	struct Label_Data	lbl;
+	const char		*fpath;
+	char			*fname;
+};
+
+struct	Entry_str_Data {
+	GtkWidget		*ptr;
+	struct Label_Data	lbl;
+	char			*str;
+	int			strsize;
 };
 
 struct	PBar_Data {
-	GtkWidget	*ptr;
-	double		frac;
-	char		text [LINE_SIZE];
+	GtkWidget		*ptr;
+	double			frac;
+	char			text [LINE_SIZE];
 };
 
 struct	EBox_Data {
-	GtkWidget	*ptr;
-	int		val;
-	int		*act;
-};
-
-struct	Label_Data {
-	GtkWidget	*ptr;
-	char		text [LINE_SIZE];
+	GtkWidget		*ptr;
+	int			val;
+	int			*act;
 };
 
 struct	Timeout_Data {
-	int		id;
-	int		val;
-	int		*act;
+	int			id;
+	int			val;
+	int			*act;
 };
 
 
@@ -117,6 +134,8 @@ static	GtkWidget		*box_help;
 static	GtkWidget		*box_help_in;
 static	struct Button_Data	button [BTN_QTTY];
 static	struct TButton_Data	tbutton [TBTN_QTTY];
+static	struct Entry_str_Data	entry_name;
+static	struct Entry_fname_Data	entry_fname;
 static	GtkWidget		*box_board;
 static	GtkWidget		*box_board_in;
 static	struct	PBar_Data	pbar_board_tit;
@@ -167,17 +186,21 @@ static	void	show_help_cheat		(void);
 static	void	show_help_safe		(void);
 static	void	show_help_gameover	(void);
 	/* Input */
-static	gboolean	callback_field	(GtkWidget			*widget,
-					GdkEventButton			*event,
-					void				*data);
-static	gboolean	callback_ebox	(GtkWidget			*widget,
-					GdkEventButton			*event,
-					void				*data);
-static	void		callback_button	(GtkWidget			*widget,
-					void				*data);
-static	gboolean	callback_tbutton (GtkWidget			*widget,
-					void				*data);
-static	gboolean	callback_timeout (void				*data);
+static	gboolean	callback_field		(GtkWidget		*widget,
+						GdkEventButton		*event,
+						void			*data);
+static	gboolean	callback_ebox		(GtkWidget		*widget,
+						GdkEventButton		*event,
+						void			*data);
+static	void		callback_button		(GtkWidget		*widget,
+						void			*data);
+static	gboolean	callback_tbutton	(GtkWidget		*widget,
+						void			*data);
+static	void		callback_entry_fname	(GtkWidget		*widget,
+						void			*data);
+static	void		callback_entry_str	(GtkWidget		*widget,
+						void			*data);
+static	gboolean	callback_timeout	(void			*data);
 
 
 /******************************************************************************
@@ -261,30 +284,56 @@ int	player_gui		(const struct Game_Iface_Out		*board,
 
 void	player_gui_save_name	(const char *filepath, char *filename, int destsize)
 {
-#if 0
-	/* Input box */
-	int	w;
-	int	r;
-	w	= 60;
-	r	= 10;
+	entry_fname.fpath	= filepath;
+	entry_fname.fname	= filename;
 
-	/* Request name */
-	alx_w_getfname(filepath, filename, false, w, r, "File name:", NULL);
-#endif
+	gtk_widget_hide(button[BTN_CH_OFF].ptr);
+	gtk_widget_hide(button[BTN_CH_1].ptr);
+	gtk_widget_hide(button[BTN_CH_2].ptr);
+	gtk_widget_hide(tbutton[TBTN_PAUSE].ptr);
+	gtk_widget_hide(button[BTN_SAVE].ptr);
+	gtk_widget_show(entry_fname.lbl.ptr);
+	gtk_widget_show(entry_fname.ptr);
+	gtk_widget_hide(button[BTN_QUIT].ptr);
+
+	gtk_widget_hide(box_board);
+
+	gtk_main();
+
+	gtk_widget_show(box_board);
+
+	gtk_widget_hide(entry_fname.lbl.ptr);
+	gtk_widget_hide(entry_fname.ptr);
+
+	/* Update last_help */
+	last_help	= GAME_IFACE_STATE_FOO;
 }
 
 void	player_gui_score_name	(char *player_name, int destsize)
 {
-#if 0
-	/* Input box */
-	int	w;
-	int	r;
-	w	= 60;
-	r	= 10;
+	entry_name.str		= player_name;
+	entry_name.strsize	= destsize;
 
-	/* Request name */
-	alx_w_getstr(player_name, w, r, "Your name:", NULL);
-#endif
+	gtk_widget_hide(button[BTN_CH_OFF].ptr);
+	gtk_widget_hide(button[BTN_CH_1].ptr);
+	gtk_widget_hide(button[BTN_CH_2].ptr);
+	gtk_widget_hide(tbutton[TBTN_PAUSE].ptr);
+	gtk_widget_hide(button[BTN_SAVE].ptr);
+	gtk_widget_show(entry_name.lbl.ptr);
+	gtk_widget_show(entry_name.ptr);
+	gtk_widget_hide(button[BTN_QUIT].ptr);
+
+	gtk_widget_hide(box_board);
+
+	gtk_main();
+
+	gtk_widget_show(box_board);
+
+	gtk_widget_hide(entry_name.lbl.ptr);
+	gtk_widget_hide(entry_name.ptr);
+
+	/* Update last_help */
+	last_help	= GAME_IFACE_STATE_FOO;
 }
 
 void	player_gui_cleanup	(void)
@@ -554,6 +603,8 @@ static	void	help_init		(int				*action)
 	snprintf(tbutton[TBTN_PAUSE].text, LINE_SIZE, "_Pause");
 	snprintf(tbutton[TBTN_PAUSE].text2, LINE_SIZE, "[_P] Continue");
 	snprintf(button[BTN_SAVE].text, LINE_SIZE, "_Save");
+	snprintf(entry_fname.lbl.text, LINE_SIZE, "File name:");
+	snprintf(entry_name.lbl.text, LINE_SIZE, "Your name:");
 	snprintf(button[BTN_QUIT].text, LINE_SIZE, "_Quit");
 
 	/* Data */
@@ -581,6 +632,10 @@ static	void	help_init		(int				*action)
 	button[BTN_CH_2].ptr		= gtk_button_new_with_mnemonic(button[BTN_CH_2].text);
 	tbutton[TBTN_PAUSE].ptr		= gtk_toggle_button_new_with_mnemonic(tbutton[TBTN_PAUSE].text);
 	button[BTN_SAVE].ptr		= gtk_button_new_with_mnemonic(button[BTN_SAVE].text);
+	entry_fname.lbl.ptr		= gtk_label_new(entry_fname.lbl.text);
+	entry_fname.ptr			= gtk_entry_new();
+	entry_name.lbl.ptr		= gtk_label_new(entry_name.lbl.text);
+	entry_name.ptr			= gtk_entry_new();
 	button[BTN_QUIT].ptr		= gtk_button_new_with_mnemonic(button[BTN_QUIT].text);
 
 	/* Toggle buttons */
@@ -597,6 +652,10 @@ static	void	help_init		(int				*action)
 			G_CALLBACK(callback_tbutton), (void *)&tbutton[TBTN_PAUSE]);
 	g_signal_connect(button[BTN_SAVE].ptr, "clicked",
 			G_CALLBACK(callback_button), (void *)&button[BTN_SAVE]);
+	g_signal_connect(entry_fname.ptr, "activate",
+			G_CALLBACK(callback_entry_fname), (void *)&entry_fname);
+	g_signal_connect(entry_name.ptr, "activate",
+			G_CALLBACK(callback_entry_str), (void *)&entry_name);
 	g_signal_connect(button[BTN_QUIT].ptr, "clicked",
 			G_CALLBACK(callback_button), (void *)&button[BTN_QUIT]);
 
@@ -606,6 +665,10 @@ static	void	help_init		(int				*action)
 	gtk_box_pack_start(GTK_BOX(box_help_in), button[BTN_CH_2].ptr, false, false, 0);
 	gtk_box_pack_start(GTK_BOX(box_help_in), tbutton[TBTN_PAUSE].ptr, false, false, 0);
 	gtk_box_pack_start(GTK_BOX(box_help_in), button[BTN_SAVE].ptr, false, false, 0);
+	gtk_box_pack_start(GTK_BOX(box_help_in), entry_fname.lbl.ptr, true, true, 0);
+	gtk_box_pack_start(GTK_BOX(box_help_in), entry_fname.ptr, true, true, 0);
+	gtk_box_pack_start(GTK_BOX(box_help_in), entry_name.lbl.ptr, true, true, 0);
+	gtk_box_pack_start(GTK_BOX(box_help_in), entry_name.ptr, true, true, 0);
 	gtk_box_pack_start(GTK_BOX(box_help_in), button[BTN_QUIT].ptr, false, false, 0);
 }
 
@@ -655,6 +718,10 @@ static	void	show_help_start		(void)
 	gtk_widget_hide(button[BTN_CH_2].ptr);
 	gtk_widget_hide(tbutton[TBTN_PAUSE].ptr);
 	gtk_widget_hide(button[BTN_SAVE].ptr);
+	gtk_widget_hide(entry_fname.lbl.ptr);
+	gtk_widget_hide(entry_fname.ptr);
+	gtk_widget_hide(entry_name.lbl.ptr);
+	gtk_widget_hide(entry_name.ptr);
 	gtk_widget_show(button[BTN_QUIT].ptr);
 
 	/* Update last_help */
@@ -673,6 +740,10 @@ static	void	show_help_play		(void)
 	gtk_widget_hide(button[BTN_CH_2].ptr);
 	gtk_widget_show(tbutton[TBTN_PAUSE].ptr);
 	gtk_widget_show(button[BTN_SAVE].ptr);
+	gtk_widget_hide(entry_fname.lbl.ptr);
+	gtk_widget_hide(entry_fname.ptr);
+	gtk_widget_hide(entry_name.lbl.ptr);
+	gtk_widget_hide(entry_name.ptr);
 	gtk_widget_show(button[BTN_QUIT].ptr);
 }
 
@@ -684,6 +755,10 @@ static	void	show_help_pause		(void)
 	gtk_widget_hide(button[BTN_CH_2].ptr);
 	gtk_widget_show(tbutton[TBTN_PAUSE].ptr);
 	gtk_widget_show(button[BTN_SAVE].ptr);
+	gtk_widget_hide(entry_fname.lbl.ptr);
+	gtk_widget_hide(entry_fname.ptr);
+	gtk_widget_hide(entry_name.lbl.ptr);
+	gtk_widget_hide(entry_name.ptr);
 	gtk_widget_show(button[BTN_QUIT].ptr);
 }
 
@@ -695,6 +770,10 @@ static	void	show_help_xyzzy		(void)
 	gtk_widget_show(button[BTN_CH_2].ptr);
 	gtk_widget_hide(tbutton[TBTN_PAUSE].ptr);
 	gtk_widget_show(button[BTN_SAVE].ptr);
+	gtk_widget_hide(entry_fname.lbl.ptr);
+	gtk_widget_hide(entry_fname.ptr);
+	gtk_widget_hide(entry_name.lbl.ptr);
+	gtk_widget_hide(entry_name.ptr);
 	gtk_widget_show(button[BTN_QUIT].ptr);
 }
 
@@ -706,6 +785,10 @@ static	void	show_help_cheat		(void)
 	gtk_widget_hide(button[BTN_CH_2].ptr);
 	gtk_widget_hide(tbutton[TBTN_PAUSE].ptr);
 	gtk_widget_show(button[BTN_SAVE].ptr);
+	gtk_widget_hide(entry_fname.lbl.ptr);
+	gtk_widget_hide(entry_fname.ptr);
+	gtk_widget_hide(entry_name.lbl.ptr);
+	gtk_widget_hide(entry_name.ptr);
 	gtk_widget_show(button[BTN_QUIT].ptr);
 }
 
@@ -717,6 +800,10 @@ static	void	show_help_safe		(void)
 	gtk_widget_hide(button[BTN_CH_2].ptr);
 	gtk_widget_hide(tbutton[TBTN_PAUSE].ptr);
 	gtk_widget_show(button[BTN_SAVE].ptr);
+	gtk_widget_hide(entry_fname.lbl.ptr);
+	gtk_widget_hide(entry_fname.ptr);
+	gtk_widget_hide(entry_name.lbl.ptr);
+	gtk_widget_hide(entry_name.ptr);
 	gtk_widget_show(button[BTN_QUIT].ptr);
 }
 
@@ -728,15 +815,19 @@ static	void	show_help_gameover	(void)
 	gtk_widget_hide(button[BTN_CH_2].ptr);
 	gtk_widget_hide(tbutton[TBTN_PAUSE].ptr);
 	gtk_widget_hide(button[BTN_SAVE].ptr);
+	gtk_widget_hide(entry_fname.lbl.ptr);
+	gtk_widget_hide(entry_fname.ptr);
+	gtk_widget_hide(entry_name.lbl.ptr);
+	gtk_widget_hide(entry_name.ptr);
 	gtk_widget_show(button[BTN_QUIT].ptr);
 }
 
 /*	*	*	*	*	*	*	*	*	*
  *	*	* Input	*	*	*	*	*	*	*
  *	*	*	*	*	*	*	*	*	*/
-static	gboolean	callback_field	(GtkWidget			*widget,
-					GdkEventButton			*event,
-					void				*data)
+static	gboolean	callback_field		(GtkWidget		*widget,
+						GdkEventButton		*event,
+						void			*data)
 {
 	if (state == GAME_IFACE_STATE_PLAYING && timeout.id) {
 		g_source_remove(timeout.id);
@@ -769,9 +860,9 @@ static	gboolean	callback_field	(GtkWidget			*widget,
 	return	false;
 }
 
-static	gboolean	callback_ebox	(GtkWidget			*widget,
-					GdkEventButton			*event,
-					void				*data)
+static	gboolean	callback_ebox		(GtkWidget		*widget,
+						GdkEventButton		*event,
+						void			*data)
 {
 	if (state == GAME_IFACE_STATE_PLAYING && timeout.id) {
 		g_source_remove(timeout.id);
@@ -798,8 +889,8 @@ static	gboolean	callback_ebox	(GtkWidget			*widget,
 
 }
 
-static	void		callback_button	(GtkWidget			*widget,
-					void				*data)
+static	void		callback_button		(GtkWidget		*widget,
+						void			*data)
 {
 	if (state == GAME_IFACE_STATE_PLAYING && timeout.id) {
 		g_source_remove(timeout.id);
@@ -814,8 +905,8 @@ static	void		callback_button	(GtkWidget			*widget,
 
 }
 
-static	gboolean	callback_tbutton (GtkWidget			*widget,
-					void				*data)
+static	gboolean	callback_tbutton	(GtkWidget		*widget,
+						void			*data)
 {
 	if (state == GAME_IFACE_STATE_PLAYING && timeout.id) {
 		g_source_remove(timeout.id);
@@ -837,7 +928,46 @@ static	gboolean	callback_tbutton (GtkWidget			*widget,
 	gtk_main_quit();
 }
 
-static	gboolean	callback_timeout (void				*data)
+static	void		callback_entry_fname	(GtkWidget		*widget,
+						void			*data)
+{
+	struct Entry_fname_Data	*entry;
+	const char		*str;
+	int			err;
+	char			buff [LINE_SIZE];
+
+	entry	= ((struct Entry_fname_Data *)data);
+
+	str	= gtk_entry_get_text(GTK_ENTRY(entry->ptr));
+	err	= alx_sscan_fname(entry->fpath, entry->fname, false, str);
+
+	if (err) {
+		snprintf(buff, LINE_SIZE, "Error %i", err);
+		gtk_entry_set_text(GTK_ENTRY(entry->ptr), buff);
+		gtk_editable_select_region(GTK_EDITABLE(entry->ptr),
+					0, GTK_ENTRY(entry->ptr)->text_length);
+	}
+
+	gtk_main_quit();
+}
+
+static	void		callback_entry_str	(GtkWidget		*widget,
+						void			*data)
+{
+	struct Entry_str_Data	*entry;
+	const char		*str;
+	int			err;
+	char			buff [LINE_SIZE];
+
+	entry	= ((struct Entry_str_Data *)data);
+
+	str	= gtk_entry_get_text(GTK_ENTRY(entry->ptr));
+	snprintf(entry->str, entry->strsize, "%s", str);
+
+	gtk_main_quit();
+}
+
+static	gboolean	callback_timeout	(void			*data)
 {
 	struct Timeout_Data	*tout;
 	tout			= ((struct Timeout_Data *)data);
