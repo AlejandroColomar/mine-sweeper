@@ -32,7 +32,7 @@ _ALL	= mine-sweeper mine-sweeper.exe
 
 ALL	= $(BIN_NAME)
 
-MAIN_OBJ_LIBALX	= alx_file.o alx_getnum.o alx_ncur.o alx_seed.o
+MAIN_OBJ_LIBALX	= alx_lib.o
 MAIN_OBJ_ABOUT	= about_mod.o
 MAIN_OBJ_CTRL	= ctrl_mod.o
 MAIN_OBJ_GAME	= game_mod.o

@@ -17,7 +17,7 @@
 /*	*	*	*	*	*	*	*	*	*
  *	*	* Other	*	*	*	*	*	*	*
  *	*	*	*	*	*	*	*	*	*/
-	#include "alx_getnum.h"
+	#include "alx_input.h"
 
 	#include "about.h"
 	#include "game_iface.h"

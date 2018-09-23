@@ -11,12 +11,13 @@
  *	*	*	*	*	*	*	*	*	*/
 	#include <inttypes.h>
 	#include <stdarg.h>
+	#include <stdbool.h>
 	#include <stdio.h>
 
 /*	*	*	*	*	*	*	*	*	*
  *	*	* Other	*	*	*	*	*	*	*
  *	*	*	*	*	*	*	*	*	*/
-	#include "alx_getnum.h"
+	#include "alx_input.h"
 
 
 /******************************************************************************
@@ -26,9 +27,11 @@
 
 	# define	MAX_TRIES	(2)
 
+	# define	ERR_OK		(0)
 	# define	ERR_RANGE	(1)
 	# define	ERR_SSCANF	(2)
-	# define	ERR_FGETS	(3)
+	# define	ERR_FPTR	(3)
+	# define	ERR_FGETS	(4)
 
 	# define	ERR_RANGE_MSG	"¡ Number is out of range !"
 	# define	ERR_SSCANF_MSG	"¡ sscanf() error !"
@@ -60,7 +63,7 @@ int	alx_sscan_dbl	(double *dest, double m, double def, double M, const char *str
 	} else if ((*dest < m) || (*dest > M)) {
 		err	= ERR_RANGE;
 	} else {
-		err	= 0;
+		err	= ERR_OK;
 	}
 
 	if (err) {
@@ -84,11 +87,54 @@ int	alx_sscan_int	(int64_t *dest, double m, int64_t def, double M, const char *s
 	} else if ((*dest < m) || (*dest > M)) {
 		err	= ERR_RANGE;
 	} else {
-		err	= 0;
+		err	= ERR_OK;
 	}
 
 	if (err) {
 		*dest = def;
+	}
+
+	return	err;
+}
+
+	/*
+	 * Scan a file name in fpath.
+	 * return:	0	if correct
+	 *		non 0	if there is an error
+	 */
+int	alx_sscan_fname	(const char *fpath, char *fname, bool exist, const char *str)
+{
+	char	buff [FILENAME_MAX];
+	char	file_path [FILENAME_MAX];
+	int	err;
+	FILE	*fp;
+
+	if (sscanf(str, " %s ", buff) != 1) {
+		err	= ERR_SSCANF;
+	} else {
+		snprintf(file_path, FILENAME_MAX, "%s%s", fpath, buff);
+
+		fp	= fopen(file_path, "r");
+
+		if (exist) {
+			if (fp == NULL) {
+				err	= ERR_FPTR;
+			} else {
+				err	= ERR_OK;
+				fclose(fp);
+			}
+		} else {
+			if (fp == NULL) {
+				err	= ERR_OK;
+			} else {
+				err	= ERR_FPTR;
+				fclose(fp);
+			}
+		}
+	}
+
+	if (!err) {
+		snprintf(fname, FILENAME_MAX, buff);
 	}
 
 	return	err;
@@ -177,7 +223,6 @@ static	double	loop_getdbl	(double m, double def, double M)
 
 		if (err) {
 			manage_error(err);
-			R	= def;
 		} else {
 			break;
 		}
@@ -205,7 +250,6 @@ static	int64_t	loop_getint	(double m, int64_t def, double M)
 
 		if (err) {
 			manage_error(err);
-			Z	= def;
 		} else {
 			break;
 		}

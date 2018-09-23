@@ -22,7 +22,7 @@
 /*	*	*	*	*	*	*	*	*	*
  *	*	* Other	*	*	*	*	*	*	*
  *	*	*	*	*	*	*	*	*	*/
-	#include "alx_getnum.h"
+	#include "alx_input.h"
 
 	#include "about.h"
 	#include "game_iface.h"
@@ -73,6 +73,13 @@ struct	Entry_int_Data {
 	double			min;
 	int64_t			def;
 	double			max;
+};
+
+struct	Entry_file_Data {
+	GtkWidget		*ptr;
+	struct Label_Data	lbl;
+	char			*str;
+	const char		*def;
 };
 
 
@@ -498,6 +505,7 @@ static	void	menu_gui_continue	(void)
 	GtkWidget		*separator[4];
 	struct Label_Data	label;
 	struct Button_Data	button [7];
+	struct Entry_file_Data	entry_file[1];
 
 	/* Text */
 	snprintf(label.text, LINE_SIZE, "Game menu");
