@@ -1,7 +1,7 @@
 #!/usr/bin/make -f
 
 VERSION		= 4
-PATCHLEVEL	= ~a4
+PATCHLEVEL	= ~b1
 SUBLEVEL	= 
 EXTRAVERSION	=
 NAME		= graphic
