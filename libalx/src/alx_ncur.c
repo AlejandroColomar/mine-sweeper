@@ -22,6 +22,8 @@
 /*	*	*	*	*	*	*	*	*	*
  *	*	* Other	*	*	*	*	*	*	*
  *	*	*	*	*	*	*	*	*	*/
+	#include "alx_input.h"
+
 	#include "alx_ncur.h"
 
 
@@ -35,8 +37,9 @@
 	# define	ERR_OK		(0)
 	# define	ERR_RANGE	(1)
 	# define	ERR_SSCANF	(2)
-	# define	ERR_GETSTR	(3)
-	# define	ERR_FPTR	(4)
+	# define	ERR_FPTR	(3)
+	# define	ERR_FGETS	(4)
+	# define	ERR_GETSTR	(5)
 
 	# define	ERR_RANGE_MSG	"¡ Number is out of range !"
 	# define	ERR_SSCANF_MSG	"¡ sscanf() error !"
@@ -561,19 +564,17 @@ static	double	loop_w_getdbl		(WINDOW *win,
 		wclear(win);
 		wrefresh(win);
 
-		err	= ERR_OK;
 		if (x == ERR) {
-			err =	ERR_GETSTR;
-		} else if (sscanf(buff, "%lf", &R) != 1) {
-			err =	ERR_SSCANF;
-		} else if (R < m || R > M) {
-			err =	ERR_RANGE;
+			err	= ERR_GETSTR;
+		} else {
+			err	= alx_sscan_dbl(&R, m, def, M, buff);
+		}
+
+		if (err) {
+			manage_w_error(win, err);
 		} else {
 			break;
 		}
-
-		manage_w_error(win, err);
-		R =	def;
 	}
 
 	return	R;
@@ -595,19 +596,17 @@ static	int64_t	loop_w_getint		(WINDOW *win,
 		wclear(win);
 		wrefresh(win);
 
-		err	= ERR_OK;
 		if (x == ERR) {
 			err	= ERR_GETSTR;
-		} else if (sscanf(buff, "%"SCNi64, &Z) != 1) {
-			err	= ERR_SSCANF;
-		} else if (Z < m || Z > M) {
-			err	= ERR_RANGE;
+		} else {
+			err	= alx_sscan_int(&Z, m, def, M, buff);
+		}
+
+		if (err) {
+			manage_w_error(win, err);
 		} else {
 			break;
 		}
-
-		manage_w_error(win, err);
-		Z =	def;
 	}
 
 	return	Z;
@@ -634,7 +633,11 @@ static	void	loop_w_getstr		(char *dest, int destsize, WINDOW *win)
 			break;
 		}
 
-		manage_w_error(win, err);
+		if (err) {
+			manage_w_error(win, err);
+		} else {
+			break;
+		}
 	}
 
 	if (!err) {
@@ -647,11 +650,8 @@ static	void	loop_w_getfname		(const char *fpath, char *fname, bool exist,
 {
 	int	i;
 	char	buff [FILENAME_MAX];
-	char	buff2 [FILENAME_MAX];
-	char	file_path [FILENAME_MAX];
 	int	x;
 	int	err;
-	FILE	*fp;
 
 	for (i = 0; i < MAX_TRIES; i++) {
 		echo();
@@ -660,38 +660,17 @@ static	void	loop_w_getfname		(const char *fpath, char *fname, bool exist,
 		wclear(win);
 		wrefresh(win);
 
-		err	= ERR_OK;
 		if (x == ERR) {
-			err =	ERR_GETSTR;
-		} else if (sscanf(buff, " %s ", buff2) != 1) {
-			err	= ERR_SSCANF;
+			err	= ERR_GETSTR;
 		} else {
-			snprintf(file_path, FILENAME_MAX, "%s%s", fpath, buff2);
-
-			fp =	fopen(file_path, "r");
-
-			if (exist) {
-				if (fp == NULL) {
-					err =	ERR_FPTR;
-				} else {
-					fclose(fp);
-					break;
-				}
-			} else {
-				if (fp != NULL) {
-					err =	ERR_FPTR;
-					fclose(fp);
-				} else {
-					break;
-				}
-			}
+			err	= alx_sscan_fname(fpath, fname, exist, buff);
 		}
 
-		manage_w_error(win, err);
-	}
-
-	if (!err) {
-		snprintf(fname, FILENAME_MAX, buff2);
+		if (err) {
+			manage_w_error(win, err);
+		} else {
+			break;
+		}
 	}
 }
 
