@@ -552,7 +552,8 @@ static	void	menu_gui_continue	(void)
 	wh	= true;
 	while (wh) {
 		/* Text */
-		snprintf(entry_fname[0].lbl.text, LINE_SIZE, "Change file name (File: \"%s\")", saved_name);
+		snprintf(entry_fname[0].lbl.text, LINE_SIZE,
+				"Change file name (File: \"%s\")", saved_name);
 
 		/* Generate widgets */
 		box			= gtk_vbox_new(false, 0);
@@ -840,9 +841,18 @@ static	void	menu_gui_custom	(void)
 	while (wh) {
 
 		/* Text */
-		snprintf(entry_int[0].lbl.text, LINE_SIZE, "Change rows: rows\t\t(%i)", menu_iface_variables.rows);
-		snprintf(entry_int[1].lbl.text, LINE_SIZE, "Change columns: cols\t(%i)", menu_iface_variables.cols);
-		snprintf(entry_dbl[0].lbl.text, LINE_SIZE, "Change proportion of mines: p\t(%lf)", menu_iface_variables.p);
+		snprintf(entry_int[0].lbl.text, LINE_SIZE,
+				"Change rows: rows\t\t(%i)\n"
+				"Introduce an integer number [%i U %i]",
+				menu_iface_variables.rows, 2, ROWS_GUI_MAX);
+		snprintf(entry_int[1].lbl.text, LINE_SIZE,
+				"Change columns: cols\t(%i)\n"
+				"Introduce an integer number [%i U %i]",
+				menu_iface_variables.cols, 2, COLS_GUI_MAX);
+		snprintf(entry_dbl[0].lbl.text, LINE_SIZE,
+				"Change proportion of mines: p\t(%lf)\n"
+				"Introduce a Real number [%i U %i]",
+				menu_iface_variables.p, 0, 1);
 
 		/* Generate widgets */
 		box			= gtk_vbox_new(false, 0);
@@ -912,34 +922,40 @@ static	void	menu_gui_devel	(void)
 	int			sw;
 	GtkWidget		*separator[2];
 	struct Label_Data	label;
-	struct Button_Data	button [2];
+	struct Button_Data	button [1];
+	struct Entry_int_Data	entry_int[1];
+	int			seed;
 
 	/* Text */
 	snprintf(label.text, LINE_SIZE, "DEVELOPER OPTIONS");
-	snprintf(button[1].text, LINE_SIZE, "[_1] Change seed (srand)");
+	snprintf(entry_int[0].lbl.text, LINE_SIZE, "Change seed (srand)");
 	snprintf(button[0].text, LINE_SIZE, "[_0] Back");
 
 	/* Data */
-	button[1].num	= 1;
+	entry_int[0].num	= &seed;
+	entry_int[0].min	= -INFINITY;
+	entry_int[0].def	= 1;
+	entry_int[0].max	= INFINITY;
 	button[0].num	= 0;
-	button[1].sw	= &sw;
 	button[0].sw	= &sw;
 
+	/* Text */
+
 	/* Menu loop */
-	int	seed;
 	wh	= true;
 	while (wh) {
 		/* Generate widgets */
-		box		= gtk_vbox_new(false, 0);
-		label.ptr	= gtk_label_new(label.text);
-		separator[0]	= gtk_hseparator_new();
-		button[1].ptr	= gtk_button_new_with_mnemonic(button[1].text);
-		separator[1]	= gtk_hseparator_new();
-		button[0].ptr	= gtk_button_new_with_mnemonic(button[0].text);
+		box			= gtk_vbox_new(false, 0);
+		label.ptr		= gtk_label_new(label.text);
+		separator[0]		= gtk_hseparator_new();
+		entry_int[0].lbl.ptr	= gtk_label_new(entry_int[0].lbl.text);
+		entry_int[0].ptr	= gtk_entry_new();
+		separator[1]		= gtk_hseparator_new();
+		button[0].ptr		= gtk_button_new_with_mnemonic(button[0].text);
 
 		/* Events */
-		g_signal_connect(button[1].ptr, "clicked",
-				G_CALLBACK(callback_button), (void *)&button[1]);
+		g_signal_connect(entry_int[0].ptr, "activate",
+				G_CALLBACK(callback_entry_int), (void *)&entry_int[0]);
 		g_signal_connect(button[0].ptr, "clicked",
 				G_CALLBACK(callback_button), (void *)&button[0]);
 
@@ -949,7 +965,8 @@ static	void	menu_gui_devel	(void)
 		/* Box */
 		gtk_box_pack_start(GTK_BOX(box), label.ptr, false, false, 0);
 		gtk_box_pack_start(GTK_BOX(box), separator[0], false, false, 5);
-		gtk_box_pack_start(GTK_BOX(box), button[1].ptr, true, true, 0);
+		gtk_box_pack_start(GTK_BOX(box), entry_int[0].lbl.ptr, true, true, 0);
+		gtk_box_pack_start(GTK_BOX(box), entry_int[0].ptr, true, true, 0);
 		gtk_box_pack_start(GTK_BOX(box), separator[1], false, false, 5);
 		gtk_box_pack_start(GTK_BOX(box), button[0].ptr, true, true, 0);
 
@@ -965,9 +982,7 @@ static	void	menu_gui_devel	(void)
 		case 0:
 			wh	= false;
 			break;
-		case 1:
-//			seed	= alx_w_getint(w2, r2, txt[0],
-//						-INFINITY, 1, INFINITY, NULL);
+		default:
 			srand(seed);
 			break;
 		}

@@ -341,9 +341,12 @@ static	void	menu_tui_custom	(void)
 	int	sw;
 	wh	= true;
 	while (wh) {
-		mvwprintw(win, mnu[1].r, mnu[1].c, "%s rows\t\t(%i)", mnu[1].t, menu_iface_variables.rows);
-		mvwprintw(win, mnu[2].r, mnu[2].c, "%s cols\t\t(%i)", mnu[2].t, menu_iface_variables.cols);
-		mvwprintw(win, mnu[3].r, mnu[3].c, "%s p\t(%lf)", mnu[3].t, menu_iface_variables.p);
+		mvwprintw(win, mnu[1].r, mnu[1].c, "%s rows\t\t(%i)",
+					mnu[1].t, menu_iface_variables.rows);
+		mvwprintw(win, mnu[2].r, mnu[2].c, "%s cols\t\t(%i)",
+					mnu[2].t, menu_iface_variables.cols);
+		mvwprintw(win, mnu[3].r, mnu[3].c, "%s p\t(%lf)",
+					mnu[3].t, menu_iface_variables.p);
 		wrefresh(win);
 
 		/* Selection */

@@ -208,7 +208,7 @@ void	save_game_file	(char *filepath)
 		fclose(fp);
 	}
 
-	/* Don't change saved_name variable if not in default dir */
+	/* Don't change saved_name if saving in non-default dir */
 	if (filepath != NULL) {
 		snprintf(saved_name, FILENAME_MAX, "%s", old_saved);
 	}
