@@ -1,10 +1,10 @@
 #!/usr/bin/make -f
 
-VERSION	= 4
-PATCHLEVEL = ~a3
-SUBLEVEL = 
-EXTRAVERSION =
-NAME = graphic
+VERSION		= 4
+PATCHLEVEL	= ~a4
+SUBLEVEL	= 
+EXTRAVERSION	=
+NAME		= graphic
 
 export	VERSION
 export	PATCHLEVEL

@@ -75,11 +75,11 @@ struct	Entry_int_Data {
 	double			max;
 };
 
-struct	Entry_file_Data {
+struct	Entry_fname_Data {
 	GtkWidget		*ptr;
 	struct Label_Data	lbl;
-	char			*str;
-	const char		*def;
+	const char		*fpath;
+	char			*fname;
 };
 
 
@@ -296,21 +296,18 @@ static	void		callback_entry_dbl	(GtkWidget	*widget,
 	struct Entry_dbl_Data	*entry;
 	const char		*str;
 	int			err;
-	double			R;
 	char			buff [LINE_SIZE];
 
 	entry	= ((struct Entry_dbl_Data *)data);
 
 	str	= gtk_entry_get_text(GTK_ENTRY(entry->ptr));
-	err	= alx_sscan_dbl(&R, entry->min, entry->def, entry->max, str);
+	err	= alx_sscan_dbl(entry->num, entry->min, entry->def, entry->max, str);
 
 	if (err) {
 		snprintf(buff, LINE_SIZE, "Error %i", err);
 		gtk_entry_set_text(GTK_ENTRY(entry->ptr), buff);
 		gtk_editable_select_region(GTK_EDITABLE(entry->ptr),
 					0, GTK_ENTRY(entry->ptr)->text_length);
-	} else {
-		*(entry->num)	= R;
 	}
 
 	gtk_main_quit();
@@ -337,6 +334,29 @@ static	void		callback_entry_int	(GtkWidget	*widget,
 					0, GTK_ENTRY(entry->ptr)->text_length);
 	} else {
 		*(entry->num)	= Z;
+	}
+
+	gtk_main_quit();
+}
+
+static	void		callback_entry_fname	(GtkWidget	*widget,
+						void		*data)
+{
+	struct Entry_fname_Data	*entry;
+	const char		*str;
+	int			err;
+	char			buff [LINE_SIZE];
+
+	entry	= ((struct Entry_fname_Data *)data);
+
+	str	= gtk_entry_get_text(GTK_ENTRY(entry->ptr));
+	err	= alx_sscan_fname(entry->fpath, entry->fname, true, str);
+
+	if (err) {
+		snprintf(buff, LINE_SIZE, "Error %i", err);
+		gtk_entry_set_text(GTK_ENTRY(entry->ptr), buff);
+		gtk_editable_select_region(GTK_EDITABLE(entry->ptr),
+					0, GTK_ENTRY(entry->ptr)->text_length);
 	}
 
 	gtk_main_quit();
@@ -504,54 +524,55 @@ static	void	menu_gui_continue	(void)
 	int			sw;
 	GtkWidget		*separator[4];
 	struct Label_Data	label;
-	struct Button_Data	button [7];
-	struct Entry_file_Data	entry_file[1];
+	struct Button_Data	button [6];
+	struct Entry_fname_Data	entry_fname[1];
 
 	/* Text */
 	snprintf(label.text, LINE_SIZE, "Game menu");
 	snprintf(button[1].text, LINE_SIZE, "[_1] Start");
 	snprintf(button[2].text, LINE_SIZE, "[_2] Select map");
 	snprintf(button[3].text, LINE_SIZE, "[_3] Change difficulty");
-	snprintf(button[5].text, LINE_SIZE, "[_5] Hi scores");
-	snprintf(button[6].text, LINE_SIZE, "[_6] DEVEL");
+	snprintf(button[4].text, LINE_SIZE, "[_4] Hi scores");
+	snprintf(button[5].text, LINE_SIZE, "[_5] DEVEL");
 	snprintf(button[0].text, LINE_SIZE, "[_0] Back");
 
 	/* Data */
-	button[1].num	= 1;
-	button[2].num	= 2;
-	button[3].num	= 3;
-	button[4].num	= 4;
-	button[5].num	= 5;
-	button[6].num	= 6;
-	button[0].num	= 0;
-	button[1].sw	= &sw;
-	button[2].sw	= &sw;
-	button[3].sw	= &sw;
-	button[4].sw	= &sw;
-	button[5].sw	= &sw;
-	button[6].sw	= &sw;
-	button[0].sw	= &sw;
+	button[1].num		= 1;
+	button[2].num		= 2;
+	button[3].num		= 3;
+	button[4].num		= 5;
+	button[5].num		= 6;
+	button[0].num		= 0;
+	button[1].sw		= &sw;
+	button[2].sw		= &sw;
+	button[3].sw		= &sw;
+	entry_fname[0].fpath	= saved_path;
+	entry_fname[0].fname	= saved_name;
+	button[4].sw		= &sw;
+	button[5].sw		= &sw;
+	button[0].sw		= &sw;
 
 	/* Menu loop */
 	wh	= true;
 	while (wh) {
 		/* Text */
-		snprintf(button[4].text, LINE_SIZE, "[_4] Change file name (File: \"%s\")", saved_name);
+		snprintf(entry_fname[0].lbl.text, LINE_SIZE, "Change file name (File: \"%s\")", saved_name);
 
 		/* Generate widgets */
-		box		= gtk_vbox_new(false, 0);
-		label.ptr	= gtk_label_new(label.text);
-		separator[0]	= gtk_hseparator_new();
-		button[1].ptr	= gtk_button_new_with_mnemonic(button[1].text);
-		separator[1]	= gtk_hseparator_new();
-		button[2].ptr	= gtk_button_new_with_mnemonic(button[2].text);
-		button[3].ptr	= gtk_button_new_with_mnemonic(button[3].text);
-		button[4].ptr	= gtk_button_new_with_mnemonic(button[4].text);
-		button[5].ptr	= gtk_button_new_with_mnemonic(button[5].text);
-		separator[2]	= gtk_hseparator_new();
-		button[6].ptr	= gtk_button_new_with_mnemonic(button[6].text);
-		separator[3]	= gtk_hseparator_new();
-		button[0].ptr	= gtk_button_new_with_mnemonic(button[0].text);
+		box			= gtk_vbox_new(false, 0);
+		label.ptr		= gtk_label_new(label.text);
+		separator[0]		= gtk_hseparator_new();
+		button[1].ptr		= gtk_button_new_with_mnemonic(button[1].text);
+		separator[1]		= gtk_hseparator_new();
+		button[2].ptr		= gtk_button_new_with_mnemonic(button[2].text);
+		button[3].ptr		= gtk_button_new_with_mnemonic(button[3].text);
+		entry_fname[0].lbl.ptr	= gtk_label_new(entry_fname[0].lbl.text);
+		entry_fname[0].ptr	= gtk_entry_new();
+		button[4].ptr		= gtk_button_new_with_mnemonic(button[5].text);
+		separator[2]		= gtk_hseparator_new();
+		button[5].ptr		= gtk_button_new_with_mnemonic(button[6].text);
+		separator[3]		= gtk_hseparator_new();
+		button[0].ptr		= gtk_button_new_with_mnemonic(button[0].text);
 
 		/* Events */
 		g_signal_connect(button[1].ptr, "clicked",
@@ -560,12 +581,12 @@ static	void	menu_gui_continue	(void)
 				G_CALLBACK(callback_button), (void *)&button[2]);
 		g_signal_connect(button[3].ptr, "clicked",
 				G_CALLBACK(callback_button), (void *)&button[3]);
+		g_signal_connect(entry_fname[0].ptr, "activate",
+				G_CALLBACK(callback_entry_fname), (void *)&entry_fname[0]);
 		g_signal_connect(button[4].ptr, "clicked",
 				G_CALLBACK(callback_button), (void *)&button[4]);
 		g_signal_connect(button[5].ptr, "clicked",
 				G_CALLBACK(callback_button), (void *)&button[5]);
-		g_signal_connect(button[6].ptr, "clicked",
-				G_CALLBACK(callback_button), (void *)&button[6]);
 		g_signal_connect(button[0].ptr, "clicked",
 				G_CALLBACK(callback_button), (void *)&button[0]);
 
@@ -579,10 +600,11 @@ static	void	menu_gui_continue	(void)
 		gtk_box_pack_start(GTK_BOX(box), separator[1], false, false, 5);
 		gtk_box_pack_start(GTK_BOX(box), button[2].ptr, true, true, 0);
 		gtk_box_pack_start(GTK_BOX(box), button[3].ptr, true, true, 0);
+		gtk_box_pack_start(GTK_BOX(box), entry_fname[0].lbl.ptr, true, true, 0);
+		gtk_box_pack_start(GTK_BOX(box), entry_fname[0].ptr, true, true, 0);
 		gtk_box_pack_start(GTK_BOX(box), button[4].ptr, true, true, 0);
-		gtk_box_pack_start(GTK_BOX(box), button[5].ptr, true, true, 0);
 		gtk_box_pack_start(GTK_BOX(box), separator[2], false, false, 5);
-		gtk_box_pack_start(GTK_BOX(box), button[6].ptr, true, true, 0);
+		gtk_box_pack_start(GTK_BOX(box), button[5].ptr, true, true, 0);
 		gtk_box_pack_start(GTK_BOX(box), separator[3], false, false, 5);
 		gtk_box_pack_start(GTK_BOX(box), button[0].ptr, true, true, 0);
 
@@ -590,39 +612,30 @@ static	void	menu_gui_continue	(void)
 		gtk_widget_show_all(window_gui);
 
 		/* GTK loop */
-		sw	= 0;
+		sw	= -1;
 		gtk_main();
+
+		/* Clear window */
+		gtk_widget_destroy(box);
 
 		/* Selection */
 		switch (sw) {
 		case 0:
-			gtk_widget_destroy(box);
 			wh	= false;
 			break;
 		case 1:
-			gtk_widget_destroy(box);
 			start_switch();
 			break;
 		case 2:
-			gtk_widget_destroy(box);
 			menu_gui_select();
 			break;
 		case 3:
-			gtk_widget_destroy(box);
 			menu_gui_level();
 			break;
 		case 4:
-			save_clr();
-//			alx_w_getfname(saved_path, saved_name, true, w2, r2,
-//								txt[0], NULL);
-			gtk_widget_destroy(box);
-			break;
-		case 5:
-			gtk_widget_destroy(box);
 			menu_gui_hiscores();
 			break;
-		case 6:
-			gtk_widget_destroy(box);
+		case 5:
 			menu_gui_devel();
 			break;
 		}
@@ -684,7 +697,7 @@ static	void	menu_gui_select	(void)
 	gtk_widget_show_all(window_gui);
 
 	/* GTK loop */
-	sw	= 0;
+	sw	= -1;
 	gtk_main();
 
 	/* Clear window */
@@ -772,7 +785,7 @@ static	void	menu_gui_level	(void)
 	gtk_widget_show_all(window_gui);
 
 	/* GTK loop */
-	sw	= 0;
+	sw	= -1;
 	gtk_main();
 
 	/* Clear window */
@@ -879,7 +892,7 @@ static	void	menu_gui_custom	(void)
 		gtk_widget_show_all(window_gui);
 
 		/* GTK loop */
-		sw	= 1;
+		sw	= -1;
 		gtk_main();
 
 		/* Selection */
@@ -948,7 +961,7 @@ static	void	menu_gui_devel	(void)
 		gtk_widget_show_all(window_gui);
 
 		/* GTK loop */
-		sw	= 0;
+		sw	= -1;
 		gtk_main();
 
 		/* Selection */
