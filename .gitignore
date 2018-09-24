@@ -1,3 +1,4 @@
 *.o
+*.s
 bin/mine-sweeper
 bin/mine-sweeper.exe
