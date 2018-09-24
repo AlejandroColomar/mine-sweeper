@@ -12,7 +12,7 @@ SRC_DIR	= $(XYZZY_DIR)/src/
 # dependencies
 
 _ALL	= xyzzy.o
-ALL = $(_ALL) xyzzy_mod.o
+ALL	= $(_ALL) xyzzy_mod.o
 
 XYZZY_INC_GAME	= game_iface.h
 XYZZY_INC	= xyzzy.h
@@ -30,14 +30,17 @@ all: $(ALL)
 
 xyzzy_mod.o: $(_ALL)
 	$(Q)$(LD) -r $^ -o $@
-	@echo  "\tLD	$@"
+	@echo  "	LD	$@"
 	@echo  ""
 	
 
-xyzzy.o: $(XYZZY_DEPS)
-	$(Q)$(CC) $(CFLAGS) $(XYZZY_INC_DIRS) -c $< -o $@
-	@echo  "\tCC	$@"
+xyzzy.s: $(XYZZY_DEPS)
+	$(Q)$(CC) $(CFLAGS) $(XYZZY_INC_DIRS) -S $< -o $@
+	@echo  "	CC	$@"
+xyzzy.o: xyzzy.s
+	$(Q)$(AS) $< -o $@
+	@echo  "	AS	$@"
 
 
 clean:
-	$(Q)rm -f *.o
+	$(Q)rm -f *.o *.s

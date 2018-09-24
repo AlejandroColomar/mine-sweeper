@@ -4,16 +4,16 @@
 
 # directories
 
-GAME_INC_DIR = $(GAME_DIR)/inc/
-PLAY_INC_DIR = $(PLAY_DIR)/inc/
+GAME_INC_DIR	= $(GAME_DIR)/inc/
+PLAY_INC_DIR	= $(PLAY_DIR)/inc/
 
-INC_DIR = $(SAVE_DIR)/inc/
-SRC_DIR = $(SAVE_DIR)/src/
+INC_DIR	= $(SAVE_DIR)/inc/
+SRC_DIR	= $(SAVE_DIR)/src/
 
 # dependencies
 
-_ALL = save.o score.o
-ALL = $(_ALL) save_mod.o
+_ALL	= save.o score.o
+ALL	= $(_ALL) save_mod.o
 
 SAVE_INC_PLAY	= player_iface.h
 SAVE_INC_GAME	= game.h
@@ -45,18 +45,24 @@ all: $(ALL)
 
 save_mod.o: $(_ALL)
 	$(Q)$(LD) -r $^ -o $@
-	@echo  "\tLD	$@"
+	@echo  "	LD	$@"
 	@echo  ""
 	
 
-save.o: $(SAVE_DEPS)
-	$(Q)$(CC) $(CFLAGS) $(SAVE_INC_DIRS) -c $< -o $@
-	@echo  "\tCC	$@"
+save.s: $(SAVE_DEPS)
+	$(Q)$(CC) $(CFLAGS) $(SAVE_INC_DIRS) -S $< -o $@
+	@echo  "	CC	$@"
+save.o: save.s
+	$(Q)$(AS) $< -o $@
+	@echo  "	AS	$@"
 
-score.o: $(SCORE_DEPS)
-	$(Q)$(CC) $(CFLAGS) $(SCORE_INC_DIRS) -c $< -o $@
-	@echo  "\tCC	$@"
+score.s: $(SCORE_DEPS)
+	$(Q)$(CC) $(CFLAGS) $(SCORE_INC_DIRS) -S $< -o $@
+	@echo  "	CC	$@"
+score.o: score.s
+	$(Q)$(AS) $< -o $@
+	@echo  "	AS	$@"
 
 
 clean:
-	$(Q)rm -f *.o
+	$(Q)rm -f *.o *.s

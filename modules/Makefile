@@ -12,6 +12,8 @@ PLAY_DIR = $(MODULES_DIR)/player/
 SAVE_DIR = $(MODULES_DIR)/save/
 XYZZY_DIR = $(MODULES_DIR)/xyzzy/
 
+TMP_DIR = $(MODULES_DIR)/tmp/
+
 export	ABOUT_DIR
 export	CTRL_DIR
 export	GAME_DIR
@@ -34,6 +36,7 @@ all:
 	$(Q)cd $(PLAY_DIR) && $(MAKE) && cd ..
 	$(Q)cd $(SAVE_DIR) && $(MAKE) && cd ..
 	$(Q)cd $(XYZZY_DIR) && $(MAKE) && cd ..
+	$(Q)cd $(TMP_DIR) && $(MAKE) && cd ..
 
 
 clean:
@@ -44,6 +47,7 @@ clean:
 	$(Q)cd $(PLAY_DIR) && $(MAKE) clean && cd ..
 	$(Q)cd $(SAVE_DIR) && $(MAKE) clean && cd ..
 	$(Q)cd $(XYZZY_DIR) && $(MAKE) clean && cd ..
+	$(Q)cd $(TMP_DIR) && $(MAKE) clean && cd ..
 	@echo  "Clean modules"
 
 ################################################################################

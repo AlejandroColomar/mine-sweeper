@@ -15,25 +15,25 @@ SRC_DIR = $(GAME_DIR)/src/
 
 # dependencies
 
-_ALL = game.o game_iface.o
-ALL = $(_ALL) game_mod.o
+_ALL	= game.o game_iface.o
+ALL	= $(_ALL) game_mod.o
 
-GAME_INC_LIBALX =	alx_seed.h
-GAME_INC_SAVE =		save.h
-GAME_INC =	game.h
-GAME_DEPS = $(SRC_DIR)/game.c \
+GAME_INC_LIBALX	= alx_seed.h
+GAME_INC_SAVE	= save.h
+GAME_INC	= game.h
+GAME_DEPS	= $(SRC_DIR)/game.c \
 			$(patsubst %,$(INC_DIR)/%,$(GAME_INC)) \
 			$(patsubst %,$(LIBALX_INC_DIR)/%,$(GAME_INC_LIBALX)) \
 			$(patsubst %,$(SAVE_INC_DIR)/%,$(GAME_INC_SAVE))
-GAME_INC_DIRS = -I $(INC_DIR) \
+GAME_INC_DIRS	= -I $(INC_DIR) \
 			-I $(SAVE_INC_DIR) \
 			-I $(LIBALX_INC_DIR)
 
-GAMEI_INC_PLAY =	player_iface.h
-GAMEI_INC_SAVE =	save.h score.h
-GAMEI_INC_XYZZY =	xyzzy.h
-GAMEI_INC =	game_iface.h	game.h
-GAMEI_DEPS = $(SRC_DIR)/game_iface.c \
+GAMEI_INC_PLAY	= player_iface.h
+GAMEI_INC_SAVE	= save.h score.h
+GAMEI_INC_XYZZY	= xyzzy.h
+GAMEI_INC	= game_iface.h	game.h
+GAMEI_DEPS	= $(SRC_DIR)/game_iface.c \
 			$(patsubst %,$(INC_DIR)/%,$(GAME_INC)) \
 			$(patsubst %,$(PLAY_INC_DIR)/%,$(GAMEI_INC_PLAY)) \
 			$(patsubst %,$(SAVE_INC_DIR)/%,$(GAME_INC_SAVE)) \
@@ -51,18 +51,24 @@ all: $(ALL)
 
 game_mod.o: $(_ALL)
 	$(Q)$(LD) -r $^ -o $@
-	@echo  "\tLD	$@"
+	@echo  "	LD	$@"
 	@echo  ""
 
 
-game.o: $(GAME_DEPS)
-	$(Q)$(CC) $(CFLAGS) $(GAME_INC_DIRS) -c $< -o $@
-	@echo  "\tCC	$@"
+game.s: $(GAME_DEPS)
+	$(Q)$(CC) $(CFLAGS) $(GAME_INC_DIRS) -S $< -o $@
+	@echo  "	CC	$@"
+game.o: game.s
+	$(Q)$(AS) $< -o $@
+	@echo  "	AS	$@"
 
-game_iface.o: $(GAMEI_DEPS)
-	$(Q)$(CC) $(CFLAGS) $(GAMEI_INC_DIRS) -c $< -o $@
-	@echo  "\tCC	$@"
+game_iface.s: $(GAMEI_DEPS)
+	$(Q)$(CC) $(CFLAGS) $(GAMEI_INC_DIRS) -S $< -o $@
+	@echo  "	CC	$@"
+game_iface.o: game_iface.s
+	$(Q)$(AS) $< -o $@
+	@echo  "	AS	$@"
 
 
 clean:
-	$(Q)rm -f *.o
+	$(Q)rm -f *.o *.s

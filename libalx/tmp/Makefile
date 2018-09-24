@@ -5,7 +5,6 @@
 # directories
 
 INC_DIR = $(LIBALX_DIR)/inc/
-OBJ_DIR = $(LIBALX_DIR)/obj/
 SRC_DIR = $(LIBALX_DIR)/src/
 
 # dependencies
@@ -49,38 +48,59 @@ all: $(ALL)
 
 alx_lib.o: $(_ALL)
 	$(Q)$(LD) -r $^ -o $@
-	@echo  "\tLD	$@"
+	@echo  "	LD	$@"
 	@echo  ""
 
 
-alx_cmp.o: $(CMP_DEPS)
-	$(Q)$(CC) $(CFLAGS) $(CMP_INC_DIRS) -c $< -o $@
-	@echo  "\tCC	$@"
+alx_cmp.s: $(CMP_DEPS)
+	$(Q)$(CC) $(CFLAGS) $(CMP_INC_DIRS) -S $< -o $@
+	@echo  "	CC	$@"
+alx_cmp.o: alx_cmp.s
+	$(Q)$(AS) $< -o $@
+	@echo  "	AS	$@"
 
-alx_file.o: $(FILE_DEPS)
-	$(Q)$(CC) $(CFLAGS) $(FILE_INC_DIRS) -c $< -o $@
-	@echo  "\tCC	$@"
+alx_file.s: $(FILE_DEPS)
+	$(Q)$(CC) $(CFLAGS) $(FILE_INC_DIRS) -S $< -o $@
+	@echo  "	CC	$@"
+alx_file.o: alx_file.s
+	$(Q)$(AS) $< -o $@
+	@echo  "	AS	$@"
 
-alx_input.o: $(INPUT_DEPS)
-	$(Q)$(CC) $(CFLAGS) $(INPUT_INC_DIRS) -c $< -o $@
-	@echo  "\tCC	$@"
+alx_input.s: $(INPUT_DEPS)
+	$(Q)$(CC) $(CFLAGS) $(INPUT_INC_DIRS) -S $< -o $@
+	@echo  "	CC	$@"
+alx_input.o: alx_input.s
+	$(Q)$(AS) $< -o $@
+	@echo  "	AS	$@"
 
-alx_mask.o: $(MASK_DEPS)
-	$(Q)$(CC) $(CFLAGS) $(MASK_INC_DIRS) -c $< -o $@
-	@echo  "\tCC	$@"
+alx_mask.s: $(MASK_DEPS)
+	$(Q)$(CC) $(CFLAGS) $(MASK_INC_DIRS) -S $< -o $@
+	@echo  "	CC	$@"
+alx_mask.o: alx_mask.s
+	$(Q)$(AS) $< -o $@
+	@echo  "	AS	$@"
 
-alx_math.o: $(MATH_DEPS)
-	$(Q)$(CC) $(CFLAGS) $(MATH_INC_DIRS) -c $< -o $@
-	@echo  "\tCC	$@"
+alx_math.s: $(MATH_DEPS)
+	$(Q)$(CC) $(CFLAGS) $(MATH_INC_DIRS) -S $< -o $@
+	@echo  "	CC	$@"
+alx_math.o: alx_math.s
+	$(Q)$(AS) $< -o $@
+	@echo  "	AS	$@"
 
-alx_ncur.o: $(NCUR_DEPS)
-	$(Q)$(CC) $(CFLAGS) $(NCUR_INC_DIRS) -c $< -o $@
-	@echo  "\tCC	$@"
+alx_ncur.s: $(NCUR_DEPS)
+	$(Q)$(CC) $(CFLAGS) $(NCUR_INC_DIRS) -S $< -o $@
+	@echo  "	CC	$@"
+alx_ncur.o: alx_ncur.s
+	$(Q)$(AS) $< -o $@
+	@echo  "	AS	$@"
 
-alx_seed.o: $(SEED_DEPS)
-	$(Q)$(CC) $(CFLAGS) $(SEED_INC_DIRS) -c $< -o $@
-	@echo  "\tCC	$@"
+alx_seed.s: $(SEED_DEPS)
+	$(Q)$(CC) $(CFLAGS) $(SEED_INC_DIRS) -S $< -o $@
+	@echo  "	CC	$@"
+alx_seed.o: alx_seed.s
+	$(Q)$(AS) $< -o $@
+	@echo  "	AS	$@"
 
 
 clean:
-	$(Q)rm -f *.o
+	$(Q)rm -f *.o *.s

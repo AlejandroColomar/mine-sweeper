@@ -4,16 +4,16 @@
 
 # directories
 
-OBJ_DIR = $(GAME_DIR)/obj/
+TMP_DIR = $(GAME_DIR)/tmp/
 
 # target: dependencies
 #	action
 
 all:
-	$(Q)cd $(OBJ_DIR) && $(MAKE) && cd ..
+	$(Q)cd $(TMP_DIR) && $(MAKE) && cd ..
 
 clean:
-	$(Q)cd $(OBJ_DIR) && $(MAKE) clean && cd ..
+	$(Q)cd $(TMP_DIR) && $(MAKE) clean && cd ..
 
 ################################################################################
 ######## End of file ###########################################################

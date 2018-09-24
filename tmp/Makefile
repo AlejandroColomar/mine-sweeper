@@ -59,14 +59,17 @@ MAIN_INC_DIRS	= -I $(LIBALX_INC_DIR) \
 
 all: $(ALL)
 
-main.o: $(MAIN_DEPS)
-	$(Q)$(CC) $(CFLAGS) $(MAIN_INC_DIRS) -c $< -o $@
+main.s: $(MAIN_DEPS)
+	$(Q)$(CC) $(CFLAGS) $(MAIN_INC_DIRS) -S $< -o $@
 	@echo  "\tCC	$@"
+main.o: main.s
+	$(Q)$(AS) $< -o $@
+	@echo  "\tAS	$@"
 	@echo  ""
 
 
 clean:
-	$(Q)rm -f *.o
+	$(Q)rm -f *.o *.s
 
 ################################################################################
 ######## End of file ###########################################################

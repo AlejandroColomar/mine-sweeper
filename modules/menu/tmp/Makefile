@@ -122,30 +122,45 @@ all: $(ALL)
 
 menu_mod.o: $(_ALL)
 	$(Q)$(LD) -r $^ -o $@
-	@echo  "\tLD	$@"
+	@echo  "	LD	$@"
 	@echo  ""
 
 
-parser.o: $(PARS_DEPS)
-	$(Q)$(CC) $(CFLAGS) $(PARS_INC_DIRS) -c $< -o $@
-	@echo  "\tCC	$@"
+parser.s: $(PARS_DEPS)
+	$(Q)$(CC) $(CFLAGS) $(PARS_INC_DIRS) -S $< -o $@
+	@echo  "	CC	$@"
+parser.o: parser.s
+	$(Q)$(AS) $< -o $@
+	@echo  "	AS	$@"
 
-menu_iface.o: $(MENUI_DEPS)
-	$(Q)$(CC) $(CFLAGS) $(MENUI_INC_DIRS) -c $< -o $@
-	@echo  "\tCC	$@"
+menu_iface.s: $(MENUI_DEPS)
+	$(Q)$(CC) $(CFLAGS) $(MENUI_INC_DIRS) -S $< -o $@
+	@echo  "	CC	$@"
+menu_iface.o: menu_iface.s
+	$(Q)$(AS) $< -o $@
+	@echo  "	AS	$@"
 
-menu_clui.o: $(MENUCLUI_DEPS)
-	$(Q)$(CC) $(CFLAGS) $(MENUCLUI_INC_DIRS) -c $< -o $@
-	@echo  "\tCC	$@"
+menu_clui.s: $(MENUCLUI_DEPS)
+	$(Q)$(CC) $(CFLAGS) $(MENUCLUI_INC_DIRS) -S $< -o $@
+	@echo  "	CC	$@"
+menu_clui.o: menu_clui.s
+	$(Q)$(AS) $< -o $@
+	@echo  "	AS	$@"
 
-menu_tui.o: $(MENUTUI_DEPS)
-	$(Q)$(CC) $(CFLAGS) $(MENUTUI_INC_DIRS) -c $< -o $@
-	@echo  "\tCC	$@"
+menu_tui.s: $(MENUTUI_DEPS)
+	$(Q)$(CC) $(CFLAGS) $(MENUTUI_INC_DIRS) -S $< -o $@
+	@echo  "	CC	$@"
+menu_tui.o: menu_tui.s
+	$(Q)$(AS) $< -o $@
+	@echo  "	AS	$@"
 
-menu_gui.o: $(MENUGUI_DEPS)
-	$(Q)$(CC) $(CFLAGS) $(MENUGUI_INC_DIRS) -c $< -o $@
-	@echo  "\tCC	$@"
+menu_gui.s: $(MENUGUI_DEPS)
+	$(Q)$(CC) $(CFLAGS) $(MENUGUI_INC_DIRS) -S $< -o $@
+	@echo  "	CC	$@"
+menu_gui.o: menu_gui.s
+	$(Q)$(AS) $< -o $@
+	@echo  "	AS	$@"
 
 
 clean:
-	$(Q)rm -f *.o
+	$(Q)rm -f *.o *.s

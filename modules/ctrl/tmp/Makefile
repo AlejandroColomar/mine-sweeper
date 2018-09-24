@@ -10,12 +10,11 @@ PLAY_INC_DIR = $(PLAY_DIR)/inc/
 
 INC_DIR = $(CTRL_DIR)/inc/
 SRC_DIR = $(CTRL_DIR)/src/
-TST_DIR = $(CTRL_DIR)/tst/
 
 # dependencies
 
-_ALL = start.o
-ALL = $(_ALL) ctrl_mod.o
+_ALL	= start.o
+ALL	= $(_ALL) ctrl_mod.o
 
 STRT_INC_GAME	= game.h game_iface.h
 STRT_INC_MENU	= menu_iface.h
@@ -39,14 +38,17 @@ all: $(ALL)
 
 ctrl_mod.o: $(_ALL)
 	$(Q)$(LD) -r $^ -o $@
-	@echo  "\tLD	$@"
+	@echo  "	LD	$@"
 	@echo  ""
 
 
-start.o: $(STRT_DEPS)
-	$(Q)$(CC) $(CFLAGS) $(STRT_INC_DIRS) -c $< -o $@
-	@echo  "\tCC	$@"
+start.s: $(STRT_DEPS)
+	$(Q)$(CC) $(CFLAGS) $(STRT_INC_DIRS) -S $< -o $@
+	@echo  "	CC	$@"
+start.o: start.s
+	$(Q)$(AS) $< -o $@
+	@echo  "	AS	$@"
 
 
 clean:
-	$(Q)rm -f *.o
+	$(Q)rm -f *.o *.s

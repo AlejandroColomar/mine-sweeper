@@ -46,7 +46,7 @@ site:
 COMPILE:
 	 - linux:
 		$ make
-	 - windows (MSYS):
+	 - windows (MSYS2):
 		$ make OS=win
 
 INSTALL:
