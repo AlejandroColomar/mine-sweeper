@@ -61,10 +61,10 @@ all: $(ALL)
 
 main.s: $(MAIN_DEPS)
 	$(Q)$(CC) $(CFLAGS) $(MAIN_INC_DIRS) -S $< -o $@
-	@echo  "\tCC	$@"
+	@echo  "	CC	$@"
 main.o: main.s
 	$(Q)$(AS) $< -o $@
-	@echo  "\tAS	$@"
+	@echo  "	AS	$@"
 	@echo  ""
 
 
