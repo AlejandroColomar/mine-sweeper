@@ -6,89 +6,70 @@
 /******************************************************************************
  ******* include guard ********************************************************
  ******************************************************************************/
-# ifndef		ALX_NCUR_H
-	# define	ALX_NCUR_H
+# ifndef		ALX_INPUT_HPP
+	# define	ALX_INPUT_HPP
 
 
 /******************************************************************************
  ******* headers **************************************************************
  ******************************************************************************/
-	#include <ncurses.h>
+	#include <math.h>
+	#include <stdarg.h>
+	#include <stdbool.h>
 	#include <stdint.h>
 
 
 /******************************************************************************
- ******* structs **************************************************************
+ ******* C wrapper ************************************************************
  ******************************************************************************/
-	struct	Alx_Menu {
-		int	r;
-		int	c;
-		char	*t;
-	};
+extern	"C" {
 
 
 /******************************************************************************
  ******* functions ************************************************************
  ******************************************************************************/
-	void	alx_start_curses	(void);
-	void	alx_pause_curses	(void);
-	void	alx_resume_curses	(void);
-	void	alx_end_curses		(void);
-	void	alx_win_del		(WINDOW		*win);
+	int	alx_sscan_dbl	(double		*dest,
+				double		m,
+				double		def,
+				double		M,
+				const char	*str);
 
-	int	alx_menu		(int		h,
-					int		w,
-					int		N,
-					struct Alx_Menu	mnu[N],
-					const char	*str);
+	int	alx_sscan_int	(int64_t	*dest,
+				double		m,
+				int64_t		def,
+				double		M,
+				const char	*str);
 
-	int	alx_menu_2		(WINDOW		*win,
-					int		N,
-					struct Alx_Menu	mnu[N],
-					const char	*str);
+	int	alx_sscan_fname	(const char	*fpath,
+				char		*fname,
+				bool		exist,
+				const char	*str);
 
-	double	alx_w_getdbl		(int		w,
-					int		r,
-					const char	*title,
-					double		m,
-					double		def,
-					double		M,
-					const char	*help);
+	double	alx_getdbl	(double		m,
+				double		def,
+				double		M,
+				const char	*formatA,
+				const char	*formatB,
+						...);
 
-	int64_t	alx_w_getint		(int		w,
-					int		r,
-					const char	*title,
-					double		m,
-					int64_t		def,
-					double		M,
-					const char	*help);
+	int64_t	alx_getint	(double		m,
+				int64_t		def,
+				double		M,
+				const char	*formatA,
+				const char	*formatB,
+						...);
 
-	void	alx_w_getstr		(char		*dest,
-					int		destsize,
-					int		w,
-					int		r,
-					const char	*title,
-					const char	*help);
 
-	void	alx_w_getfname		(const char	*fpath,
-					char		*fname,
-					bool		exist,
-					int		w,
-					int		r,
-					const char	*title,
-					const char	*help);
-
-	void	alx_ncur_prn_title	(WINDOW		*win,
-					const char	*title);
-
-	void	alx_ncur_prn_subtitle	(WINDOW		*win,
-					const char	*subtitle);
+/******************************************************************************
+ ******* C wrapper ************************************************************
+ ******************************************************************************/
+}	/* extern "C" */
 
 
 /******************************************************************************
  ******* include guard ********************************************************
  ******************************************************************************/
-# endif			/* alx_ncur.h */
+# endif			/* alx_input.h */
 
 
 /******************************************************************************
