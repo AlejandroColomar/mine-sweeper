@@ -8,7 +8,7 @@ MODULES_TMP_DIR	= $(MODULES_DIR)/tmp/
 TMP_DIR	= $(MAIN_DIR)/tmp/
 
 # dependencies
-_ALL	= mine-sweeper mine-sweeper.exe
+_ALL	= $(BIN_NAME) $(BIN_NAME).exe
 
 ALL	= $(BIN_NAME)
 
