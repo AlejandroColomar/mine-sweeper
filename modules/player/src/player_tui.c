@@ -10,7 +10,7 @@
  *	*	* Standard	*	*	*	*	*	*
  *	*	*	*	*	*	*	*	*	*/
 		/* WINDOW & wgetch() & KEY_... & ... */
-	#include <ncursesw/ncurses.h>
+	#include <ncurses.h>
 		/* wchar_t */
 	#include <wchar.h>
 
