@@ -23,6 +23,7 @@
  ******* enums ****************************************************************
  ******************************************************************************/
 	enum	Player_GUI_Char {
+		PLAYER_GUI_CHAR_ERROR		= 'X',
 		PLAYER_GUI_CHAR_KBOOM		= '#',
 		PLAYER_GUI_CHAR_HIDDEN_FIELD	= '+',
 		PLAYER_GUI_CHAR_HIDDEN_MINE	= '*',

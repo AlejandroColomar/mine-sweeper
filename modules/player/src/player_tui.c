@@ -156,6 +156,8 @@ int	player_tui_start	(const struct Player_Iface_Position	*position,
 	show_help_start();
 	show_board_start(position, title, subtitle);
 	*action	= usr_input();
+
+	return	0;
 }
 
 int	player_tui		(const struct Game_Iface_Out		*board,
@@ -167,6 +169,8 @@ int	player_tui		(const struct Game_Iface_Out		*board,
 	show_help(board);
 	show_board(board, position, title, subtitle);
 	*action	= usr_input();
+
+	return	0;
 }
 
 void	player_tui_save_name	(const char *filepath, char *filename, int destsize)
@@ -381,75 +385,79 @@ static	wchar_t	set_char	(int game_iface_visible)
 	wchar_t	wch;
 	switch (game_iface_visible) {
 	case GAME_IFACE_VIS_KBOOM:
-		wch =	PLAYER_TUI_CHAR_KBOOM;
+		wch	= PLAYER_TUI_CHAR_KBOOM;
 		break;
 
 	case GAME_IFACE_VIS_HIDDEN_FIELD:
-		wch =	PLAYER_TUI_CHAR_HIDDEN_FIELD;
+		wch	= PLAYER_TUI_CHAR_HIDDEN_FIELD;
 		break;
 
 	case GAME_IFACE_VIS_HIDDEN_MINE:
-		wch =	PLAYER_TUI_CHAR_HIDDEN_MINE;
+		wch	= PLAYER_TUI_CHAR_HIDDEN_MINE;
 		break;
 
 	case GAME_IFACE_VIS_HIDDEN_SAFE:
-		wch =	PLAYER_TUI_CHAR_HIDDEN_SAFE;
+		wch	= PLAYER_TUI_CHAR_HIDDEN_SAFE;
 		break;
 
 	case GAME_IFACE_VIS_SAFE_MINE:
-		wch =	PLAYER_TUI_CHAR_SAFE_MINE;
+		wch	= PLAYER_TUI_CHAR_SAFE_MINE;
 		break;
 
 	case GAME_IFACE_VIS_0:
-		wch =	PLAYER_TUI_CHAR_0;
+		wch	= PLAYER_TUI_CHAR_0;
 		break;
 
 	case GAME_IFACE_VIS_1:
-		wch =	PLAYER_TUI_CHAR_1;
+		wch	= PLAYER_TUI_CHAR_1;
 		break;
 
 	case GAME_IFACE_VIS_2:
-		wch =	PLAYER_TUI_CHAR_2;
+		wch	= PLAYER_TUI_CHAR_2;
 		break;
 
 	case GAME_IFACE_VIS_3:
-		wch =	PLAYER_TUI_CHAR_3;
+		wch	= PLAYER_TUI_CHAR_3;
 		break;
 
 	case GAME_IFACE_VIS_4:
-		wch =	PLAYER_TUI_CHAR_4;
+		wch	= PLAYER_TUI_CHAR_4;
 		break;
 
 	case GAME_IFACE_VIS_5:
-		wch =	PLAYER_TUI_CHAR_5;
+		wch	= PLAYER_TUI_CHAR_5;
 		break;
 
 	case GAME_IFACE_VIS_6:
-		wch =	PLAYER_TUI_CHAR_6;
+		wch	= PLAYER_TUI_CHAR_6;
 		break;
 
 	case GAME_IFACE_VIS_7:
-		wch =	PLAYER_TUI_CHAR_7;
+		wch	= PLAYER_TUI_CHAR_7;
 		break;
 
 	case GAME_IFACE_VIS_8:
-		wch =	PLAYER_TUI_CHAR_8;
+		wch	= PLAYER_TUI_CHAR_8;
 		break;
 
 	case GAME_IFACE_VIS_FLAG:
-		wch =	PLAYER_TUI_CHAR_FLAG;
+		wch	= PLAYER_TUI_CHAR_FLAG;
 		break;
 
 	case GAME_IFACE_VIS_FLAG_FALSE:
-		wch =	PLAYER_TUI_CHAR_FLAG_FALSE;
+		wch	= PLAYER_TUI_CHAR_FLAG_FALSE;
 		break;
 
 	case GAME_IFACE_VIS_POSSIBLE:
-		wch =	PLAYER_TUI_CHAR_POSSIBLE;
+		wch	= PLAYER_TUI_CHAR_POSSIBLE;
 		break;
 
 	case GAME_IFACE_VIS_POSSIBLE_FALSE:
-		wch =	PLAYER_TUI_CHAR_POSSIBLE_FALSE;
+		wch	= PLAYER_TUI_CHAR_POSSIBLE_FALSE;
+		break;
+
+	default:
+		wch	= PLAYER_TUI_CHAR_ERROR;
 		break;
 	}
 

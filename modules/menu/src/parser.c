@@ -121,11 +121,12 @@ void	parser	(int argc, char *argv[])
 		case 'p':
 			parse_proportion(optarg);
 			break;
-/* Only for DEVEL
+# if 0
+// for DEVEL
 		case 'r':
 			parse_rand_seed(optarg);
 			break;
-*/
+# endif
 		case 's':
 			parse_start(optarg);
 			break;

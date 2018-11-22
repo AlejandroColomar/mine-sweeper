@@ -258,7 +258,6 @@ static	void	menu_tui_select	(void)
 static	void	menu_tui_level	(void)
 {
 	/* Menu dimensions & options */
-	WINDOW	*win;
 	int	h;
 	int	w;
 	h	= 10;

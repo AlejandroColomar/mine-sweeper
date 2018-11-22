@@ -321,7 +321,7 @@ static	void		callback_entry_int	(GtkWidget	*widget,
 	entry	= ((struct Entry_int_Data *)data);
 
 	str	= gtk_entry_get_text(GTK_ENTRY(entry->ptr));
-	err	= alx_sscan_int(&Z, entry->min, entry->def, entry->max, str);
+	err	= alx_sscan_int64(&Z, entry->min, entry->def, entry->max, str);
 
 	if (err) {
 		snprintf(buff, LINE_SIZE, "Error %i", err);

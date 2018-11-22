@@ -139,6 +139,10 @@ int	player_iface_start	(int *pos_row, int *pos_col)
 	case PLAYER_IFACE_ACT_QUIT:
 		fail	= -1;
 		break;
+
+	default:
+		fail	= -2;
+		break;
 	}
 	return	fail;
 }

@@ -575,6 +575,10 @@ static	char	set_char	(int game_iface_visible)
 	case GAME_IFACE_VIS_POSSIBLE_FALSE:
 		ch =	PLAYER_GUI_CHAR_POSSIBLE_FALSE;
 		break;
+
+	default:
+		ch	= PLAYER_GUI_CHAR_ERROR;
+		break;
 	}
 
 	return	ch;
@@ -887,6 +891,7 @@ static	gboolean	callback_ebox		(GtkWidget		*widget,
 
 	gtk_main_quit();
 
+	return	false;
 }
 
 static	void		callback_button		(GtkWidget		*widget,
@@ -926,6 +931,8 @@ static	gboolean	callback_tbutton	(GtkWidget		*widget,
 	}
 
 	gtk_main_quit();
+
+	return	false;
 }
 
 static	void		callback_entry_fname	(GtkWidget		*widget,
@@ -956,8 +963,6 @@ static	void		callback_entry_str	(GtkWidget		*widget,
 {
 	struct Entry_str_Data	*entry;
 	const char		*str;
-	int			err;
-	char			buff [LINE_SIZE];
 
 	entry	= ((struct Entry_str_Data *)data);
 
@@ -975,6 +980,8 @@ static	gboolean	callback_timeout	(void			*data)
 	*(tout->act)		= tout->val;
 
 	gtk_main_quit();
+
+	return	false;
 }
 
 

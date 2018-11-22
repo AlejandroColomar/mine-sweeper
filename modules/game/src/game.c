@@ -44,7 +44,6 @@ static	void	game_init_mines		(int pos_row, int pos_col);
 static	void	game_init_adjnums	(void);
 	/* Step */
 static	void	game_step		(int r, int c);
-static	void	game_first_step		(int r, int c);
 static	void	game_discover		(int r, int c);
 static	void	game_discover_recursive	(int r, int c);
 static	void	game_big_step		(int r, int c);

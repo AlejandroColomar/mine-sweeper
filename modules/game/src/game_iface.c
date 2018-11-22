@@ -535,6 +535,10 @@ static	void	game_iface_update_usr	(int r, int c)
 	case GAME_USR_POSSIBLE:
 		field_usr	= GAME_IFACE_VIS_POSSIBLE;
 		break;
+
+	default:
+		field_usr	= GAME_IFACE_VIS_FOO;
+		break;
 	}
 
 	game_iface_out.usr[r][c]	= field_usr;

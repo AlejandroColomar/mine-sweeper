@@ -287,6 +287,10 @@ static	char	set_char	(int game_iface_visible)
 	case GAME_IFACE_VIS_POSSIBLE_FALSE:
 		ch	= PLAYER_CLUI_CHAR_POSSIBLE_FALSE;
 		break;
+
+	default:
+		ch	= PLAYER_CLUI_CHAR_ERROR;
+		break;
 	}
 
 	return	ch;
@@ -306,6 +310,7 @@ static	int	usr_input	(void)
 
 	/* Interpret input */
 	int	action;
+	action	= PLAYER_IFACE_ACT_FOO;
 	sscanf(buff, "%c", &ch);
 	switch (ch) {
 		/* Escape sequence */
@@ -317,19 +322,19 @@ static	int	usr_input	(void)
 			sscanf(buff, "%*2c""%c", &ch);
 			switch (ch) {
 			case 65:
-				action =	PLAYER_IFACE_ACT_MOVE_UP;
+				action	= PLAYER_IFACE_ACT_MOVE_UP;
 				break;
 
 			case 66:
-				action =	PLAYER_IFACE_ACT_MOVE_DOWN;
+				action	= PLAYER_IFACE_ACT_MOVE_DOWN;
 				break;
 
 			case 67:
-				action =	PLAYER_IFACE_ACT_MOVE_RIGHT;
+				action	= PLAYER_IFACE_ACT_MOVE_RIGHT;
 				break;
 
 			case 68:
-				action =	PLAYER_IFACE_ACT_MOVE_LEFT;
+				action	= PLAYER_IFACE_ACT_MOVE_LEFT;
 				break;
 			}
 			break;
@@ -337,45 +342,45 @@ static	int	usr_input	(void)
 		break;
 
 	case 'h':
-		action =	PLAYER_IFACE_ACT_MOVE_LEFT;
+		action	= PLAYER_IFACE_ACT_MOVE_LEFT;
 		break;
 
 	case 'j':
-		action =	PLAYER_IFACE_ACT_MOVE_DOWN;
+		action	= PLAYER_IFACE_ACT_MOVE_DOWN;
 		break;
 
 	case 'k':
-		action =	PLAYER_IFACE_ACT_MOVE_UP;
+		action	= PLAYER_IFACE_ACT_MOVE_UP;
 		break;
 
 	case 'l':
-		action =	PLAYER_IFACE_ACT_MOVE_RIGHT;
+		action	= PLAYER_IFACE_ACT_MOVE_RIGHT;
 		break;
 
 	case '+':
-		action =	PLAYER_IFACE_ACT_STEP;
+		action	= PLAYER_IFACE_ACT_STEP;
 		break;
 
 	case ' ':
-		action =	PLAYER_IFACE_ACT_FLAG;
+		action	= PLAYER_IFACE_ACT_FLAG;
 		break;
 
 	case 'f':
-		action =	PLAYER_IFACE_ACT_FLAG_POSSIBLE;
+		action	= PLAYER_IFACE_ACT_FLAG_POSSIBLE;
 		break;
 
 		/* ASCII 0x08 is BS */
 	case 0x7F:
 	case 0x08:
-		action =	PLAYER_IFACE_ACT_RM_FLAG;
+		action	= PLAYER_IFACE_ACT_RM_FLAG;
 		break;
 
 	case 'p':
-		action =	PLAYER_IFACE_ACT_PAUSE;
+		action	= PLAYER_IFACE_ACT_PAUSE;
 		break;
 
 	case 's':
-		action =	PLAYER_IFACE_ACT_SAVE;
+		action	= PLAYER_IFACE_ACT_SAVE;
 		break;
 
 	case 'x':
@@ -388,7 +393,7 @@ static	int	usr_input	(void)
 			if (ch == 'z') {
 			sscanf(buff, "%*4c""%c", &ch);
 			if (ch == 'y') {
-				action =	PLAYER_IFACE_ACT_XYZZY_ON;
+				action	= PLAYER_IFACE_ACT_XYZZY_ON;
 			}
 			}
 			}
@@ -396,27 +401,23 @@ static	int	usr_input	(void)
 		break;
 
 	case '0':
-		action =	PLAYER_IFACE_ACT_XYZZY_OFF;
+		action	= PLAYER_IFACE_ACT_XYZZY_OFF;
 		break;
 
 	case '1':
-		action =	PLAYER_IFACE_ACT_XYZZY_LIN;
+		action	= PLAYER_IFACE_ACT_XYZZY_LIN;
 		break;
 
 	case '2':
-		action =	PLAYER_IFACE_ACT_XYZZY_P;
+		action	= PLAYER_IFACE_ACT_XYZZY_P;
 		break;
 
 	case '3':
-		action =	PLAYER_IFACE_ACT_XYZZY_NP;
+		action	= PLAYER_IFACE_ACT_XYZZY_NP;
 		break;
 
 	case 'q':
-		action =	PLAYER_IFACE_ACT_QUIT;
-		break;
-
-	default:
-		action =	PLAYER_IFACE_ACT_FOO;
+		action	= PLAYER_IFACE_ACT_QUIT;
 		break;
 	}
 

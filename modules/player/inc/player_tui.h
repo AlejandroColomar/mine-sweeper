@@ -31,6 +31,7 @@
  ******* enums ****************************************************************
  ******************************************************************************/
 	enum	Player_TUI_Char {
+		PLAYER_TUI_CHAR_ERROR		= 'X',
 		PLAYER_TUI_CHAR_KBOOM		= '#',
 		PLAYER_TUI_CHAR_HIDDEN_FIELD	= '+',
 		PLAYER_TUI_CHAR_HIDDEN_MINE	= '*',

@@ -139,27 +139,36 @@ export	LD
 ################################################################################
 # cflags
 CFLAGS_STD	= -std=c11
-CFLAGS_GTK	= `pkg-config --cflags gtk+-2.0`
+
+CFLAGS_OPT	= -O3
+CFLAGS_OPT     += -march=native
+
+CFLAGS_W	= -Wall
+CFLAGS_W       += -Werror
+CFLAGS_W       += -Wno-format-truncation
+CFLAGS_W       += -Wno-format-zero-length
+CFLAGS_W       += -Wno-unused-function
+
+CFLAGS_PKG	= `pkg-config --cflags ncurses`
+CFLAGS_PKG     += `pkg-config --cflags gtk+-2.0`
 
 CFLAGS_D	= -D PROG_VERSION=\"$(PROGRAMVERSION)\"
-CFLAGS_D       += -D 'INSTALL_SHARE_DIR="$(INSTALL_SHARE_DIR)"'
+CFLAGS_D       += -D INSTALL_SHARE_DIR=\"$(INSTALL_SHARE_DIR)\"
 CFLAGS_D       += -D SHARE_DIR=\"$(SHARE_DIR)\"
-CFLAGS_D       += -D 'INSTALL_VAR_DIR="$(INSTALL_VAR_DIR)"'
+CFLAGS_D       += -D INSTALL_VAR_DIR=\"$(INSTALL_VAR_DIR)\"
 CFLAGS_D       += -D VAR_DIR=\"$(VAR_DIR)\"
 
 ifeq ($(OS), linux)
   CFLAGS_D     += -D OS_LINUX
 else ifeq ($(OS), win)
   CFLAGS_D     += -D OS_WIN
-  # curses
-  CFLAGS_CURSES	= -D _XOPEN_SOURCE=500 -I /mingw64/include/ncurses
 endif
 
-ifeq ($(OS), linux)
-  CFLAGS	= $(CFLAGS_STD) $(CFLAGS_D) $(CFLAGS_GTK)
-else ifeq ($(OS), win)
-  CFLAGS	= $(CFLAGS_STD) $(CFLAGS_D) $(CFLAGS_CURSES) $(CFLAGS_GTK)
-endif
+CFLAGS		= $(CFLAGS_STD)
+CFLAGS         += $(CFLAGS_OPT)
+CFLAGS         += $(CFLAGS_W)
+CFLAGS         += $(CFLAGS_PKG)
+CFLAGS         += $(CFLAGS_D)
 
 export	CFLAGS
 
@@ -167,14 +176,15 @@ export	CFLAGS
 # libs
 LIBS_STATIC	= -static
 
-LIBS_MATH	= -l m
-LIBS_CURSES	= -l ncurses
-LIBS_GTK	= `pkg-config --libs gtk+-2.0`
+LIBS_STD	= -l m
+
+LIBS_PKG	= `pkg-config --libs ncurses`
+LIBS_PKG       += `pkg-config --libs gtk+-2.0`
 
 ifeq ($(OS), linux)
-  LIBS		= $(LIBS_MATH) $(LIBS_CURSES) $(LIBS_GTK)
+  LIBS		= $(LIBS_STD) $(LIBS_PKG)
 else ifeq ($(OS), win)
-  LIBS		= $(LIBS_STATIC) $(LIBS_MATH) $(LIBS_CURSES) $(LIBS_GTK)
+  LIBS		= $(LIBS_STD) $(LIBS_STATIC) $(LIBS_PKG)
 endif
 
 export	LIBS
