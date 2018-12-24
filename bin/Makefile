@@ -19,9 +19,12 @@ MAIN_OBJS		= $(TMP_DIR)/main.o \
 				$(patsubst %,$(MODULES_TMP_DIR)/%,$(MAIN_OBJ_MODULES))
 
 # static libs
-MAIN_LIB_LIBALX	= -L $(LIBALX_LIB_DIR) -l alx-base -l alx-io -l alx-curses
+STATIC_LIB_LIBALX	= -L $(LIBALX_LIB_DIR) \
+				-l alx-curses \
+				-l alx-io \
+				-l alx-base
 
-STATIC_LIBS	= $(MAIN_LIB_LIBALX)
+STATIC_LIBS	= $(STATIC_LIB_LIBALX)
 
 
 # target: dependencies
@@ -31,14 +34,13 @@ all: $(ALL)
 
 
 $(BIN_NAME): $(MAIN_OBJS)
-	$(Q)$(CC) $^ -o $@ $(STATIC_LIBS) $(LIBS)
 	@echo  "	CC	$@"
-	@echo  ""
+	$(Q)$(CC) $^ -o $@ $(STATIC_LIBS) $(LIBS)
 
 
 clean:
-	$(Q)rm -f $(_ALL)
 	@echo  "Clean binaries"
+	$(Q)rm -f $(_ALL)
 
 ################################################################################
 ######## End of file ###########################################################
