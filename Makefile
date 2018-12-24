@@ -200,31 +200,37 @@ all: binary
 
 PHONY += libalx
 libalx:
-	$(Q)cd $(LIBALX_DIR) && $(MAKE) && cd ..
+	@echo	'	MAKE	libalx'
+	$(Q)make base	-C $(LIBALX_DIR)
+	$(Q)make io	-C $(LIBALX_DIR)
+	$(Q)make curses	-C $(LIBALX_DIR)
 
 PHONY += modules
 modules: libalx
-	$(Q)cd $(MODULES_DIR) && $(MAKE) && cd ..
+	@echo	'	MAKE	modules'
+	$(Q)make -C $(MODULES_DIR)
 
 PHONY += object
 object: modules libalx
-	$(Q)cd $(TMP_DIR) && $(MAKE) && cd ..
+	@echo	'	MAKE	obj'
+	$(Q)make -C $(TMP_DIR)
 
 PHONY += binary
 binary: object
-	$(Q)cd $(BIN_DIR) && $(MAKE) && cd ..
+	@echo	'	MAKE	bin'
+	$(Q)make -C $(BIN_DIR)
 
 PHONY += install
 install: uninstall
-	@echo  "Create $(INSTALL_BIN_DIR)/"
+	@echo	"Create $(INSTALL_BIN_DIR)/"
 	$(Q)mkdir -p		$(DESTDIR)/$(INSTALL_BIN_DIR)/
-	@echo "Copy $(BIN_NAME)"
+	@echo	"Copy $(BIN_NAME)"
 	$(Q)cp			$(BIN_DIR)/$(BIN_NAME)	$(DESTDIR)/$(INSTALL_BIN_DIR)/
-	@echo  ""
+	@echo	""
 	
-	@echo  "Create $(INSTALL_SHARE_DIR)/$(SHARE_DIR)/"
+	@echo	"Create $(INSTALL_SHARE_DIR)/$(SHARE_DIR)/"
 	$(Q)mkdir -p		$(DESTDIR)/$(INSTALL_SHARE_DIR)/$(SHARE_DIR)/
-	@echo "Copy share/*"
+	@echo	"Copy share/*"
 	$(Q)cp -r		./share/*		$(DESTDIR)/$(INSTALL_SHARE_DIR)/$(SHARE_DIR)/
 	
 	@echo  "Create $(INSTALL_VAR_DIR)/$(VAR_DIR)/"
@@ -233,17 +239,17 @@ install: uninstall
 	$(Q)mkdir		$(DESTDIR)/$(INSTALL_VAR_DIR)/$(VAR_DIR)/boards_intermediate/
 	$(Q)mkdir		$(DESTDIR)/$(INSTALL_VAR_DIR)/$(VAR_DIR)/boards_expert/
 	$(Q)mkdir		$(DESTDIR)/$(INSTALL_VAR_DIR)/$(VAR_DIR)/boards_custom/
-	@echo "Copy var/*"
+	@echo	"Copy var/*"
 	$(Q)cp -r		./var/*			$(DESTDIR)/$(INSTALL_VAR_DIR)/$(VAR_DIR)/
-	@echo "Change owner"
+	@echo	"Change owner"
 	$(Q)chown root:games -R	$(DESTDIR)/$(INSTALL_VAR_DIR)/$(VAR_DIR)/
-	@echo "Change permissions"
+	@echo	"Change permissions"
 	$(Q)chmod 664 -R	$(DESTDIR)/$(INSTALL_VAR_DIR)/$(VAR_DIR)/
 	$(Q)chmod +X -R		$(DESTDIR)/$(INSTALL_VAR_DIR)/$(VAR_DIR)/
-	@echo  ""
+	@echo	""
 	
-	@echo  "Done"
-	@echo  ""
+	@echo	"Done"
+	@echo	""
 
 PHONY += uninstall
 uninstall:

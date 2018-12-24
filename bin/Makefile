@@ -19,7 +19,7 @@ MAIN_OBJS		= $(TMP_DIR)/main.o \
 				$(patsubst %,$(MODULES_TMP_DIR)/%,$(MAIN_OBJ_MODULES))
 
 # static libs
-MAIN_LIB_LIBALX	= -L $(LIBALX_LIB_DIR) -l alx
+MAIN_LIB_LIBALX	= -L $(LIBALX_LIB_DIR) -l alx-base -l alx-io -l alx-curses
 
 STATIC_LIBS	= $(MAIN_LIB_LIBALX)
 
