@@ -201,24 +201,24 @@ all: binary
 PHONY += libalx
 libalx:
 	@echo	'	MAKE	libalx'
-	$(Q)make base	-C $(LIBALX_DIR)
-	$(Q)make io	-C $(LIBALX_DIR)
-	$(Q)make curses	-C $(LIBALX_DIR)
+	$(Q)$(MAKE) base	-C $(LIBALX_DIR)
+	$(Q)$(MAKE) io		-C $(LIBALX_DIR)
+	$(Q)$(MAKE) curses	-C $(LIBALX_DIR)
 
 PHONY += modules
 modules: libalx
 	@echo	'	MAKE	modules'
-	$(Q)make -C $(MODULES_DIR)
+	$(Q)$(MAKE) -C $(MODULES_DIR)
 
 PHONY += object
 object: modules libalx
 	@echo	'	MAKE	obj'
-	$(Q)make -C $(TMP_DIR)
+	$(Q)$(MAKE) -C $(TMP_DIR)
 
 PHONY += binary
 binary: object
 	@echo	'	MAKE	bin'
-	$(Q)make -C $(BIN_DIR)
+	$(Q)$(MAKE) -C $(BIN_DIR)
 
 PHONY += install
 install: uninstall
@@ -226,14 +226,14 @@ install: uninstall
 	$(Q)mkdir -p		$(DESTDIR)/$(INSTALL_BIN_DIR)/
 	@echo	"Copy $(BIN_NAME)"
 	$(Q)cp			$(BIN_DIR)/$(BIN_NAME)	$(DESTDIR)/$(INSTALL_BIN_DIR)/
-	@echo	""
+	@echo
 	
 	@echo	"Create $(INSTALL_SHARE_DIR)/$(SHARE_DIR)/"
 	$(Q)mkdir -p		$(DESTDIR)/$(INSTALL_SHARE_DIR)/$(SHARE_DIR)/
 	@echo	"Copy share/*"
 	$(Q)cp -r		./share/*		$(DESTDIR)/$(INSTALL_SHARE_DIR)/$(SHARE_DIR)/
 	
-	@echo  "Create $(INSTALL_VAR_DIR)/$(VAR_DIR)/"
+	@echo	"Create $(INSTALL_VAR_DIR)/$(VAR_DIR)/"
 	$(Q)mkdir -p		$(DESTDIR)/$(INSTALL_VAR_DIR)/$(VAR_DIR)/
 	$(Q)mkdir		$(DESTDIR)/$(INSTALL_VAR_DIR)/$(VAR_DIR)/boards_beginner/
 	$(Q)mkdir		$(DESTDIR)/$(INSTALL_VAR_DIR)/$(VAR_DIR)/boards_intermediate/
@@ -246,28 +246,32 @@ install: uninstall
 	@echo	"Change permissions"
 	$(Q)chmod 664 -R	$(DESTDIR)/$(INSTALL_VAR_DIR)/$(VAR_DIR)/
 	$(Q)chmod +X -R		$(DESTDIR)/$(INSTALL_VAR_DIR)/$(VAR_DIR)/
-	@echo	""
+	@echo
 	
 	@echo	"Done"
-	@echo	""
+	@echo
 
 PHONY += uninstall
 uninstall:
+	@echo	"Clean old installations"
 	$(Q)rm -f	$(DESTDIR)/$(INSTALL_BIN_DIR)/$(BIN_NAME)
 	$(Q)rm -f -r	$(DESTDIR)/$(INSTALL_SHARE_DIR)/$(SHARE_DIR)/
 	$(Q)rm -f -r	$(DESTDIR)/$(INSTALL_VAR_DIR)/$(VAR_DIR)/
-	@echo  "Clean old installations"
-	@echo  ""
+	@echo
 
 PHONY += clean
 clean:
-	$(Q)cd $(LIBALX_DIR) && $(MAKE) clean && cd ..
-	$(Q)cd $(MODULES_DIR) && $(MAKE) clean && cd ..
-	$(Q)cd $(TMP_DIR) && $(MAKE) clean && cd ..
+	@echo	'	CLEAN	modules'
+	$(Q)$(MAKE) clean	-C $(MODULES_DIR)
+	@echo	'	CLEAN	tmp'
+	$(Q)$(MAKE) clean	-C $(TMP_DIR)
+	@echo	'	CLEAN	bin'
+	$(Q)$(MAKE) clean	-C $(BIN_DIR)
 
 PHONY += mrproper
 mrproper: clean
-	$(Q)cd $(BIN_DIR) && $(MAKE) clean && cd ..
+	@echo	'	CLEAN	libalx'
+	$(Q)$(MAKE) clean	-C $(LIBALX_DIR)
 
 PHONY += help
 help:

@@ -48,7 +48,6 @@ clean:
 	$(Q)cd $(SAVE_DIR) && $(MAKE) clean && cd ..
 	$(Q)cd $(XYZZY_DIR) && $(MAKE) clean && cd ..
 	$(Q)cd $(TMP_DIR) && $(MAKE) clean && cd ..
-	@echo  "Clean modules"
 
 ################################################################################
 ######## End of file ###########################################################
