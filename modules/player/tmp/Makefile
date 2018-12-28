@@ -65,38 +65,37 @@ all: $(ALL)
 
 
 player_mod.o: $(_ALL)
+	@echo	"	LD	$@"
 	$(Q)$(LD) -r $^ -o $@
-	@echo  "	LD	$@"
-	@echo  ""
 
 
 player_iface.s: $(PLAYI_DEPS)
+	@echo	"	CC	$@"
 	$(Q)$(CC) $(CFLAGS) $(PLAYI_INC_DIRS) -S $< -o $@
-	@echo  "	CC	$@"
 player_iface.o: player_iface.s
+	@echo	"	AS	$@"
 	$(Q)$(AS) $< -o $@
-	@echo  "	AS	$@"
 
 player_clui.s: $(PLAYCLUI_DEPS)
+	@echo	"	CC	$@"
 	$(Q)$(CC) $(CFLAGS) $(PLAYCLUI_INC_DIRS) -S $< -o $@
-	@echo  "	CC	$@"
 player_clui.o: player_clui.s
+	@echo	"	AS	$@"
 	$(Q)$(AS) $< -o $@
-	@echo  "	AS	$@"
 
 player_tui.s: $(PLAYTUI_DEPS)
+	@echo	"	CC	$@"
 	$(Q)$(CC) $(CFLAGS) $(PLAYTUI_INC_DIRS) -S $< -o $@
-	@echo  "	CC	$@"
 player_tui.o: player_tui.s
+	@echo	"	AS	$@"
 	$(Q)$(AS) $< -o $@
-	@echo  "	AS	$@"
 
 player_gui.s: $(PLAYGUI_DEPS)
+	@echo	"	CC	$@"
 	$(Q)$(CC) $(CFLAGS) $(PLAYGUI_INC_DIRS) -S $< -o $@
-	@echo  "	CC	$@"
 player_gui.o: player_gui.s
+	@echo	"	AS	$@"
 	$(Q)$(AS) $< -o $@
-	@echo  "	AS	$@"
 
 
 clean:

@@ -44,24 +44,23 @@ all: $(ALL)
 
 
 save_mod.o: $(_ALL)
+	@echo	"	LD	$@"
 	$(Q)$(LD) -r $^ -o $@
-	@echo  "	LD	$@"
-	@echo  ""
 	
 
 save.s: $(SAVE_DEPS)
+	@echo	"	CC	$@"
 	$(Q)$(CC) $(CFLAGS) $(SAVE_INC_DIRS) -S $< -o $@
-	@echo  "	CC	$@"
 save.o: save.s
+	@echo	"	AS	$@"
 	$(Q)$(AS) $< -o $@
-	@echo  "	AS	$@"
 
 score.s: $(SCORE_DEPS)
+	@echo	"	CC	$@"
 	$(Q)$(CC) $(CFLAGS) $(SCORE_INC_DIRS) -S $< -o $@
-	@echo  "	CC	$@"
 score.o: score.s
+	@echo	"	AS	$@"
 	$(Q)$(AS) $< -o $@
-	@echo  "	AS	$@"
 
 
 clean:

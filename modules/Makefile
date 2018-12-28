@@ -28,31 +28,40 @@ export	XYZZY_DIR
 # target: dependencies
 #	action
 
+PHONY := all
 all:
-	$(Q)cd $(ABOUT_DIR) && $(MAKE) && cd ..
-	$(Q)cd $(CTRL_DIR) && $(MAKE) && cd ..
-	$(Q)cd $(GAME_DIR) && $(MAKE) && cd ..
-	$(Q)cd $(MENU_DIR) && $(MAKE) && cd ..
-	$(Q)cd $(PLAY_DIR) && $(MAKE) && cd ..
-	$(Q)cd $(SAVE_DIR) && $(MAKE) && cd ..
-	$(Q)cd $(XYZZY_DIR) && $(MAKE) && cd ..
-	$(Q)cd $(TMP_DIR) && $(MAKE) && cd ..
+	@echo	'	MAKE	modules:	about'
+	$(Q)$(MAKE) -C $(ABOUT_DIR)
+	@echo	'	MAKE	modules:	ctrl'
+	$(Q)$(MAKE) -C $(CTRL_DIR)
+	@echo	'	MAKE	modules:	game'
+	$(Q)$(MAKE) -C $(GAME_DIR)
+	@echo	'	MAKE	modules:	menu'
+	$(Q)$(MAKE) -C $(MENU_DIR)
+	@echo	'	MAKE	modules:	play'
+	$(Q)$(MAKE) -C $(PLAY_DIR)
+	@echo	'	MAKE	modules:	save'
+	$(Q)$(MAKE) -C $(SAVE_DIR)
+	@echo	'	MAKE	modules:	xyzzy'
+	$(Q)$(MAKE) -C $(XYZZY_DIR)
+	@echo	'	MAKE	modules:	tmp'
+	$(Q)$(MAKE) -C $(TMP_DIR)
 
 
+PHONY += clean
 clean:
-	$(Q)cd $(ABOUT_DIR) && $(MAKE) clean && cd ..
-	$(Q)cd $(CTRL_DIR) && $(MAKE) clean && cd ..
-	$(Q)cd $(GAME_DIR) && $(MAKE) clean && cd ..
-	$(Q)cd $(MENU_DIR) && $(MAKE) clean && cd ..
-	$(Q)cd $(PLAY_DIR) && $(MAKE) clean && cd ..
-	$(Q)cd $(SAVE_DIR) && $(MAKE) clean && cd ..
-	$(Q)cd $(XYZZY_DIR) && $(MAKE) clean && cd ..
-	$(Q)cd $(TMP_DIR) && $(MAKE) clean && cd ..
+	@echo	'	RM	*.o *.s *.a'
+	$(Q)find . -type f -name '*.o' -exec rm '{}' '+'
+	$(Q)find . -type f -name '*.s' -exec rm '{}' '+'
+	$(Q)find . -type f -name '*.a' -exec rm '{}' '+'
 
 ################################################################################
-######## End of file ###########################################################
-################################################################################
-######## End of file ###########################################################
+# Declare the contents of the .PHONY variable as phony.
+.PHONY: $(PHONY)
+
+
+
+
 ################################################################################
 ######## End of file ###########################################################
 ################################################################################

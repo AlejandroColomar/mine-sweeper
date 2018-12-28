@@ -195,7 +195,7 @@ export	LIBS
 
 # That's the default target when none is given on the command line
 PHONY := all
-all: binary
+all: libalx modules main binary
 
 
 PHONY += libalx
@@ -204,21 +204,25 @@ libalx:
 	$(Q)$(MAKE) base	-C $(LIBALX_DIR)
 	$(Q)$(MAKE) io		-C $(LIBALX_DIR)
 	$(Q)$(MAKE) curses	-C $(LIBALX_DIR)
+	@echo
 
 PHONY += modules
 modules: libalx
 	@echo	'	MAKE	modules'
 	$(Q)$(MAKE) -C $(MODULES_DIR)
+	@echo
 
-PHONY += object
-object: modules libalx
-	@echo	'	MAKE	obj'
+PHONY += main
+main: libalx modules
+	@echo	'	MAKE	main'
 	$(Q)$(MAKE) -C $(TMP_DIR)
+	@echo
 
 PHONY += binary
-binary: object
+binary: main
 	@echo	'	MAKE	bin'
 	$(Q)$(MAKE) -C $(BIN_DIR)
+	@echo
 
 PHONY += install
 install: uninstall

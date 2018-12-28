@@ -29,17 +29,16 @@ all: $(ALL)
 
 
 xyzzy_mod.o: $(_ALL)
+	@echo	"	LD	$@"
 	$(Q)$(LD) -r $^ -o $@
-	@echo  "	LD	$@"
-	@echo  ""
 	
 
 xyzzy.s: $(XYZZY_DEPS)
+	@echo	"	CC	$@"
 	$(Q)$(CC) $(CFLAGS) $(XYZZY_INC_DIRS) -S $< -o $@
-	@echo  "	CC	$@"
 xyzzy.o: xyzzy.s
+	@echo	"	AS	$@"
 	$(Q)$(AS) $< -o $@
-	@echo  "	AS	$@"
 
 
 clean:

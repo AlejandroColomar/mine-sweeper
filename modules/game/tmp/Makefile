@@ -47,27 +47,26 @@ GAMEI_INC_DIRS = -I $(INC_DIR) \
 #	action
 
 all: $(ALL)
-	
+
 
 game_mod.o: $(_ALL)
 	$(Q)$(LD) -r $^ -o $@
-	@echo  "	LD	$@"
-	@echo  ""
+	@echo	"	LD	$@"
 
 
 game.s: $(GAME_DEPS)
 	$(Q)$(CC) $(CFLAGS) $(GAME_INC_DIRS) -S $< -o $@
-	@echo  "	CC	$@"
+	@echo	"	CC	$@"
 game.o: game.s
 	$(Q)$(AS) $< -o $@
-	@echo  "	AS	$@"
+	@echo	"	AS	$@"
 
 game_iface.s: $(GAMEI_DEPS)
 	$(Q)$(CC) $(CFLAGS) $(GAMEI_INC_DIRS) -S $< -o $@
-	@echo  "	CC	$@"
+	@echo	"	CC	$@"
 game_iface.o: game_iface.s
 	$(Q)$(AS) $< -o $@
-	@echo  "	AS	$@"
+	@echo	"	AS	$@"
 
 
 clean:

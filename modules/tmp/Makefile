@@ -38,9 +38,8 @@ all: $(ALL)
 
 
 modules.o: $(MODS_OBJS)
+	@echo	"	LD	$@"
 	$(Q)$(LD) -r $^ -o $@
-	@echo  "	LD	$@"
-	@echo  ""
 
 
 clean:

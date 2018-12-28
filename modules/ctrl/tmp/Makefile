@@ -34,20 +34,19 @@ STRT_INC_DIRS = -I $(INC_DIR) \
 #	action
 
 all: $(ALL)
-	
+
 
 ctrl_mod.o: $(_ALL)
+	@echo	"	LD	$@"
 	$(Q)$(LD) -r $^ -o $@
-	@echo  "	LD	$@"
-	@echo  ""
 
 
 start.s: $(STRT_DEPS)
+	@echo	"	CC	$@"
 	$(Q)$(CC) $(CFLAGS) $(STRT_INC_DIRS) -S $< -o $@
-	@echo  "	CC	$@"
 start.o: start.s
+	@echo	"	AS	$@"
 	$(Q)$(AS) $< -o $@
-	@echo  "	AS	$@"
 
 
 clean:
