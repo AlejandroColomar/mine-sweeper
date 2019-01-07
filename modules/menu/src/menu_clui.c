@@ -6,19 +6,16 @@
 /******************************************************************************
  ******* headers **************************************************************
  ******************************************************************************/
-/*	*	*	*	*	*	*	*	*	*
- *	*	* Standard	*	*	*	*	*	*
- *	*	*	*	*	*	*	*	*	*/
+/* Standard C ----------------------------------------------------------------*/
 		/* INFINITY */
 	#include <math.h>
 		/* srand() */
 	#include <stdlib.h>
 
-/*	*	*	*	*	*	*	*	*	*
- *	*	* Other	*	*	*	*	*	*	*
- *	*	*	*	*	*	*	*	*	*/
+/* libalx --------------------------------------------------------------------*/
 	#include "alx_input.h"
 
+/* Project -------------------------------------------------------------------*/
 	#include "about.h"
 	#include "game_iface.h"
 //	#include "save.h"
@@ -60,51 +57,73 @@ static	void	menu_clui_start		(void);
 void	menu_clui	(void)
 {
 	char	buff [BUFF_SIZE];
-	char	ch;
+	char	c;
 
-	ch	= 'n';
+	c	= 'n';
 	printf("Read 'Disclaimer of warranty'? (yes/NO): ");
-	fgets(buff, BUFF_SIZE, stdin);
-	sscanf(buff, " %c", &ch);
-	if (ch == 'y' || ch == 'Y') {
-		puts (" >yes");
+	if (!fgets(buff, BUFF_SIZE, stdin)) {
+		goto err_fgets;
+	}
+	if (sscanf(buff, " %c", &c) != 1) {
+		goto err_sscanf;
+	}
+	if (c == 'y' || c == 'Y') {
+		printf(" >yes\n");
 		print_share_file(SHARE_DISCLAIMER);
 	} else {
-		puts (" >NO");
+		printf(" >NO\n");
 	}
 
-	ch	= 'n';
+	c	= 'n';
 	printf("Read 'License'? (yes/NO): ");
-	fgets(buff, BUFF_SIZE, stdin);
-	sscanf(buff, " %c", &ch);
-	if (ch == 'y' || ch == 'Y') {
-		puts (" >yes");
+	if (!fgets(buff, BUFF_SIZE, stdin)) {
+		goto err_fgets;
+	}
+	if (sscanf(buff, " %c", &c) != 1) {
+		goto err_sscanf;
+	}
+	if (c == 'y' || c == 'Y') {
+		printf(" >yes\n");
 		print_share_file(SHARE_LICENSE);
 	} else {
-		puts (" >NO");
+		printf(" >NO\n");
 	}
 #if 0
 	printf("Game interface? (NCURSES/text): ");
-	scanf(" %c%*s ", &ch);
-	if (ch == 't' || ch == 'T') {
-		puts (" >text");
+	scanf(" %c%*s ", &c);
+	if (c == 't' || c == 'T') {
+		printf(" >text\n");
 		// FIXME
 	} else {
-		puts (" >NCURSES");
+		printf(" >NCURSES\n");
 		// FIXME
 	}
 #endif
-	ch	= 'n';
+	c	= 'n';
 	printf("New game or load game? (NEW/load): ");
-	fgets(buff, BUFF_SIZE, stdin);
-	sscanf(buff, " %c", &ch);
-	if (ch == 'l' || ch == 'L') {
-		puts (" >load");
+	if (!fgets(buff, BUFF_SIZE, stdin)) {
+		goto err_fgets;
+	}
+	if (sscanf(buff, " %c", &c) != 1) {
+		goto err_sscanf;
+	}
+	if (c == 'l' || c == 'L') {
+		printf(" >load\n");
 		menu_clui_load();
 	} else {
-		puts (" >NEW");
+		printf(" >NEW\n");
 		menu_clui_rand();
 	}
+
+	return;
+
+
+err_fgets:
+	printf("fgets() error\n");
+	exit(EXIT_FAILURE);
+err_sscanf:
+	printf("sscanf() error\n");
+	exit(EXIT_FAILURE);
 }
 
 
@@ -113,52 +132,70 @@ void	menu_clui	(void)
  ******************************************************************************/
 static	void	menu_clui_rand		(void)
 {
+	int	seed;
+	char	buff [BUFF_SIZE];
+	char	c;
+
 	/* Random */
 	start_mode	= START_RAND;
 
-	char	buff [BUFF_SIZE];
-	char	ch;
-
-	ch	= 'n';
+	c	= 'n';
 	printf("Set seed for random generator? (yes/NO): ");
-	fgets(buff, BUFF_SIZE, stdin);
-	sscanf(buff, " %c", &ch);
-	int	seed;
-	if (ch == 'y' || ch == 'Y') {
-		puts (" >yes");
+	if (!fgets(buff, BUFF_SIZE, stdin)) {
+		goto err_fgets;
+	}
+	if (sscanf(buff, " %c", &c) != 1) {
+		goto err_sscanf;
+	}
+	if (c == 'y' || c == 'Y') {
+		printf(" >yes\n");
 		seed	= alx_getint(-INFINITY, 1, INFINITY, "Seed:", NULL);
 		srand(seed);
 	} else {
-		puts (" >NO");
+		printf(" >NO\n");
 	}
 
-	ch	= 'b';
+	c	= 'b';
 	printf("Level? (BEGINNER/intermediate/(expert)/custom): ");
-	fgets(buff, BUFF_SIZE, stdin);
-	sscanf(buff, " %c", &ch);
-	if (ch == 'i' || ch == 'I') {
-		puts (" >intermediate");
+	if (!fgets(buff, BUFF_SIZE, stdin)) {
+		goto err_fgets;
+	}
+	if (sscanf(buff, " %c", &c) != 1) {
+		goto err_sscanf;
+	}
+	if (c == 'i' || c == 'I') {
+		printf(" >intermediate\n");
 		menu_iface_variables.level	= GAME_IFACE_LEVEL_INTERMEDIATE;
 		menu_clui_start();
-	} else if (ch == 'e' || ch == 'E') {
-		puts (" >expert");
+	} else if (c == 'e' || c == 'E') {
+		printf(" >expert\n");
 		menu_iface_variables.level	= GAME_IFACE_LEVEL_EXPERT_INV;
 		menu_clui_start();
 
-	} else if (ch == 'c' || ch == 'C') {
-		puts (" >custom");
+	} else if (c == 'c' || c == 'C') {
+		printf(" >custom\n");
 		menu_iface_variables.level	= GAME_IFACE_LEVEL_CUSTOM;
 		menu_clui_custom();
 	} else {
-		puts (" >BEGINNER");
+		printf(" >BEGINNER\n");
 		menu_iface_variables.level	= GAME_IFACE_LEVEL_BEGINNER;
 		menu_clui_start();
 	}
+
+	return;
+
+
+err_fgets:
+	printf("fgets() error\n");
+	exit(EXIT_FAILURE);
+err_sscanf:
+	printf("sscanf() error\n");
+	exit(EXIT_FAILURE);
 }
 
 static	void	menu_clui_custom	(void)
 {
-	/* Random */
+
 	start_mode	= START_RAND;
 
 	menu_iface_variables.rows	= alx_getint(2, menu_iface_variables.rows, ROWS_CLUI_MAX, "Rows:", NULL);
@@ -170,7 +207,7 @@ static	void	menu_clui_custom	(void)
 
 static	void	menu_clui_load		(void)
 {
-	/* Load */
+
 	start_mode	= START_LOAD;
 #if 0
 	/* File name */ // FIXME
@@ -181,25 +218,39 @@ static	void	menu_clui_load		(void)
 
 static	void	menu_clui_start		(void)
 {
-	puts(" >>START:");
+	char	buff [BUFF_SIZE];
+	char	c;
+
+	printf(" >>START:\n");
 	start_switch();
 
-	char	buff [BUFF_SIZE];
-	char	ch;
-
-	ch	= 'm';
+	c	= 'm';
 	printf("Play again? (MENU/play/exit): ");
-	fgets(buff, BUFF_SIZE, stdin);
-	sscanf(buff, " %c", &ch);
-	if (ch == 'p' || ch == 'P') {
-		puts (" >play");
+	if (!fgets(buff, BUFF_SIZE, stdin)) {
+		goto err_fgets;
+	}
+	if (sscanf(buff, " %c", &c) != 1) {
+		goto err_sscanf;
+	}
+	if (c == 'p' || c == 'P') {
+		printf(" >play\n");
 		menu_clui_start();
-	} else if (ch == 'e' || ch == 'E') {
-		puts (" >exit!");
+	} else if (c == 'e' || c == 'E') {
+		printf(" >exit!\n");
 	} else {
-		puts (" >MENU");
+		printf(" >MENU\n");
 		menu_clui();
 	}
+
+	return;
+
+
+err_fgets:
+	printf("fgets() error\n");
+	exit(EXIT_FAILURE);
+err_sscanf:
+	printf("sscanf() error\n");
+	exit(EXIT_FAILURE);
 }
 
 
