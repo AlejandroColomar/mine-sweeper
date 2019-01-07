@@ -137,9 +137,9 @@
 /******************************************************************************
  ******* functions ************************************************************
  ******************************************************************************/
-	void	game_iface_init_rand	(int level, int pos_row, int pos_col);
-	void	game_iface_init_load	(void);
-	void	game_iface		(void);
+void	game_iface_init_rand	(int level, int pos_row, int pos_col);
+void	game_iface_init_load	(void);
+void	game_iface		(void);
 
 
 /******************************************************************************

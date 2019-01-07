@@ -6,17 +6,13 @@
 /******************************************************************************
  ******* headers **************************************************************
  ******************************************************************************/
-/*	*	*	*	*	*	*	*	*	*
- *	*	* Standard	*	*	*	*	*	*
- *	*	*	*	*	*	*	*	*	*/
+/* Standard C ----------------------------------------------------------------*/
 	#include <stdbool.h>
 		/* printf() & sscanf() */
 	#include <stdio.h>
 	#include <wchar.h>
 
-/*	*	*	*	*	*	*	*	*	*
- *	*	* Other	*	*	*	*	*	*	*
- *	*	*	*	*	*	*	*	*	*/
+/* Project -------------------------------------------------------------------*/
 		/* struct Game_Iface_Out */
 	#include "game_iface.h"
 
@@ -33,8 +29,20 @@
 
 
 /******************************************************************************
+ ******* enums ****************************************************************
+ ******************************************************************************/
+
+
+/******************************************************************************
+ ******* structs **************************************************************
+ ******************************************************************************/
+
+
+/******************************************************************************
  ******* variables ************************************************************
  ******************************************************************************/
+/* Global --------------------------------------------------------------------*/
+/* Static --------------------------------------------------------------------*/
 static	int	oldaction;
 
 
@@ -42,26 +50,24 @@ static	int	oldaction;
  ******* static functions *****************************************************
  ******************************************************************************/
 	/* Start */
-static	void	show_board_start(const struct Player_Iface_Position	*position,
-				const char				*title,
-				const char				*subtitle);
+static	void	show_board_start(const struct Player_Iface_Position  *position,
+				const char *title, const char *subtitle);
 
-static	void	board_loop_start(const struct Player_Iface_Position	*position);
+static	void	board_loop_start(const struct Player_Iface_Position  *position);
 
 	/* Play */
-static	void	show_board	(const struct Game_Iface_Out		*board,
-				const struct Player_Iface_Position	*position,
-				const char				*title,
-				const char				*subtitle);
+static	void	show_board	(const struct Game_Iface_Out  *board,
+				const struct Player_Iface_Position  *position,
+				const char *title, const char *subtitle);
 
-static	void	board_loop	(const struct Game_Iface_Out		*board,
-				const struct Player_Iface_Position	*position);
+static	void	board_loop	(const struct Game_Iface_Out  *board,
+				const struct Player_Iface_Position  *position);
 
 static	char	set_char	(int game_iface_visible);
 	/* Input */
 static	int	usr_input	(void);
 	/* Help */
-static	void	show_help		(const struct Game_Iface_Out	*board);
+static	void	show_help		(const struct Game_Iface_Out  *board);
 static	void	show_help_start		(void);
 static	void	show_help_play		(void);
 static	void	show_help_pause		(void);
@@ -72,29 +78,24 @@ static	void	show_help_gameover	(void);
 
 
 /******************************************************************************
- ******* main *****************************************************************
+ ******* global functions *****************************************************
  ******************************************************************************/
-void	player_clui_start	(const struct Player_Iface_Position	*position,
-				const char				*title,
-				const char				*subtitle,
-				int					*action)
+void	player_clui_start	(const struct Player_Iface_Position  *position,
+				const char *title, const char *subtitle,
+				int *action)
 {
-	/* User action */
+
 	show_help_start();
 	show_board_start(position, title, subtitle);
-
 	*action		= usr_input();
 	oldaction	= *action;
 }
 
-void	player_clui		(const struct Game_Iface_Out		*board,
-				const struct Player_Iface_Position	*position,
-				const char				*title,
-				const char				*subtitle,
-				int					*action)
+void	player_clui		(const struct Game_Iface_Out  *board,
+				const struct Player_Iface_Position  *position,
+				const char *title, const char *subtitle,
+				int *action)
 {
-	/* User action */
-
 
 	if (oldaction != PLAYER_IFACE_ACT_FOO) {
 		show_help(board);
@@ -104,15 +105,19 @@ void	player_clui		(const struct Game_Iface_Out		*board,
 	oldaction	= *action;
 }
 
-void	player_clui_save_name	(const char *filepath, char *filename, int destsize)
+void	player_clui_save_name	(const char *fpath, char *fname, int destsize)
 {
-	puts("File name:");
-	fgets(filename, destsize, stdin);
+
+	(void)fpath;
+
+	printf("File name:\n");
+	fgets(fname, destsize, stdin);
 }
 
 void	player_clui_score_name	(char *player_name, int destsize)
 {
-	puts("Your name:");
+
+	printf("Your name:\n");
 	fgets(player_name, destsize, stdin);
 }
 
@@ -123,40 +128,37 @@ void	player_clui_score_name	(char *player_name, int destsize)
 /*	*	*	*	*	*	*	*	*	*
  *	*	* Start	*	*	*	*	*	*	*
  *	*	*	*	*	*	*	*	*	*/
-static	void	show_board_start(const struct Player_Iface_Position	*position,
-				const char				*title,
-				const char				*subtitle)
+static	void	show_board_start(const struct Player_Iface_Position  *position,
+				const char *title, const char *subtitle)
 {
-	/* Title */
-	puts("________________________________________________________________________________");
 
-	/* Board */
+	printf("________________________________________"
+		"________________________________________\n");
 	board_loop_start(position);
-
-	/* Subtitle & title */
 	printf("%s	-	%s\n", subtitle, title);
-	puts("--------------------------------------------------------------------------------");
+	printf("----------------------------------------"
+		"----------------------------------------\n");
 }
 
-static	void	board_loop_start(const struct Player_Iface_Position	*position)
+static	void	board_loop_start(const struct Player_Iface_Position  *position)
 {
 	int	i;
 	int	j;
-	char	ch;
+	char	c;
 
 	putchar('\n');
 	for (i = 0; i < position->rows; i++) {
 		for (j = 0; j < position->cols; j++) {
-			ch =	PLAYER_CLUI_CHAR_HIDDEN_FIELD;
+			c =	PLAYER_CLUI_CHAR_HIDDEN_FIELD;
 
 			/* Print char */
 			if (i == position->row && j == position->col) {
 				putchar('<');
-				putchar(ch);
+				putchar(c);
 				putchar('>');
 			} else {
 				putchar(' ');
-				putchar(ch);
+				putchar(c);
 				putchar(' ');
 			}
 		}
@@ -168,42 +170,40 @@ static	void	board_loop_start(const struct Player_Iface_Position	*position)
 /*	*	*	*	*	*	*	*	*	*
  *	*	* Play	*	*	*	*	*	*
  *	*	*	*	*	*	*	*	*	*/
-static	void	show_board	(const struct Game_Iface_Out		*board,
-				const struct Player_Iface_Position	*position,
-				const char				*title,
-				const char				*subtitle)
+static	void	show_board	(const struct Game_Iface_Out  *board,
+				const struct Player_Iface_Position  *position,
+				const char *title, const char *subtitle)
 {
-	puts("________________________________________________________________________________");
 
-	/* Board */
+	printf("________________________________________"
+		"________________________________________\n");
 	board_loop(board, position);
-
-	/* Subtitle & title */
 	printf("%s	-	%s\n", subtitle, title);
-	puts("--------------------------------------------------------------------------------");
+	printf("----------------------------------------"
+		"----------------------------------------\n");
 
 }
 
-static	void	board_loop	(const struct Game_Iface_Out		*board,
-				const struct Player_Iface_Position	*position)
+static	void	board_loop	(const struct Game_Iface_Out  *board,
+				const struct Player_Iface_Position  *position)
 {
 	int	i;
 	int	j;
-	char	ch;
+	char	c;
 
 	putchar('\n');
 	for (i = 0; i < board->rows; i++) {
 		for (j = 0; j < board->cols; j++) {
-			ch =	set_char(board->visible[i][j]);
+			c =	set_char(board->visible[i][j]);
 
 			/* Print char */
 			if (i == position->row && j == position->col) {
 				putchar('<');
-				putchar(ch);
+				putchar(c);
 				putchar('>');
 			} else {
 				putchar(' ');
-				putchar(ch);
+				putchar(c);
 				putchar(' ');
 			}
 		}
@@ -214,86 +214,87 @@ static	void	board_loop	(const struct Game_Iface_Out		*board,
 
 static	char	set_char	(int game_iface_visible)
 {
-	char	ch;
+	char	c;
+
 	switch (game_iface_visible) {
 	case GAME_IFACE_VIS_KBOOM:
-		ch	= PLAYER_CLUI_CHAR_KBOOM;
+		c	= PLAYER_CLUI_CHAR_KBOOM;
 		break;
 
 	case GAME_IFACE_VIS_HIDDEN_FIELD:
-		ch	= PLAYER_CLUI_CHAR_HIDDEN_FIELD;
+		c	= PLAYER_CLUI_CHAR_HIDDEN_FIELD;
 		break;
 
 	case GAME_IFACE_VIS_HIDDEN_MINE:
-		ch	= PLAYER_CLUI_CHAR_HIDDEN_MINE;
+		c	= PLAYER_CLUI_CHAR_HIDDEN_MINE;
 		break;
 
 	case GAME_IFACE_VIS_HIDDEN_SAFE:
-		ch	= PLAYER_CLUI_CHAR_HIDDEN_SAFE;
+		c	= PLAYER_CLUI_CHAR_HIDDEN_SAFE;
 		break;
 
 	case GAME_IFACE_VIS_SAFE_MINE:
-		ch	= PLAYER_CLUI_CHAR_SAFE_MINE;
+		c	= PLAYER_CLUI_CHAR_SAFE_MINE;
 		break;
 
 	case GAME_IFACE_VIS_0:
-		ch	= PLAYER_CLUI_CHAR_0;
+		c	= PLAYER_CLUI_CHAR_0;
 		break;
 
 	case GAME_IFACE_VIS_1:
-		ch	= PLAYER_CLUI_CHAR_1;
+		c	= PLAYER_CLUI_CHAR_1;
 		break;
 
 	case GAME_IFACE_VIS_2:
-		ch	= PLAYER_CLUI_CHAR_2;
+		c	= PLAYER_CLUI_CHAR_2;
 		break;
 
 	case GAME_IFACE_VIS_3:
-		ch	= PLAYER_CLUI_CHAR_3;
+		c	= PLAYER_CLUI_CHAR_3;
 		break;
 
 	case GAME_IFACE_VIS_4:
-		ch	= PLAYER_CLUI_CHAR_4;
+		c	= PLAYER_CLUI_CHAR_4;
 		break;
 
 	case GAME_IFACE_VIS_5:
-		ch	= PLAYER_CLUI_CHAR_5;
+		c	= PLAYER_CLUI_CHAR_5;
 		break;
 
 	case GAME_IFACE_VIS_6:
-		ch	= PLAYER_CLUI_CHAR_6;
+		c	= PLAYER_CLUI_CHAR_6;
 		break;
 
 	case GAME_IFACE_VIS_7:
-		ch	= PLAYER_CLUI_CHAR_7;
+		c	= PLAYER_CLUI_CHAR_7;
 		break;
 
 	case GAME_IFACE_VIS_8:
-		ch	= PLAYER_CLUI_CHAR_8;
+		c	= PLAYER_CLUI_CHAR_8;
 		break;
 
 	case GAME_IFACE_VIS_FLAG:
-		ch	= PLAYER_CLUI_CHAR_FLAG;
+		c	= PLAYER_CLUI_CHAR_FLAG;
 		break;
 
 	case GAME_IFACE_VIS_FLAG_FALSE:
-		ch	= PLAYER_CLUI_CHAR_FLAG_FALSE;
+		c	= PLAYER_CLUI_CHAR_FLAG_FALSE;
 		break;
 
 	case GAME_IFACE_VIS_POSSIBLE:
-		ch	= PLAYER_CLUI_CHAR_POSSIBLE;
+		c	= PLAYER_CLUI_CHAR_POSSIBLE;
 		break;
 
 	case GAME_IFACE_VIS_POSSIBLE_FALSE:
-		ch	= PLAYER_CLUI_CHAR_POSSIBLE_FALSE;
+		c	= PLAYER_CLUI_CHAR_POSSIBLE_FALSE;
 		break;
 
 	default:
-		ch	= PLAYER_CLUI_CHAR_ERROR;
+		c	= PLAYER_CLUI_CHAR_ERROR;
 		break;
 	}
 
-	return	ch;
+	return	c;
 }
 
 /*	*	*	*	*	*	*	*	*	*
@@ -301,26 +302,41 @@ static	char	set_char	(int game_iface_visible)
  *	*	*	*	*	*	*	*	*	*/
 static	int	usr_input	(void)
 {
-	/* Wait for input */
 	char	buff [BUFF_SIZE];
-	char	ch;
+	char	c;
+	int	action;
+	char	*p;
+
+	action	= PLAYER_IFACE_ACT_FOO;
+
+	/* Wait for input */
 	buff[0]	= '\0';
-	ch	= '\0';
-	fgets(buff, BUFF_SIZE, stdin);
+	c	= '\0';
+	if (!fgets(buff, BUFF_SIZE, stdin)) {
+		goto err_fgets;
+	}
+	p	= buff;
 
 	/* Interpret input */
-	int	action;
-	action	= PLAYER_IFACE_ACT_FOO;
-	sscanf(buff, "%c", &ch);
-	switch (ch) {
+	if (sscanf(p, "%c", &c) != 1) {
+		goto err_sscanf;
+	}
+	p++;
+	switch (c) {
 		/* Escape sequence */
 	case 27:
 			/* Arrows */
-		sscanf(buff, "%*c""%c", &ch);
-		switch (ch) {
+		if (sscanf(p, "%c", &c) != 1) {
+			goto err_sscanf;
+		}
+		p++;
+		switch (c) {
 		case 91:
-			sscanf(buff, "%*2c""%c", &ch);
-			switch (ch) {
+			if (sscanf(p, "%c", &c) != 1) {
+				goto err_sscanf;
+			}
+			p++;
+			switch (c) {
 			case 65:
 				action	= PLAYER_IFACE_ACT_MOVE_UP;
 				break;
@@ -385,17 +401,29 @@ static	int	usr_input	(void)
 
 	case 'x':
 		/* Special sequence "xyzzy" */
-		sscanf(buff, "%*c""%c", &ch);
-		if (ch == 'y') {
-			sscanf(buff, "%*2c""%c", &ch);
-			if (ch == 'z') {
-			sscanf(buff, "%*3c""%c", &ch);
-			if (ch == 'z') {
-			sscanf(buff, "%*4c""%c", &ch);
-			if (ch == 'y') {
-				action	= PLAYER_IFACE_ACT_XYZZY_ON;
+		if (sscanf(p, "%c", &c) != 1) {
+			goto err_sscanf;
+		}
+		p++;
+		if (c == 'y') {
+			if (sscanf(p, "%c", &c) != 1) {
+				goto err_sscanf;
 			}
-			}
+			p++;
+			if (c == 'z') {
+				if (sscanf(p, "%c", &c) != 1) {
+					goto err_sscanf;
+				}
+				p++;
+				if (c == 'z') {
+					if (sscanf(p, "%c", &c) != 1) {
+						goto err_sscanf;
+					}
+					p++;
+					if (c == 'y') {
+						action	= PLAYER_IFACE_ACT_XYZZY_ON;
+					}
+				}
 			}
 		}
 		break;
@@ -421,14 +449,19 @@ static	int	usr_input	(void)
 		break;
 	}
 
+
+err_sscanf:
+err_fgets:
+
 	return	action;
 }
 
 /*	*	*	*	*	*	*	*	*	*
  *	*	* Help	*	*	*	*	*	*	*
  *	*	*	*	*	*	*	*	*	*/
-static	void	show_help		(const struct Game_Iface_Out	*board)
+static	void	show_help		(const struct Game_Iface_Out  *board)
 {
+
 	switch (board->state) {
 	case GAME_IFACE_STATE_PLAYING:
 		show_help_play();
@@ -458,7 +491,8 @@ static	void	show_help		(const struct Game_Iface_Out	*board)
 
 static	void	show_help_start		(void)
 {
-	puts(  "Move      "      "|Step " "|Quit " "|Confirm");
+
+	printf("Move      "      "|Step " "|Quit " "|Confirm\n");
 	printf(" %c%c%c%c %c%c%c%c| %c   ""| %c   ""| Enter\n",
 		'h','j','k','l',
 			'<','v','^','>',
@@ -467,7 +501,8 @@ static	void	show_help_start		(void)
 
 static	void	show_help_play		(void)
 {
-	puts(  "Move      "      "|Step " "|Flag  |? " "|Remove |Pause " "|Save " "|Quit " "|Confirm");
+
+	printf("Move      "      "|Step " "|Flag  |? " "|Remove |Pause " "|Save " "|Quit " "|Confirm\n");
 	printf(" %c%c%c%c %c%c%c%c| %c   ""| Space| %c""| BS    | %c    ""| %c   ""| %c   ""| Enter\n",
 		'h','j','k','l',
 			'<','v','^','>',
@@ -476,14 +511,16 @@ static	void	show_help_play		(void)
 
 static	void	show_help_pause		(void)
 {
-	puts(  "Continue " "|Save " "|Quit " "|Confirm");
+
+	printf("Continue " "|Save " "|Quit " "|Confirm\n");
 	printf(" %c       ""| %c   ""| %c   ""| Enter",
 		'p',	's',	'q');
 }
 
 static	void	show_help_xyzzy		(void)
 {
-	puts(  "XYZZY |Move      "      "|Step " "|Flag  |? " "|Remove |Save " "|Quit " "|Confirm");
+
+	printf("XYZZY |Move      "      "|Step " "|Flag  |? " "|Remove |Save " "|Quit " "|Confirm\n");
 	printf(" 0 1 2| %c%c%c%c %c%c%c%c| %c   ""| Space| %c""| BS    | %c   ""| %c   ""| Enter\n",
 			'h','j','k','l',
 				'<','v','^','>',
@@ -492,7 +529,8 @@ static	void	show_help_xyzzy		(void)
 
 static	void	show_help_cheat		(void)
 {
-	puts(  "Move      "      "|Step " "|Flag  |? " "|Remove |Save " "|Quit " "|Confirm");
+
+	printf("Move      "      "|Step " "|Flag  |? " "|Remove |Save " "|Quit " "|Confirm\n");
 	printf(" %c%c%c%c %c%c%c%c| %c   ""| Space| %c""| BS    | %c   ""| %c   ""| Enter\n",
 		'h','j','k','l',
 			'<','v','^','>',
@@ -501,14 +539,16 @@ static	void	show_help_cheat		(void)
 
 static	void	show_help_safe		(void)
 {
-	puts(  "Save " "|Quit " "|Confirm");
+
+	printf("Save " "|Quit " "|Confirm\n");
 	printf(" %c   ""| %c   ""| Enter\n",
 		's',	'q');
 }
 
 static	void	show_help_gameover	(void)
 {
-	puts(  "Quit " "|Confirm");
+
+	printf("Quit " "|Confirm\n");
 	printf(" %c   ""| Enter\n",
 		'q');
 }

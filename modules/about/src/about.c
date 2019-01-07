@@ -9,6 +9,7 @@
 /* Standard C ----------------------------------------------------------------*/
 		/* printf() */
 	#include <stdio.h>
+	#include <stdlib.h>
 
 /* libalx ------------------------------------------------------------------*/
 		/* alx_prn_file() */
@@ -43,7 +44,18 @@ char	share_path [FILENAME_MAX];
  ******************************************************************************/
 void	about_init		(void)
 {
-	snprintf(share_path, FILENAME_MAX, "%s/%s/", INSTALL_SHARE_DIR, SHARE_DIR);
+	if (snprintf(share_path, FILENAME_MAX, "%s/%s/",
+					INSTALL_SHARE_DIR,
+					SHARE_DIR)  >=  FILENAME_MAX) {
+		goto err_path;
+	}
+
+	return;
+
+
+err_path:
+	printf("Path is too large and has been truncated\n");
+	exit(EXIT_FAILURE);
 }
 
 void	snprint_share_file	(char *dest, int destsize, int share_file)

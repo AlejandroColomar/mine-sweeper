@@ -6,9 +6,7 @@
 /******************************************************************************
  ******* headers **************************************************************
  ******************************************************************************/
-/*	*	*	*	*	*	*	*	*	*
- *	*	* Standard	*	*	*	*	*	*
- *	*	*	*	*	*	*	*	*	*/
+/* Standard C ----------------------------------------------------------------*/
 		/* bool */
 	#include <stdbool.h>
 		/* rand() */
@@ -18,12 +16,11 @@
 		/* getpid() */
 	#include <unistd.h>
 
-/*	*	*	*	*	*	*	*	*	*
- *	*	* Other	*	*	*	*	*	*	*
- *	*	*	*	*	*	*	*	*	*/
+/* libalx --------------------------------------------------------------------*/
 		/* seedf() */
 	#include "alx_seed.h"
 
+/* Project -------------------------------------------------------------------*/
 	#include "save.h"
 
 	#include "game.h"
@@ -32,7 +29,9 @@
 /******************************************************************************
  ******* variables ************************************************************
  ******************************************************************************/
-struct Game_Board	game_board;
+/* Global --------------------------------------------------------------------*/
+	struct Game_Board	game_board;
+/* Static --------------------------------------------------------------------*/
 
 
 /******************************************************************************
@@ -59,17 +58,16 @@ static	void	game_flag_recursive	(int r, int c);
 
 
 /******************************************************************************
- ******* main *****************************************************************
+ ******* global functions *****************************************************
  ******************************************************************************/
-void	game_init		(void)
+void	game_init	(void)
 {
 	int	seed;
 	seed	= seedf(clock(), time(NULL), getpid());
 	srand(seed);
 }
 
-void	game_init_rand		(int rows, int cols, int mines,
-				int pos_row, int pos_col)
+void	game_init_rand	(int rows, int cols, int mines, int pos_row, int pos_col)
 {
 	/* size & mines */
 	game_board.rows		= rows;
@@ -86,18 +84,18 @@ void	game_init_rand		(int rows, int cols, int mines,
 	game_init_adjnums();
 }
 
-void	game_init_load		(int *rows, int *cols)
+void	game_init_load	(int *rows, int *cols)
 {
+
 	load_game_file();
-
 	game_board.state	= GAME_STATE_PLAYING;
-
 	*rows	= game_board.rows;
 	*cols	= game_board.cols;
 }
 
-void	game_action		(int action, int row, int col)
+void	game_action	(int action, int row, int col)
 {
+
 	switch (action) {
 	case GAME_ACT_STEP:
 		game_step(row, col);
@@ -128,6 +126,7 @@ static	void	game_init_clr		(void)
 {
 	int	i;
 	int	j;
+
 	for (i = 0; i < game_board.rows; i++) {
 		for (j = 0; j < game_board.cols; j++) {
 			game_board.gnd[i][j]	= GAME_MINE_NO;
@@ -145,6 +144,7 @@ static	void	game_init_mines		(int pos_row, int pos_col)
 	int	i;
 	int	r;
 	int	c;
+
 	i	= 0;
 	while (i < game_board.mines) {
 		r	= (rand() % game_board.rows);
@@ -166,6 +166,7 @@ static	void	game_init_adjnums	(void)
 	int	c;
 	int	i;
 	int	j;
+
 	for (r = 0; r < game_board.rows; r++) {
 	for (c = 0; c < game_board.cols; c++) {
 		if (game_board.gnd[r][c] >= GAME_MINE_YES) {
@@ -188,6 +189,7 @@ static	void	game_init_adjnums	(void)
  *	*	*	*	*	*	*	*	*	*/
 static	void	game_step		(int r, int c)
 {
+
 	switch (game_board.usr[r][c]) {
 	case GAME_USR_HIDDEN:
 	case GAME_USR_POSSIBLE:
@@ -203,8 +205,8 @@ static	void	game_step		(int r, int c)
 static	void	game_discover		(int r, int c)
 {
 	int	safe_fields;
-	safe_fields	= (game_board.rows * game_board.cols) - game_board.mines;
 
+	safe_fields	= (game_board.rows * game_board.cols) - game_board.mines;
 	if (game_board.gnd[r][c] >= GAME_MINE_YES) {
 		game_board.usr[r][c]	= GAME_USR_KBOOM;
 		game_board.state	= GAME_STATE_GAMEOVER;
@@ -240,8 +242,8 @@ static	void	game_discover_recursive	(int r, int c)
 static	void	game_big_step		(int r, int c)
 {
 	int	cnt;
-	cnt	= game_count_flags(r, c);
 
+	cnt	= game_count_flags(r, c);
 	if (cnt && (game_board.gnd[r][c] == cnt)) {
 		game_step_recursive(r, c);
 	}
@@ -293,6 +295,7 @@ static	void	game_step_recursive	(int r, int c)
  *	*	*	*	*	*	*	*	*	*/
 static	void	game_flag		(int r, int c)
 {
+
 	switch (game_board.usr[r][c]) {
 	case GAME_USR_HIDDEN:
 		game_board.usr[r][c]	= GAME_USR_FLAG;
@@ -316,6 +319,7 @@ static	void	game_flag		(int r, int c)
 
 static	void	game_possible		(int r, int c)
 {
+
 	switch (game_board.usr[r][c]) {
 	case GAME_USR_HIDDEN:
 		game_board.usr[r][c]	= GAME_USR_POSSIBLE;
@@ -329,6 +333,7 @@ static	void	game_possible		(int r, int c)
 
 static	void	game_rmflag		(int r, int c)
 {
+
 	switch (game_board.usr[r][c]) {
 	case GAME_USR_FLAG:
 		game_board.usr[r][c]	= GAME_USR_HIDDEN;
@@ -344,8 +349,8 @@ static	void	game_rmflag		(int r, int c)
 static	void	game_all_flags		(int r, int c)
 {
 	int	cnt;
-	cnt =	game_count_nclear(r, c);
 
+	cnt =	game_count_nclear(r, c);
 	if (cnt && (game_board.gnd[r][c] == cnt)) {
 		game_flag_recursive(r, c);
 	}

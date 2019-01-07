@@ -53,14 +53,14 @@
 /******************************************************************************
  ******* functions ************************************************************
  ******************************************************************************/
-void	player_gui_init		(struct Player_Iface_Position	*position,
+void	player_gui_init		(struct Player_Iface_Position  *pos,
 				int *action);
 
-int	player_gui_start	(struct Player_Iface_Position	*position,
+int	player_gui_start	(const struct Player_Iface_Position  *pos,
 				const char *title, const char *subtitle);
 
-int	player_gui		(const struct Game_Iface_Out	*board,
-				struct Player_Iface_Position	*position,
+int	player_gui		(const struct Game_Iface_Out  *board,
+				const struct Player_Iface_Position  *pos,
 				const char *title, const char *subtitle);
 
 void	player_gui_save_name	(const char *fpath, char *fname, int destsize);
