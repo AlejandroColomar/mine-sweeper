@@ -46,7 +46,7 @@ all: $(ALL)
 save_mod.o: $(_ALL)
 	@echo	"	LD	$@"
 	$(Q)$(LD) -r $^ -o $@
-	
+
 
 save.s: $(SAVE_DEPS)
 	@echo	"	CC	$@"

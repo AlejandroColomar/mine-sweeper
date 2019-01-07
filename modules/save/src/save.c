@@ -45,6 +45,7 @@
  ******************************************************************************/
 void	save_init	(void)
 {
+
 	if (snprintf(home_path, FILENAME_MAX, "%s/",
 				getenv(ENV_HOME))  >=  FILENAME_MAX) {
 		goto err_path;
@@ -59,23 +60,27 @@ void	save_init	(void)
 	}
 	saved_name[0]	= '\0';
 
-	int	err;
-	err	= mkdir(user_game_path, 0700);
-
-	if (!err) {
-		mkdir(saved_path, 0700);
-	} else {
-
+	if (mkdir(user_game_path, 0700)) {
 		switch (errno) {
 		case EACCES:
 			printf("err = EACCES");
 			exit(EXIT_FAILURE);
-			break;
-
 		case EEXIST:
 			/* OK */
-			break;
-
+			return;
+		default:
+			printf("WTF?!");
+			exit(EXIT_FAILURE);
+		}
+	}
+	if (mkdir(saved_path, 0700)) {
+		switch (errno) {
+		case EACCES:
+			printf("err = EACCES");
+			exit(EXIT_FAILURE);
+		case EEXIST:
+			/* OK */
+			return;
 		default:
 			printf("WTF?!");
 			exit(EXIT_FAILURE);
@@ -93,6 +98,7 @@ err_path:
 
 void	save_clr	(void)
 {
+
 	if (snprintf(saved_path, FILENAME_MAX, "%s/%s/",
 				home_path, USER_SAVED_DIR)  >=  FILENAME_MAX) {
 		goto err_path;
@@ -111,7 +117,6 @@ void	load_game_file	(void)
 {
 	char	file_name [FILENAME_MAX];
 	FILE	*fp;
-
 	int	i;
 	int	j;
 
@@ -164,6 +169,7 @@ void	save_game_file	(char *filepath)
 	FILE	*fp;
 	int	i;
 	int	j;
+	bool	x;
 
 	/* Don't change saved_name variable if not in default dir */
 	if (filepath != NULL) {
@@ -179,7 +185,6 @@ void	save_game_file	(char *filepath)
 	player_iface_save_name(filepath, saved_name, FILENAME_MAX);
 
 	/* Look for an unused name of the type 'name_XXX.mine'. */
-	bool	x;
 	x	= true;
 	for (i = 0; x; i++) {
 		if (filepath == NULL) {

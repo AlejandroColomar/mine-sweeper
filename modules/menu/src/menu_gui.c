@@ -6,9 +6,7 @@
 /******************************************************************************
  ******* headers **************************************************************
  ******************************************************************************/
-/*	*	*	*	*	*	*	*	*	*
- *	*	* Standard	*	*	*	*	*	*
- *	*	*	*	*	*	*	*	*	*/
+/* Standard C ----------------------------------------------------------------*/
 	#include <gtk/gtk.h>
 		/* INFINITY */
 	#include <math.h>
@@ -19,11 +17,10 @@
 		/* srand() */
 	#include <stdlib.h>
 
-/*	*	*	*	*	*	*	*	*	*
- *	*	* Other	*	*	*	*	*	*	*
- *	*	*	*	*	*	*	*	*	*/
+/* libalx --------------------------------------------------------------------*/
 	#include "alx_input.h"
 
+/* Project -------------------------------------------------------------------*/
 	#include "about.h"
 	#include "game_iface.h"
 	#include "save.h"
@@ -134,25 +131,22 @@ static	void		menu_gui_verbose	(void);
  ******************************************************************************/
 void	menu_gui_init		(void)
 {
-	/* Window */
+	char		title [LINE_SIZE];
+
 	window_gui	= gtk_window_new(GTK_WINDOW_TOPLEVEL);
 
-	/* Quit */
 	g_signal_connect(window_gui, "delete-event", G_CALLBACK(delete_window), NULL);
 	g_signal_connect(window_gui, "destroy", G_CALLBACK(destroy_window), NULL);
 
 	/* Title.  PROG_VERSION defined in Makefile */
-	char		title [LINE_SIZE];
 	(void)snprintf(title, LINE_SIZE, "mine-sweeper %s", PROG_VERSION);
 	gtk_window_set_title(GTK_WINDOW(window_gui), title);
-
-	/* Border */
 	gtk_container_set_border_width(GTK_CONTAINER(window_gui), 20);
 }
 
 void	menu_gui_cleanup	(void)
 {
-	/* Destroy window */
+
 	gtk_widget_destroy(window_gui);
 }
 

@@ -6,15 +6,11 @@
 /******************************************************************************
  ******* headers **************************************************************
  ******************************************************************************/
-/*	*	*	*	*	*	*	*	*	*
- *	*	* Standard	*	*	*	*	*	*
- *	*	*	*	*	*	*	*	*	*/
+/* Standard C ----------------------------------------------------------------*/
 		/* errno */
 	#include <errno.h>
 
-/*	*	*	*	*	*	*	*	*	*
- *	*	* Other	*	*	*	*	*	*	*
- *	*	*	*	*	*	*	*	*	*/
+/* Project -------------------------------------------------------------------*/
 		/* game() */
 	#include "game.h"
 		/* game_iface() */
@@ -46,6 +42,7 @@ static	void	start_load	(void);
  ******************************************************************************/
 void	start_switch	(void)
 {
+
 	switch (start_mode) {
 	case START_FOO:
 		start_foo();
@@ -67,48 +64,40 @@ void	start_switch	(void)
  ******************************************************************************/
 static	void	start_foo	(void)
 {
+
 	/* empty */
+	;
 }
 
 static	void	start_rand	(void)
 {
-	/* size & mines */
 	int	level;
 	int	rows;
 	int	cols;
 	int	mines;
-	menu_iface_board(&level, &rows, &cols, &mines);
-
-	/* user iface init */
 	bool	fail;
-	player_iface_init(rows, cols);
-
-	/* start position */
 	int	r;
 	int	c;
+
+	menu_iface_board(&level, &rows, &cols, &mines);
+	player_iface_init(rows, cols);
 	fail	= player_iface_start(&r, &c);
-
 	if (!fail) {
-		/* game init */
 		game_init_rand(rows, cols, mines, r, c);
-
-		/* game iface init */
 		game_iface_init_rand(level, r, c);
-
 		/* game loop */
 		game_iface();
 	}
 
-	/* user iface cluanup */
 	player_iface_cleanup();
 }
 
 static	void	start_load	(void)
 {
-	/* size & game init (sets errno) */
 	int	rows;
 	int	cols;
 
+	/* size & game init (sets errno) */
 	errno	= 0;
 	game_init_load(&rows, &cols);
 
