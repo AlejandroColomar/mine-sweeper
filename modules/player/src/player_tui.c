@@ -6,20 +6,17 @@
 /******************************************************************************
  ******* headers **************************************************************
  ******************************************************************************/
-/*	*	*	*	*	*	*	*	*	*
- *	*	* Standard	*	*	*	*	*	*
- *	*	*	*	*	*	*	*	*	*/
+/* Standard C ----------------------------------------------------------------*/
 		/* WINDOW & wgetch() & KEY_... & ... */
 	#include <ncurses.h>
 		/* wchar_t */
 	#include <wchar.h>
 
-/*	*	*	*	*	*	*	*	*	*
- *	*	* Other	*	*	*	*	*	*	*
- *	*	*	*	*	*	*	*	*	*/
+/* libalx ------------------------------------------------------------------*/
 		/* alx_..._curses() & alx_ncur_prn_...() */
 	#include "alx_ncur.h"
 
+/* Project -------------------------------------------------------------------*/
 		/* struct Game_Iface_Out */
 	#include "game_iface.h"
 
@@ -38,14 +35,9 @@
 /******************************************************************************
  ******* variables ************************************************************
  ******************************************************************************/
-/*	*	*	*	*	*	*	*	*	*
- *	*	* Global	*	*	*	*	*	*
- *	*	*	*	*	*	*	*	*	*/
+/* Global --------------------------------------------------------------------*/
 bool	flag_color;
-
-/*	*	*	*	*	*	*	*	*	*
- *	*	* Static	*	*	*	*	*	*
- *	*	*	*	*	*	*	*	*	*/
+/* Static --------------------------------------------------------------------*/
 static	WINDOW	*win_board;
 static	WINDOW	*win_help;
 static	int	last_help;
@@ -56,17 +48,14 @@ static	int	last_help;
  ******************************************************************************/
 	/* Start */
 static	void	show_board_start(const struct Player_Iface_Position	*position,
-				const char				*title,
-				const char				*subtitle);
+				const char *title, const char *subtitle);
 
 static	void	board_loop_start(const struct Player_Iface_Position	*position);
-static	void	highlight_cursor_start(const struct Player_Iface_Position *position);
 
 	/* Play */
 static	void	show_board	(const struct Game_Iface_Out		*board,
 				const struct Player_Iface_Position	*position,
-				const char				*title,
-				const char				*subtitle);
+				const char *title, const char *subtitle);
 
 static	void	board_loop	(const struct Game_Iface_Out		*board,
 				const struct Player_Iface_Position	*position);
@@ -149,10 +138,10 @@ void	player_tui_init		(int rows, int cols)
 }
 
 int	player_tui_start	(const struct Player_Iface_Position	*position,
-				const char				*title,
-				const char				*subtitle,
-				int					*action)
+				const char *title, const char *subtitle,
+				int *action)
 {
+
 	show_help_start();
 	show_board_start(position, title, subtitle);
 	*action	= usr_input();
@@ -162,10 +151,10 @@ int	player_tui_start	(const struct Player_Iface_Position	*position,
 
 int	player_tui		(const struct Game_Iface_Out		*board,
 				const struct Player_Iface_Position	*position,
-				const char				*title,
-				const char				*subtitle,
-				int					*action)
+				const char *title, const char *subtitle,
+				int *action)
 {
+
 	show_help(board);
 	show_board(board, position, title, subtitle);
 	*action	= usr_input();
@@ -173,33 +162,33 @@ int	player_tui		(const struct Game_Iface_Out		*board,
 	return	0;
 }
 
-void	player_tui_save_name	(const char *filepath, char *filename, int destsize)
+void	player_tui_save_name	(const char *fpath, char *fname, int destsize)
 {
-	/* Input box */
 	int	w;
 	int	r;
+
+	/* Input box */
 	w	= 60;
 	r	= 10;
-
 	/* Request name */
-	alx_w_getfname(filepath, filename, false, w, r, "File name:", NULL);
+	alx_w_getfname(fpath, fname, false, w, r, "File name:", NULL);
 }
 
 void	player_tui_score_name	(char *player_name, int destsize)
 {
-	/* Input box */
 	int	w;
 	int	r;
+
+	/* Input box */
 	w	= 60;
 	r	= 10;
-
 	/* Request name */
 	alx_w_getstr(player_name, destsize, w, r, "Your name:", NULL);
 }
 
 void	player_tui_cleanup	(void)
 {
-	/* Del wins & return to terminal mode */
+
 	alx_win_del(win_board);
 	alx_win_del(win_help);
 	alx_pause_curses();
@@ -213,8 +202,7 @@ void	player_tui_cleanup	(void)
  *	*	* Start	*	*	*	*	*	*	*
  *	*	*	*	*	*	*	*	*	*/
 static	void	show_board_start(const struct Player_Iface_Position	*position,
-				const char				*title,
-				const char				*subtitle)
+				const char *title, const char *subtitle)
 {
 	/* Clear & box */
 	werase(win_board);
@@ -262,36 +250,12 @@ static	void	board_loop_start(const struct Player_Iface_Position	*position)
 	}
 }
 
-static	void	highlight_cursor_start(const struct Player_Iface_Position *position)
-{
-	int	k;
-	int	l;
-	wchar_t	wch;
-	int	pair;
-
-	k	= 1 + position->row;
-	l	= 2 + 2 * position->col;
-	wch	= PLAYER_TUI_CHAR_HIDDEN_FIELD;
-
-	pair	= PAIR_HILITE;
-	if (flag_color) {
-		wattron(win_board, A_BOLD | COLOR_PAIR(pair));
-	}
-	mvwaddch(win_board, k, l - 1, '<');
-	mvwaddch(win_board, k, l, wch);
-	mvwaddch(win_board, k, l + 1, '>');
-	if (flag_color) {
-		wattroff(win_board, A_BOLD | COLOR_PAIR(pair));
-	}
-}
-
 /*	*	*	*	*	*	*	*	*	*
  *	*	* Play	*	*	*	*	*	*
  *	*	*	*	*	*	*	*	*	*/
 static	void	show_board	(const struct Game_Iface_Out		*board,
 				const struct Player_Iface_Position	*position,
-				const char				*title,
-				const char				*subtitle)
+				const char *title, const char *subtitle)
 {
 	/* Clear & box */
 	werase(win_board);

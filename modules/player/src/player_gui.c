@@ -6,9 +6,7 @@
 /******************************************************************************
  ******* headers **************************************************************
  ******************************************************************************/
-/*	*	*	*	*	*	*	*	*	*
- *	*	* Standard	*	*	*	*	*	*
- *	*	*	*	*	*	*	*	*	*/
+/* Standard C ----------------------------------------------------------------*/
 	#include <gtk/gtk.h>
 		/* fmod */
 	#include <math.h>
@@ -17,12 +15,11 @@
 		/* snprintf() */
 	#include <stdio.h>
 
-/*	*	*	*	*	*	*	*	*	*
- *	*	* Other	*	*	*	*	*	*	*
- *	*	*	*	*	*	*	*	*	*/
+/* libalx ------------------------------------------------------------------*/
 		/* alx_sscan_fname() */
 	#include "alx_input.h"
 
+/* Project -------------------------------------------------------------------*/
 		/* struct Game_Iface_Out */
 	#include "game_iface.h"
 		/* window_gui */
@@ -44,86 +41,86 @@
 /******************************************************************************
  ******* enums ****************************************************************
  ******************************************************************************/
-enum	Buttons {
-	BTN_CH_OFF = 0,
-	BTN_CH_1,
-	BTN_CH_2,
-	BTN_SAVE,
-	BTN_QUIT,
-	BTN_QTTY
-};
+	enum	Buttons {
+		BTN_CH_OFF = 0,
+		BTN_CH_1,
+		BTN_CH_2,
+		BTN_SAVE,
+		BTN_QUIT,
+		BTN_QTTY
+	};
 
-enum	TButtons {
-	TBTN_PAUSE,
-	TBTN_QTTY
-};
+	enum	TButtons {
+		TBTN_PAUSE,
+		TBTN_QTTY
+	};
 
 
 /******************************************************************************
  ******* structs **************************************************************
  ******************************************************************************/
-struct	Label_Data {
-	GtkWidget		*ptr;
-	char			text [LINE_SIZE];
-};
+	struct	Label_Data {
+		GtkWidget	*ptr;
+		char	text [LINE_SIZE];
+	};
 
-struct	Field_Data {
-	GtkWidget		*ptr;
-	char			ch;
-	int			r;
-	int			c;
-	int			*row;
-	int			*col;
-	int			*act;
-};
+	struct	Field_Data {
+		GtkWidget	*ptr;
+		char	ch;
+		int	r;
+		int	c;
+		int	*row;
+		int	*col;
+		int	*act;
+	};
 
-struct	Button_Data {
-	GtkWidget		*ptr;
-	char			text [LINE_SIZE];
-	int			val;
-	int			*act;
-};
+	struct	Button_Data {
+		GtkWidget	*ptr;
+		char	text [LINE_SIZE];
+		int	val;
+		int	*act;
+	};
 
-struct	TButton_Data {
-	GtkWidget		*ptr;
-	char			text [LINE_SIZE];
-	char			text2 [LINE_SIZE];
-	int			val;
-	int			val2;
-	int			*act;
-};
+	struct	TButton_Data {
+		GtkWidget	*ptr;
+		char	text [LINE_SIZE];
+		char	text2 [LINE_SIZE];
+		int	val;
+		int	val2;
+		int	*act;
+	};
 
-struct	Entry_fname_Data {
-	GtkWidget		*ptr;
-	struct Label_Data	lbl;
-	const char		*fpath;
-	char			*fname;
-};
+	struct	Entry_fname_Data {
+		GtkWidget		*ptr;
+		struct Label_Data	lbl;
+		const char	*fpath;
+		char		*fname;
+	};
 
-struct	Entry_str_Data {
-	GtkWidget		*ptr;
-	struct Label_Data	lbl;
-	char			*str;
-	int			strsize;
-};
+	struct	Entry_str_Data {
+		GtkWidget		*ptr;
+		struct Label_Data	lbl;
+		char	*str;
+		int	strsize;
+	};
 
-struct	PBar_Data {
-	GtkWidget		*ptr;
-	double			frac;
-	char			text [LINE_SIZE];
-};
+	struct	PBar_Data {
+		GtkWidget	*ptr;
+		double	frac;
+		char	text [LINE_SIZE];
+	};
 
-struct	EBox_Data {
-	GtkWidget		*ptr;
-	int			val;
-	int			*act;
-};
+	struct	EBox_Data {
+		GtkWidget	*ptr;
+		int	val;
+		int	*act;
+	};
 
-struct	Timeout_Data {
-	int			id;
-	int			val;
-	int			*act;
-};
+	struct	Timeout_Data {
+		int	id;
+		int	val;
+		int	*act;
+	};
 
 
 /******************************************************************************
@@ -156,27 +153,25 @@ static	int			state;
  ******* static functions *****************************************************
  ******************************************************************************/
 	/* Start */
-static	void	board_init	(struct Player_Iface_Position		*position,
-				int					*action);
-static	void	show_board_start(struct Player_Iface_Position		*position,
-				const char				*title,
-				const char				*subtitle);
+static	void	board_init	(struct Player_Iface_Position	*position,
+				int *action);
+static	void	show_board_start(struct Player_Iface_Position	*position,
+				const char *title, const char *subtitle);
 
-static	void	board_loop_start(struct Player_Iface_Position		*position);
+static	void	board_loop_start(struct Player_Iface_Position	*position);
 
 	/* Play */
-static	void	show_board	(const struct Game_Iface_Out		*board,
-				struct Player_Iface_Position		*position,
-				const char				*title,
-				const char				*subtitle);
+static	void	show_board	(const struct Game_Iface_Out	*board,
+				struct Player_Iface_Position	*position,
+				const char *title, const char *subtitle);
 
-static	void	board_loop	(const struct Game_Iface_Out		*board,
-				struct Player_Iface_Position		*position);
+static	void	board_loop	(const struct Game_Iface_Out	*board,
+				struct Player_Iface_Position	*position);
 
 static	char	set_char	(int game_iface_visible);
-static	void	show_char	(struct Field_Data			*field);
+static	void	show_char	(struct Field_Data		*field);
 	/* Help */
-static	void	help_init		(int				*action);
+static	void	help_init		(int *action);
 static	void	show_help		(const struct Game_Iface_Out	*board);
 static	void	show_help_start		(void);
 static	void	show_help_play		(void);
@@ -186,28 +181,24 @@ static	void	show_help_cheat		(void);
 static	void	show_help_safe		(void);
 static	void	show_help_gameover	(void);
 	/* Input */
-static	gboolean	callback_field		(GtkWidget		*widget,
-						GdkEventButton		*event,
-						void			*data);
-static	gboolean	callback_ebox		(GtkWidget		*widget,
-						GdkEventButton		*event,
-						void			*data);
-static	void		callback_button		(GtkWidget		*widget,
-						void			*data);
-static	gboolean	callback_tbutton	(GtkWidget		*widget,
-						void			*data);
-static	void		callback_entry_fname	(GtkWidget		*widget,
-						void			*data);
-static	void		callback_entry_str	(GtkWidget		*widget,
-						void			*data);
-static	gboolean	callback_timeout	(void			*data);
+static	gboolean	callback_field		(GtkWidget *widget,
+						GdkEventButton *event,
+						void *data);
+static	gboolean	callback_ebox		(GtkWidget *widget,
+						GdkEventButton *event,
+						void *data);
+static	void		callback_button		(GtkWidget *widget, void *data);
+static	gboolean	callback_tbutton	(GtkWidget *widget, void *data);
+static	void		callback_entry_fname	(GtkWidget *widget, void *data);
+static	void		callback_entry_str	(GtkWidget *widget, void *data);
+static	gboolean	callback_timeout	(void *data);
 
 
 /******************************************************************************
  ******* main *****************************************************************
  ******************************************************************************/
-void	player_gui_init		(struct Player_Iface_Position		*position,
-				int					*action)
+void	player_gui_init		(struct Player_Iface_Position	*position,
+				int *action)
 {
 	box		= gtk_hbox_new(false, 0);
 	gtk_container_add(GTK_CONTAINER(window_gui), box);
@@ -247,9 +238,8 @@ void	player_gui_init		(struct Player_Iface_Position		*position,
 	gtk_widget_show_all(window_gui);
 }
 
-int	player_gui_start	(struct Player_Iface_Position		*position,
-				const char				*title,
-				const char				*subtitle)
+int	player_gui_start	(struct Player_Iface_Position	*position,
+				const char *title, const char *subtitle)
 {
 	show_help_start();
 	show_board_start(position, title, subtitle);
@@ -263,10 +253,9 @@ int	player_gui_start	(struct Player_Iface_Position		*position,
 	return	0;
 }
 
-int	player_gui		(const struct Game_Iface_Out		*board,
-				struct Player_Iface_Position		*position,
-				const char				*title,
-				const char				*subtitle)
+int	player_gui		(const struct Game_Iface_Out	*board,
+				struct Player_Iface_Position	*position,
+				const char *title, const char *subtitle)
 {
 	state	= board->state;
 
@@ -282,10 +271,10 @@ int	player_gui		(const struct Game_Iface_Out		*board,
 	return	0;
 }
 
-void	player_gui_save_name	(const char *filepath, char *filename, int destsize)
+void	player_gui_save_name	(const char *fpath, char *fname, int destsize)
 {
-	entry_fname.fpath	= filepath;
-	entry_fname.fname	= filename;
+	entry_fname.fpath	= fpath;
+	entry_fname.fname	= fname;
 
 	gtk_widget_hide(button[BTN_CH_OFF].ptr);
 	gtk_widget_hide(button[BTN_CH_1].ptr);
@@ -349,8 +338,8 @@ void	player_gui_cleanup	(void)
 /*	*	*	*	*	*	*	*	*	*
  *	*	* Start	*	*	*	*	*	*	*
  *	*	*	*	*	*	*	*	*	*/
-static	void	board_init	(struct Player_Iface_Position		*position,
-				int					*action)
+static	void	board_init	(struct Player_Iface_Position	*position,
+				int *action)
 {
 	GtkWidget		*separator[2];
 
@@ -407,9 +396,8 @@ static	void	board_init	(struct Player_Iface_Position		*position,
 	gtk_widget_show_all(box_board);
 }
 
-static	void	show_board_start(struct Player_Iface_Position		*position,
-				const char				*title,
-				const char				*subtitle)
+static	void	show_board_start(struct Player_Iface_Position	*position,
+				const char *title, const char *subtitle)
 {
 	/* Title */
 	snprintf(pbar_board_tit.text, LINE_SIZE, title);
@@ -430,7 +418,7 @@ static	void	show_board_start(struct Player_Iface_Position		*position,
 	gtk_widget_show_all(box_board);
 }
 
-static	void	board_loop_start(struct Player_Iface_Position		*position)
+static	void	board_loop_start(struct Player_Iface_Position	*position)
 {
 	int			i;
 	int			j;
@@ -449,10 +437,9 @@ static	void	board_loop_start(struct Player_Iface_Position		*position)
 /*	*	*	*	*	*	*	*	*	*
  *	*	* Play	*	*	*	*	*	*
  *	*	*	*	*	*	*	*	*	*/
-static	void	show_board	(const struct Game_Iface_Out		*board,
-				struct Player_Iface_Position		*position,
-				const char				*title,
-				const char				*subtitle)
+static	void	show_board	(const struct Game_Iface_Out	*board,
+				struct Player_Iface_Position	*position,
+				const char *title, const char *subtitle)
 {
 	/* Title */
 	snprintf(pbar_board_tit.text, LINE_SIZE, title);
@@ -486,8 +473,8 @@ static	void	show_board	(const struct Game_Iface_Out		*board,
 	gtk_widget_show_all(box_board);
 }
 
-static	void	board_loop	(const struct Game_Iface_Out		*board,
-				struct Player_Iface_Position		*position)
+static	void	board_loop	(const struct Game_Iface_Out	*board,
+				struct Player_Iface_Position	*position)
 {
 	int			i;
 	int			j;
@@ -584,7 +571,7 @@ static	char	set_char	(int game_iface_visible)
 	return	ch;
 }
 
-static	void	show_char	(struct Field_Data			*field)
+static	void	show_char	(struct Field_Data *field)
 {
 	char	text [2];
 	sprintf(text, "%c", field->ch);
@@ -594,7 +581,7 @@ static	void	show_char	(struct Field_Data			*field)
 /*	*	*	*	*	*	*	*	*	*
  *	*	* Help	*	*	*	*	*	*	*
  *	*	*	*	*	*	*	*	*	*/
-static	void	help_init		(int				*action)
+static	void	help_init		(int *action)
 {
 	/* Box */
 	box_help_in	= gtk_vbox_new(false, 0);
@@ -829,9 +816,9 @@ static	void	show_help_gameover	(void)
 /*	*	*	*	*	*	*	*	*	*
  *	*	* Input	*	*	*	*	*	*	*
  *	*	*	*	*	*	*	*	*	*/
-static	gboolean	callback_field		(GtkWidget		*widget,
-						GdkEventButton		*event,
-						void			*data)
+static	gboolean	callback_field		(GtkWidget *widget,
+						GdkEventButton *event,
+						void *data)
 {
 	if (state == GAME_IFACE_STATE_PLAYING && timeout.id) {
 		g_source_remove(timeout.id);
@@ -864,9 +851,9 @@ static	gboolean	callback_field		(GtkWidget		*widget,
 	return	false;
 }
 
-static	gboolean	callback_ebox		(GtkWidget		*widget,
-						GdkEventButton		*event,
-						void			*data)
+static	gboolean	callback_ebox		(GtkWidget *widget,
+						GdkEventButton *event,
+						void *data)
 {
 	if (state == GAME_IFACE_STATE_PLAYING && timeout.id) {
 		g_source_remove(timeout.id);
@@ -894,8 +881,7 @@ static	gboolean	callback_ebox		(GtkWidget		*widget,
 	return	false;
 }
 
-static	void		callback_button		(GtkWidget		*widget,
-						void			*data)
+static	void		callback_button		(GtkWidget *widget, void *data)
 {
 	if (state == GAME_IFACE_STATE_PLAYING && timeout.id) {
 		g_source_remove(timeout.id);
@@ -910,8 +896,7 @@ static	void		callback_button		(GtkWidget		*widget,
 
 }
 
-static	gboolean	callback_tbutton	(GtkWidget		*widget,
-						void			*data)
+static	gboolean	callback_tbutton	(GtkWidget *widget, void *data)
 {
 	if (state == GAME_IFACE_STATE_PLAYING && timeout.id) {
 		g_source_remove(timeout.id);
@@ -935,8 +920,7 @@ static	gboolean	callback_tbutton	(GtkWidget		*widget,
 	return	false;
 }
 
-static	void		callback_entry_fname	(GtkWidget		*widget,
-						void			*data)
+static	void		callback_entry_fname	(GtkWidget *widget, void *data)
 {
 	struct Entry_fname_Data	*entry;
 	const char		*str;
@@ -958,8 +942,7 @@ static	void		callback_entry_fname	(GtkWidget		*widget,
 	gtk_main_quit();
 }
 
-static	void		callback_entry_str	(GtkWidget		*widget,
-						void			*data)
+static	void		callback_entry_str	(GtkWidget *widget, void *data)
 {
 	struct Entry_str_Data	*entry;
 	const char		*str;
@@ -972,7 +955,7 @@ static	void		callback_entry_str	(GtkWidget		*widget,
 	gtk_main_quit();
 }
 
-static	gboolean	callback_timeout	(void			*data)
+static	gboolean	callback_timeout	(void *data)
 {
 	struct Timeout_Data	*tout;
 	tout			= ((struct Timeout_Data *)data);

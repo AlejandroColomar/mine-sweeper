@@ -53,8 +53,12 @@ static	void	menu_tui_continue	(void);
 static	void	menu_tui_select		(void);
 static	void	menu_tui_level		(void);
 static	void	menu_tui_custom		(void);
+#if 0
 static	void	menu_tui_devel		(void);
+#endif
+#if 0
 static	void	menu_tui_verbose	(void);
+#endif
 
 
 /******************************************************************************
@@ -375,7 +379,7 @@ static	void	menu_tui_custom	(void)
 	/* Cleanup */
 	alx_win_del(win);
 }
-
+#if 0
 static	void	menu_tui_devel	(void)
 {
 	WINDOW	*win;
@@ -429,6 +433,7 @@ static	void	menu_tui_devel	(void)
 	/* Cleanup */
 	alx_win_del(win);
 }
+#endif
 
 
 /******************************************************************************

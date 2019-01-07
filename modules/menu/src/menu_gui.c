@@ -124,7 +124,9 @@ static	void		menu_gui_select		(void);
 static	void		menu_gui_level		(void);
 static	void		menu_gui_custom		(void);
 static	void		menu_gui_devel		(void);
+#if 0
 static	void		menu_gui_verbose	(void);
+#endif
 
 
 /******************************************************************************
@@ -141,7 +143,7 @@ void	menu_gui_init		(void)
 
 	/* Title.  PROG_VERSION defined in Makefile */
 	char		title [LINE_SIZE];
-	snprintf(title, LINE_SIZE, "mine-sweeper %s", PROG_VERSION);
+	(void)snprintf(title, LINE_SIZE, "mine-sweeper %s", PROG_VERSION);
 	gtk_window_set_title(GTK_WINDOW(window_gui), title);
 
 	/* Border */
@@ -163,11 +165,11 @@ void	menu_gui		(void)
 	struct Button_Data	button [4];
 
 	/* Text */
-	snprintf(label.text, LINE_SIZE, "Main menu");
-	snprintf(button[1].text, LINE_SIZE, "[_1] Continue");
-	snprintf(button[2].text, LINE_SIZE, "[_2] Disclaimer of warranty");
-	snprintf(button[3].text, LINE_SIZE, "[_3] Terms and conditions");
-	snprintf(button[0].text, LINE_SIZE, "[_0] Exit program");
+	(void)snprintf(label.text, LINE_SIZE, "Main menu");
+	(void)snprintf(button[1].text, LINE_SIZE, "[_1] Continue");
+	(void)snprintf(button[2].text, LINE_SIZE, "[_2] Disclaimer of warranty");
+	(void)snprintf(button[3].text, LINE_SIZE, "[_3] Terms and conditions");
+	(void)snprintf(button[0].text, LINE_SIZE, "[_0] Exit program");
 
 	/* Data */
 	button[1].num	= 1;
@@ -256,6 +258,7 @@ static	gboolean	delete_window	(GtkWidget	*widget,
 					GdkEvent	*event,
 					void		*data)
 {
+
 	gtk_main_quit();
 
 	/* false: send destroy signal */
@@ -265,6 +268,7 @@ static	gboolean	delete_window	(GtkWidget	*widget,
 static	void		destroy_window	(GtkWidget	*widget,
 					void		*data)
 {
+
 	exit(EXIT_SUCCESS);
 }
 
@@ -300,7 +304,7 @@ static	void		callback_entry_dbl	(GtkWidget	*widget,
 	err	= alx_sscan_dbl(entry->num, entry->min, entry->def, entry->max, str);
 
 	if (err) {
-		snprintf(buff, LINE_SIZE, "Error %i", err);
+		(void)snprintf(buff, LINE_SIZE, "Error %i", err);
 		gtk_entry_set_text(GTK_ENTRY(entry->ptr), buff);
 		gtk_editable_select_region(GTK_EDITABLE(entry->ptr),
 					0, GTK_ENTRY(entry->ptr)->text_length);
@@ -324,7 +328,7 @@ static	void		callback_entry_int	(GtkWidget	*widget,
 	err	= alx_sscan_int64(&Z, entry->min, entry->def, entry->max, str);
 
 	if (err) {
-		snprintf(buff, LINE_SIZE, "Error %i", err);
+		(void)snprintf(buff, LINE_SIZE, "Error %i", err);
 		gtk_entry_set_text(GTK_ENTRY(entry->ptr), buff);
 		gtk_editable_select_region(GTK_EDITABLE(entry->ptr),
 					0, GTK_ENTRY(entry->ptr)->text_length);
@@ -371,9 +375,9 @@ static	void	menu_gui_disclaim	(void)
 	char			label_file_txt [BUFF_SIZE_TEXT];
 
 	/* Text */
-	snprintf(label.text, LINE_SIZE, "Disclaimer of warranty");
+	(void)snprintf(label.text, LINE_SIZE, "Disclaimer of warranty");
 	snprint_share_file(label_file_txt, BUFF_SIZE_TEXT, SHARE_DISCLAIMER);
-	snprintf(button[0].text, LINE_SIZE, "[_0] Back");
+	(void)snprintf(button[0].text, LINE_SIZE, "[_0] Back");
 
 	/* Data */
 	button[0].num	= 0;
@@ -421,9 +425,9 @@ static	void	menu_gui_license	(void)
 	char			label_file_txt [BUFF_SIZE_TEXT];
 
 	/* Text */
-	snprintf(label.text, LINE_SIZE, "Terms and conditions");
+	(void)snprintf(label.text, LINE_SIZE, "Terms and conditions");
 	snprint_share_file(label_file_txt, BUFF_SIZE_TEXT, SHARE_LICENSE);
-	snprintf(button[0].text, LINE_SIZE, "[_0] Back");
+	(void)snprintf(button[0].text, LINE_SIZE, "[_0] Back");
 
 	/* Data */
 	button[0].num	= 0;
@@ -471,9 +475,9 @@ static	void	menu_gui_hiscores	(void)
 	char			label_file_txt [BUFF_SIZE_TEXT];
 
 	/* Text */
-	snprintf(label.text, LINE_SIZE, "Hi scores");
+	(void)snprintf(label.text, LINE_SIZE, "Hi scores");
 	snprint_scores(label_file_txt, BUFF_SIZE_TEXT);
-	snprintf(button[0].text, LINE_SIZE, "[_0] Back");
+	(void)snprintf(button[0].text, LINE_SIZE, "[_0] Back");
 
 	/* Data */
 	button[0].num	= 0;
@@ -524,13 +528,13 @@ static	void	menu_gui_continue	(void)
 	struct Entry_fname_Data	entry_fname[1];
 
 	/* Text */
-	snprintf(label.text, LINE_SIZE, "Game menu");
-	snprintf(button[1].text, LINE_SIZE, "[_1] Start");
-	snprintf(button[2].text, LINE_SIZE, "[_2] Select map");
-	snprintf(button[3].text, LINE_SIZE, "[_3] Change difficulty");
-	snprintf(button[4].text, LINE_SIZE, "[_4] Hi scores");
-	snprintf(button[5].text, LINE_SIZE, "[_5] DEVEL");
-	snprintf(button[0].text, LINE_SIZE, "[_0] Back");
+	(void)snprintf(label.text, LINE_SIZE, "Game menu");
+	(void)snprintf(button[1].text, LINE_SIZE, "[_1] Start");
+	(void)snprintf(button[2].text, LINE_SIZE, "[_2] Select map");
+	(void)snprintf(button[3].text, LINE_SIZE, "[_3] Change difficulty");
+	(void)snprintf(button[4].text, LINE_SIZE, "[_4] Hi scores");
+	(void)snprintf(button[5].text, LINE_SIZE, "[_5] DEVEL");
+	(void)snprintf(button[0].text, LINE_SIZE, "[_0] Back");
 
 	/* Data */
 	button[1].num		= 1;
@@ -552,7 +556,7 @@ static	void	menu_gui_continue	(void)
 	wh	= true;
 	while (wh) {
 		/* Text */
-		snprintf(entry_fname[0].lbl.text, LINE_SIZE,
+		(void)snprintf(entry_fname[0].lbl.text, LINE_SIZE,
 				"Change file name (File: \"%s\")", saved_name);
 
 		/* Generate widgets */
@@ -647,10 +651,11 @@ static	void	menu_gui_select	(void)
 	struct Button_Data	button [3];
 
 	/* Text */
-	snprintf(label.text, LINE_SIZE, "Select map");
-	snprintf(button[1].text, LINE_SIZE, "[_1] New map");
-	snprintf(button[2].text, LINE_SIZE, "[_2] Load map (File: \"%s\")", saved_name);
-	snprintf(button[0].text, LINE_SIZE, "[_0] Back");
+	(void)snprintf(label.text, LINE_SIZE, "Select map");
+	(void)snprintf(button[1].text, LINE_SIZE, "[_1] New map");
+	(void)snprintf(button[2].text, LINE_SIZE, "[_2] Load map (File: \"%s\")",
+								saved_name);
+	(void)snprintf(button[0].text, LINE_SIZE, "[_0] Back");
 
 	/* Data */
 	button[1].num	= 1;
@@ -721,12 +726,12 @@ static	void	menu_gui_level	(void)
 	struct Button_Data	button [5];
 
 	/* Text */
-	snprintf(label.text, LINE_SIZE, "Select level");
-	snprintf(button[1].text, LINE_SIZE, "[_1] Beginner");
-	snprintf(button[2].text, LINE_SIZE, "[_2] Intermediate");
-	snprintf(button[3].text, LINE_SIZE, "[_3] Expert");
-	snprintf(button[4].text, LINE_SIZE, "[_4] Custom");
-	snprintf(button[0].text, LINE_SIZE, "[_0] Back");
+	(void)snprintf(label.text, LINE_SIZE, "Select level");
+	(void)snprintf(button[1].text, LINE_SIZE, "[_1] Beginner");
+	(void)snprintf(button[2].text, LINE_SIZE, "[_2] Intermediate");
+	(void)snprintf(button[3].text, LINE_SIZE, "[_3] Expert");
+	(void)snprintf(button[4].text, LINE_SIZE, "[_4] Custom");
+	(void)snprintf(button[0].text, LINE_SIZE, "[_0] Back");
 
 	/* Data */
 	button[1].num	= 1;
@@ -817,8 +822,8 @@ static	void	menu_gui_custom	(void)
 	struct Entry_dbl_Data	entry_dbl[1];
 
 	/* Text */
-	snprintf(label.text, LINE_SIZE, "Custom");
-	snprintf(button[0].text, LINE_SIZE, "[_0] Back");
+	(void)snprintf(label.text, LINE_SIZE, "Custom");
+	(void)snprintf(button[0].text, LINE_SIZE, "[_0] Back");
 
 	/* Data */
 	entry_int[0].num	= &menu_iface_variables.rows;
@@ -841,15 +846,15 @@ static	void	menu_gui_custom	(void)
 	while (wh) {
 
 		/* Text */
-		snprintf(entry_int[0].lbl.text, LINE_SIZE,
+		(void)snprintf(entry_int[0].lbl.text, LINE_SIZE,
 				"Change rows: rows\t\t(%i)\n"
 				"Introduce an integer number [%i U %i]",
 				menu_iface_variables.rows, 2, ROWS_GUI_MAX);
-		snprintf(entry_int[1].lbl.text, LINE_SIZE,
+		(void)snprintf(entry_int[1].lbl.text, LINE_SIZE,
 				"Change columns: cols\t(%i)\n"
 				"Introduce an integer number [%i U %i]",
 				menu_iface_variables.cols, 2, COLS_GUI_MAX);
-		snprintf(entry_dbl[0].lbl.text, LINE_SIZE,
+		(void)snprintf(entry_dbl[0].lbl.text, LINE_SIZE,
 				"Change proportion of mines: p\t(%lf)\n"
 				"Introduce a Real number [%i U %i]",
 				menu_iface_variables.p, 0, 1);
@@ -927,9 +932,9 @@ static	void	menu_gui_devel	(void)
 	int			seed;
 
 	/* Text */
-	snprintf(label.text, LINE_SIZE, "DEVELOPER OPTIONS");
-	snprintf(entry_int[0].lbl.text, LINE_SIZE, "Change seed (srand)");
-	snprintf(button[0].text, LINE_SIZE, "[_0] Back");
+	(void)snprintf(label.text, LINE_SIZE, "DEVELOPER OPTIONS");
+	(void)snprintf(entry_int[0].lbl.text, LINE_SIZE, "Change seed (srand)");
+	(void)snprintf(button[0].text, LINE_SIZE, "[_0] Back");
 
 	/* Data */
 	entry_int[0].num	= &seed;

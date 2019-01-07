@@ -1,72 +1,69 @@
 /******************************************************************************
  *	Copyright (C) 2015	Alejandro Colomar Andrés		      *
+ *	SPDX-License-Identifier:	GPL-2.0-only			      *
  ******************************************************************************/
 
 
 /******************************************************************************
  ******* headers **************************************************************
  ******************************************************************************/
-/*	*	*	*	*	*	*	*	*	*
- *	*	* Standard	*	*	*	*	*	*
- *	*	*	*	*	*	*	*	*	*/
+/* Standard C ----------------------------------------------------------------*/
 		/* errno */
 	#include <errno.h>
 		/* bool */
 	#include <stdbool.h>
 		/* fscanf() & fprintf() & FILE & FILENAME_MAX & snprintf() */
 	#include <stdio.h>
-		/* getenv() */
+		/* getenv() & exit() */
 	#include <stdlib.h>
-		/* mkdir */
-#if defined	OS_LINUX
-	#include <sys/stat.h>
-#elif defined	OS_WIN
-	#include <direct.h>
-#endif
 
-/*	*	*	*	*	*	*	*	*	*
- *	*	* Other	*	*	*	*	*	*	*
- *	*	*	*	*	*	*	*	*	*/
+/* Linux ---------------------------------------------------------------------*/
+		/* mkdir */
+	#include <sys/stat.h>
+
+/* Project -------------------------------------------------------------------*/
 		/* struct Game_Board */
 	#include "game.h"
 		/* player_iface_save_name() */
 	#include "player_iface.h"
 
+/* Module --------------------------------------------------------------------*/
 	#include "save.h"
 
 
 /******************************************************************************
  ******* variables ************************************************************
  ******************************************************************************/
-char	home_path [FILENAME_MAX];
-char	user_game_path [FILENAME_MAX];
-char	saved_path [FILENAME_MAX];
-char	saved_name [FILENAME_MAX];
+	char	home_path [FILENAME_MAX];
+	char	user_game_path [FILENAME_MAX];
+	char	saved_path [FILENAME_MAX];
+	char	saved_name [FILENAME_MAX];
 
 
 /******************************************************************************
- ******* main *****************************************************************
+ ******* global functions *****************************************************
  ******************************************************************************/
 void	save_init	(void)
 {
-	snprintf(home_path, FILENAME_MAX, "%s/", getenv(ENV_HOME));
-	snprintf(user_game_path, FILENAME_MAX, "%s/%s/", home_path, USER_GAME_DIR);
-	snprintf(saved_path, FILENAME_MAX, "%s/%s/", home_path, USER_SAVED_DIR);
-	sprintf(saved_name, "");
+	if (snprintf(home_path, FILENAME_MAX, "%s/",
+				getenv(ENV_HOME))  >=  FILENAME_MAX) {
+		goto err_path;
+	}
+	if (snprintf(user_game_path, FILENAME_MAX, "%s/%s/",
+				home_path, USER_GAME_DIR)  >=  FILENAME_MAX) {
+		goto err_path;
+	}
+	if (snprintf(saved_path, FILENAME_MAX, "%s/%s/",
+				home_path, USER_SAVED_DIR)  >=  FILENAME_MAX) {
+		goto err_path;
+	}
+	saved_name[0]	= '\0';
 
 	int	err;
-#if defined	OS_LINUX
 	err	= mkdir(user_game_path, 0700);
-#elif defined	OS_WIN
-	err	= mkdir(user_game_path);
-#endif
 
 	if (!err) {
-#if defined	OS_LINUX
 		mkdir(saved_path, 0700);
-#elif defined	OS_WIN
-		mkdir(saved_path);
-#endif
 	} else {
 
 		switch (errno) {
@@ -84,11 +81,30 @@ void	save_init	(void)
 			exit(EXIT_FAILURE);
 		}
 	}
+
+	return;
+
+
+err_path:
+	printf("Path is too large and has been truncated\n");
+	getchar();
+	exit(EXIT_FAILURE);
 }
 
 void	save_clr	(void)
 {
-	snprintf(saved_path, FILENAME_MAX, "%s/%s/", home_path, USER_SAVED_DIR);
+	if (snprintf(saved_path, FILENAME_MAX, "%s/%s/",
+				home_path, USER_SAVED_DIR)  >=  FILENAME_MAX) {
+		goto err_path;
+	}
+
+	return;
+
+
+err_path:
+	printf("Path is too large and has been truncated\n");
+	getchar();
+	exit(EXIT_FAILURE);
 }
 
 void	load_game_file	(void)
@@ -99,7 +115,10 @@ void	load_game_file	(void)
 	int	i;
 	int	j;
 
-	snprintf(file_name, FILENAME_MAX, "%s/%s", saved_path, saved_name);
+	if (snprintf(file_name, FILENAME_MAX, "%s/%s",
+				saved_path, saved_name)  >=  FILENAME_MAX) {
+		goto err_path;
+	}
 
 	fp	= fopen(file_name, "r");
 	if (fp) {
@@ -126,6 +145,14 @@ void	load_game_file	(void)
 
 		fclose(fp);
 	}
+
+	return;
+
+
+err_path:
+	printf("Path is too large and has been truncated\n");
+	getchar();
+	exit(EXIT_FAILURE);
 }
 
 void	save_game_file	(char *filepath)
@@ -146,7 +173,7 @@ void	save_game_file	(char *filepath)
 	/* Default path & name */
 	save_clr();
 	snprintf(saved_name, FILENAME_MAX, "%s", SAVED_NAME_DEFAULT);
-	sprintf(file_num, "");
+	file_num[0]	= '\0';
 
 	/* Request file name */
 	player_iface_save_name(filepath, saved_name, FILENAME_MAX);
@@ -156,11 +183,19 @@ void	save_game_file	(char *filepath)
 	x	= true;
 	for (i = 0; x; i++) {
 		if (filepath == NULL) {
-			snprintf(file_name, FILENAME_MAX, "%s/%s%s%s",
-					saved_path, saved_name, file_num, FILE_EXTENSION);
+			if (snprintf(file_name, FILENAME_MAX, "%s/%s%s%s",
+					saved_path,
+					saved_name, file_num,
+					FILE_EXTENSION)  >=  FILENAME_MAX) {
+				goto err_path;
+			}
 		} else {
-			snprintf(file_name, FILENAME_MAX, "%s/%s%s%s",
-					filepath, saved_name, file_num, FILE_EXTENSION);
+			if (snprintf(file_name, FILENAME_MAX, "%s/%s%s%s",
+					filepath,
+					saved_name, file_num,
+					FILE_EXTENSION)  >=  FILENAME_MAX) {
+				goto err_path;
+			}
 		}
 
 		fp =	fopen(file_name, "r");
@@ -173,8 +208,11 @@ void	save_game_file	(char *filepath)
 			file_num[4] =	'\0';
 		} else {
 			x	= false;
-			snprintf(tmp, FILENAME_MAX, "%s%s%s",
-					saved_name, file_num, FILE_EXTENSION);
+			if (snprintf(tmp, FILENAME_MAX, "%s%s%s",
+					saved_name, file_num,
+					FILE_EXTENSION)  >=  FILENAME_MAX) {
+				goto err_path;
+			}
 			snprintf(saved_name, FILENAME_MAX, "%s", tmp);
 		}
 	}
@@ -212,6 +250,14 @@ void	save_game_file	(char *filepath)
 	if (filepath != NULL) {
 		snprintf(saved_name, FILENAME_MAX, "%s", old_saved);
 	}
+
+	return;
+
+
+err_path:
+	printf("Path is too large and has been truncated\n");
+	getchar();
+	exit(EXIT_FAILURE);
 }
 
 

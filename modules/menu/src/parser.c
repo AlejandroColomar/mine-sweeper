@@ -40,13 +40,15 @@
 /******************************************************************************
  ******* static functions *****************************************************
  ******************************************************************************/
-static	void	parse_rows		(char* argument);
-static	void	parse_columns		(char* argument);
-static	void	parse_file		(char* argument);
-static	void	parse_iface		(char* argument);
-static	void	parse_proportion	(char* argument);
-static	void	parse_rand_seed		(char* argument);
-static	void	parse_start		(char* argument);
+static	void	parse_rows		(char *argument);
+static	void	parse_columns		(char *argument);
+static	void	parse_file		(char *argument);
+static	void	parse_iface		(char *argument);
+static	void	parse_proportion	(char *argument);
+#if 0
+static	void	parse_rand_seed		(char *argument);
+#endif
+static	void	parse_start		(char *argument);
 
 
 /******************************************************************************
@@ -145,7 +147,7 @@ void	parser	(int argc, char *argv[])
 /******************************************************************************
  ******* static functions *****************************************************
  ******************************************************************************/
-static	void	parse_rows		(char* argument)
+static	void	parse_rows		(char *argument)
 {
 	menu_iface_variables.rows	= atoi(argument);
 	if (menu_iface_variables.rows < 2 || menu_iface_variables.rows > ROWS_MAX) {
@@ -155,7 +157,7 @@ static	void	parse_rows		(char* argument)
 	}
 }
 
-static	void	parse_columns		(char* argument)
+static	void	parse_columns		(char *argument)
 {
 	menu_iface_variables.cols	= atoi(argument);
 	if (menu_iface_variables.cols < 2 || menu_iface_variables.cols > COLS_MAX) {
@@ -165,7 +167,7 @@ static	void	parse_columns		(char* argument)
 	}
 }
 
-static	void	parse_file		(char* argument)
+static	void	parse_file		(char *argument)
 {
 	// FIXME
 	FILE	*fp;
@@ -177,12 +179,12 @@ static	void	parse_file		(char* argument)
 	} else {
 		fclose(fp);
 
-		sprintf(saved_path, "");
+		saved_path[0]	= '\0';
 		snprintf(saved_name, FILENAME_MAX, argument);
 	}
 }
 
-static	void	parse_iface		(char* argument)
+static	void	parse_iface		(char *argument)
 {
 	menu_iface_mode		= atoi(argument);
 	player_iface_mode	= menu_iface_mode;
@@ -193,7 +195,7 @@ static	void	parse_iface		(char* argument)
 	}
 }
 
-static	void	parse_proportion	(char* argument)
+static	void	parse_proportion	(char *argument)
 {
 	menu_iface_variables.p	= atof(argument);
 	if (menu_iface_variables.p < 0 || menu_iface_variables.p > 1) {
@@ -202,15 +204,15 @@ static	void	parse_proportion	(char* argument)
 		exit(EXIT_FAILURE);
 	}
 }
-
-static	void	parse_rand_seed		(char* argument)
+#if 0
+static	void	parse_rand_seed		(char *argument)
 {
 	int	seed;
 	seed	= atof(argument);
 	srand(seed);
 }
-
-static	void	parse_start		(char* argument)
+#endif
+static	void	parse_start		(char *argument)
 {
 	start_mode	= atoi(argument);
 	if (start_mode < START_FOO || start_mode > START_LOAD) {

@@ -73,11 +73,11 @@ extern	int	player_iface_mode;
  ******* functions ************************************************************
  ******************************************************************************/
 void	player_iface_init	(int rows, int cols);
-int	player_iface_start	(int *pos_row, int *pos_col);
-void	player_iface		(const	struct Game_Iface_Out	*game_iface_out,
-				const	struct Game_Iface_Score	*game_iface_score,
-					struct Game_Iface_In	*game_iface_in);
-void	player_iface_save_name	(const char *filepath, char *filename, int destsize);
+int	player_iface_start	(int *row, int *col);
+void	player_iface		(const	struct Game_Iface_Out	*out,
+				const	struct Game_Iface_Score	*score,
+					struct Game_Iface_In	*in);
+void	player_iface_save_name	(const char *fpath, char *fname, int destsize);
 void	player_iface_score_name	(char *player_name, int destsize);
 void	player_iface_cleanup	(void);
 

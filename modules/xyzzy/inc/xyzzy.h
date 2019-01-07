@@ -14,10 +14,10 @@
  ******* functions ************************************************************
  ******************************************************************************/
 void	xyzzy_init	(void);
-int	xyzzy_lin	(const struct Game_Iface_Out	*game_iface_out,
-			struct Game_Iface_In		*game_iface_in);
-int	xyzzy_p		(const struct Game_Iface_Out	*game_iface_out,
-			struct Game_Iface_In		*game_iface_in);
+int	xyzzy_lin	(const struct Game_Iface_Out	*out,
+			struct Game_Iface_In		*in);
+int	xyzzy_p		(const struct Game_Iface_Out	*out,
+			struct Game_Iface_In		*in);
 
 
 /******************************************************************************

@@ -1,14 +1,14 @@
 /******************************************************************************
  *	Copyright (C) 2015	Alejandro Colomar Andrés		      *
+ *	SPDX-License-Identifier:	GPL-2.0-only			      *
  ******************************************************************************/
 
 
 /******************************************************************************
  ******* headers **************************************************************
  ******************************************************************************/
-/*	*	*	*	*	*	*	*	*	*
- *	*	* Standard	*	*	*	*	*	*
- *	*	*	*	*	*	*	*	*	*/
+/* Standard C ----------------------------------------------------------------*/
+	#include <errno.h>
 		/* fscanf() & fprintf() & FILE & FILENAME_MAX & snprintf() */
 	#include <stdio.h>
 		/* exit() */
@@ -16,15 +16,15 @@
 		/* time_t & time() & struct tm & localtime() */
 	#include <time.h>
 
-/*	*	*	*	*	*	*	*	*	*
- *	*	* Other	*	*	*	*	*	*	*
- *	*	*	*	*	*	*	*	*	*/
+/* Project -------------------------------------------------------------------*/
 		/* struct Game_Board */
 	#include "game.h"
 		/* enum Game_Iface_Level */
 	#include "game_iface.h"
 		/* player_iface_score_name() */
 	#include "player_iface.h"
+
+/* Module --------------------------------------------------------------------*/
 		/* saved_name */
 	#include "save.h"
 
@@ -41,16 +41,16 @@
 /******************************************************************************
  ******* variables ************************************************************
  ******************************************************************************/
-char	var_path [FILENAME_MAX];
-char	var_hiscores_path [FILENAME_MAX];
-char	var_boards_beginner_path [FILENAME_MAX];
-char	var_boards_intermediate_path [FILENAME_MAX];
-char	var_boards_expert_path [FILENAME_MAX];
-char	var_boards_custom_path [FILENAME_MAX];
+	char	var_path [FILENAME_MAX];
+	char	var_hiscores_path [FILENAME_MAX];
+	char	var_boards_beginner_path [FILENAME_MAX];
+	char	var_boards_intermediate_path [FILENAME_MAX];
+	char	var_boards_expert_path [FILENAME_MAX];
+	char	var_boards_custom_path [FILENAME_MAX];
 
-char	var_hiscores_beginner_name [FILENAME_MAX];
-char	var_hiscores_intermediate_name [FILENAME_MAX];
-char	var_hiscores_expert_name [FILENAME_MAX];
+	char	var_hiscores_beginner_name [FILENAME_MAX];
+	char	var_hiscores_intermediate_name [FILENAME_MAX];
+	char	var_hiscores_expert_name [FILENAME_MAX];
 
 
 /******************************************************************************
@@ -60,63 +60,98 @@ static	void	snprint_scores_file	(char *dest, int destsize, char *file_name);
 
 
 /******************************************************************************
- ******* main *****************************************************************
+ ******* global functions *****************************************************
  ******************************************************************************/
 void	score_init	(void)
 {
-	snprintf(var_path, FILENAME_MAX, "%s/%s/",
-				INSTALL_VAR_DIR, VAR_DIR);
-	snprintf(var_hiscores_path, FILENAME_MAX, "%s/%s/",
-				var_path, HISCORES_DIR);
-	snprintf(var_boards_beginner_path, FILENAME_MAX, "%s/%s/",
-				var_path, BOARDS_BEGINNER_DIR);
-	snprintf(var_boards_intermediate_path, FILENAME_MAX, "%s/%s/",
-				var_path, BOARDS_INTERMEDIATE_DIR);
-	snprintf(var_boards_expert_path, FILENAME_MAX, "%s/%s/",
-				var_path, BOARDS_EXPERT_DIR);
-	snprintf(var_boards_custom_path, FILENAME_MAX, "%s/%s/",
-				var_path, BOARDS_CUSTOM_DIR);
+
+	if (snprintf(var_path, FILENAME_MAX, "%s/%s/",
+				INSTALL_VAR_DIR, VAR_DIR)  >=  FILENAME_MAX) {
+		goto err_path;
+	}
+	if (snprintf(var_hiscores_path, FILENAME_MAX, "%s/%s/",
+				var_path, HISCORES_DIR)  >=  FILENAME_MAX) {
+		goto err_path;
+	}
+	if (snprintf(var_boards_beginner_path, FILENAME_MAX, "%s/%s/",
+				var_path, BOARDS_BEGINNER_DIR)  >=  FILENAME_MAX) {
+		goto err_path;
+	}
+	if (snprintf(var_boards_intermediate_path, FILENAME_MAX, "%s/%s/",
+				var_path, BOARDS_INTERMEDIATE_DIR)  >=  FILENAME_MAX) {
+		goto err_path;
+	}
+	if (snprintf(var_boards_expert_path, FILENAME_MAX, "%s/%s/",
+				var_path, BOARDS_EXPERT_DIR)  >=  FILENAME_MAX) {
+		goto err_path;
+	}
+	if (snprintf(var_boards_custom_path, FILENAME_MAX, "%s/%s/",
+				var_path, BOARDS_CUSTOM_DIR)  >=  FILENAME_MAX) {
+		goto err_path;
+	}
 	snprintf(var_hiscores_beginner_name, FILENAME_MAX, "%s",
-				HISCORES_BEGINNER_NAME);
+						HISCORES_BEGINNER_NAME);
 	snprintf(var_hiscores_intermediate_name, FILENAME_MAX, "%s",
-				HISCORES_INTERMEDIATE_NAME);
+						HISCORES_INTERMEDIATE_NAME);
 	snprintf(var_hiscores_expert_name, FILENAME_MAX, "%s",
-				HISCORES_EXPERT_NAME);
+						HISCORES_EXPERT_NAME);
+
+	return;
+
+
+err_path:
+	printf("Path is too large and has been truncated\n");
+	getchar();
+	exit(EXIT_FAILURE);
 }
 
 void	save_score	(const struct Game_Iface_Score  *game_iface_score)
 {
-	/* File name */
+	struct tm	*date_format;
 	char	file_name [FILENAME_MAX];
+	char	player_name [BUFF_SIZE];
+	FILE	*fp;
+
+	/* File name */
 	switch (game_iface_score->level) {
 	case GAME_IFACE_LEVEL_BEGINNER:
-		snprintf(file_name, FILENAME_MAX, "%s/%s",
-				var_hiscores_path, var_hiscores_beginner_name);
+		if (snprintf(file_name, FILENAME_MAX, "%s/%s",
+					var_hiscores_path,
+					var_hiscores_beginner_name)  >=
+								FILENAME_MAX) {
+			goto err_path;
+		}
 		break;
 
 	case GAME_IFACE_LEVEL_INTERMEDIATE:
-		snprintf(file_name, FILENAME_MAX, "%s/%s",
-				var_hiscores_path, var_hiscores_intermediate_name);
+		if (snprintf(file_name, FILENAME_MAX, "%s/%s",
+					var_hiscores_path,
+					var_hiscores_intermediate_name)  >=
+								FILENAME_MAX) {
+			goto err_path;
+		}
 		break;
 
 	case GAME_IFACE_LEVEL_EXPERT:
-		snprintf(file_name, FILENAME_MAX, "%s/%s",
-				var_hiscores_path, var_hiscores_expert_name);
+		if (snprintf(file_name, FILENAME_MAX, "%s/%s",
+					var_hiscores_path,
+					var_hiscores_expert_name)  >=
+								FILENAME_MAX) {
+			goto err_path;
+		}
 		break;
 	}
 
 	/* Date & time */
 	time_t		date_secs;
-	struct tm	*date_format;
 	date_secs	= time(NULL);
 	date_format	= localtime(&date_secs);
 
 	/* Player name (foo is default) */
-	char	player_name [BUFF_SIZE];
 	player_iface_score_name(player_name, BUFF_SIZE);
 
 	/* Write to file (append) */
-	FILE	*fp;
+	errno = 0;
 	fp	= fopen(file_name, "a");
 	if (fp) {
 		fprintf(fp, "\n");
@@ -139,37 +174,61 @@ void	save_score	(const struct Game_Iface_Score  *game_iface_score)
 
 		fclose(fp);
 	} else {
+		printf("errno: %i", errno);
 		exit(EXIT_FAILURE);
 	}
+
+	return;
+
+
+err_path:
+	printf("Path is too large and has been truncated\n");
+	printf("Score could not be saved!\n");
 }
 
 void	snprint_scores	(char *dest, int destsize)
 {
-	/* File */
 	char	file_name [FILENAME_MAX];
-
-	/* Tmp strings */
 	char	tmp1 [BUFF_SIZE_TEXT];
 	char	tmp2 [BUFF_SIZE_TEXT];
 
 	/* Beginner */
-	snprintf(file_name, FILENAME_MAX, "%s/%s",
-			var_hiscores_path, var_hiscores_beginner_name);
-	snprint_scores_file(dest, destsize, file_name);
+	if (snprintf(file_name, FILENAME_MAX, "%s/%s",
+					var_hiscores_path,
+					var_hiscores_beginner_name)  >=
+								FILENAME_MAX) {
+		goto err_path;
+	}
+	(void)snprint_scores_file(dest, destsize, file_name);
 
 	/* Intermediate */
-	snprintf(file_name, FILENAME_MAX, "%s/%s",
-			var_hiscores_path, var_hiscores_intermediate_name);
-	snprint_scores_file(tmp1, destsize, file_name);
-	snprintf(tmp2, destsize, "%s%s", dest, tmp1);
-	snprintf(dest, destsize, "%s", tmp2);
+	if (snprintf(file_name, FILENAME_MAX, "%s/%s",
+					var_hiscores_path,
+					var_hiscores_intermediate_name)  >=
+								FILENAME_MAX) {
+		goto err_path;
+	}
+	(void)snprint_scores_file(tmp1, destsize, file_name);
+	(void)snprintf(tmp2, destsize, "%s%s", dest, tmp1);
+	(void)snprintf(dest, destsize, "%s", tmp2);
 
 	/* Expert */
-	snprintf(file_name, FILENAME_MAX, "%s/%s",
-			var_hiscores_path, var_hiscores_expert_name);
-	snprint_scores_file(tmp1, destsize, file_name);
-	snprintf(tmp2, destsize, "%s%s", dest, tmp1);
-	snprintf(dest, destsize, "%s", tmp2);
+	if (snprintf(file_name, FILENAME_MAX, "%s/%s",
+					var_hiscores_path,
+					var_hiscores_expert_name)  >=
+								FILENAME_MAX) {
+		goto err_path;
+	}
+	(void)snprint_scores_file(tmp1, destsize, file_name);
+	(void)snprintf(tmp2, destsize, "%s%s", dest, tmp1);
+	(void)snprintf(dest, destsize, "%s", tmp2);
+
+	return;
+
+
+err_path:
+	printf("Path is too large and has been truncated\n");
+	printf("Score could not be shown!\n");
 }
 
 
@@ -178,14 +237,9 @@ void	snprint_scores	(char *dest, int destsize)
  ******************************************************************************/
 static	void	snprint_scores_file	(char *dest, int destsize, char *file_name)
 {
-	/* File */
 	FILE	*fp;
 	int	c;
-
-	/* Tmp string */
 	char	tmp [BUFF_SIZE_TEXT];
-
-	/* Score variables */
 	char	title [BUFF_SIZE];
 	char	name [BUFF_SIZE];
 	int	year;
@@ -207,7 +261,7 @@ static	void	snprint_scores_file	(char *dest, int destsize, char *file_name)
 		fscanf(fp, " ");
 
 		/* Print */
-		snprintf(dest, destsize,
+		(void)snprintf(dest, destsize,
 				"_______________________________________________________\n"
 				"%s\n\n"
 				"name	date		clicks	time		file\n\n",
@@ -241,7 +295,7 @@ static	void	snprint_scores_file	(char *dest, int destsize, char *file_name)
 			secs	= (time % 60);
 
 			/* Print */
-			snprintf(tmp, BUFF_SIZE_TEXT,
+			(void)snprintf(tmp, BUFF_SIZE_TEXT,
 					"%s"
 					"%s\n"
 					"	%4i/%2i/%2i	%i	%i:%02i:%02i	\t%s\n\n",
@@ -251,7 +305,7 @@ static	void	snprint_scores_file	(char *dest, int destsize, char *file_name)
 								clicks,
 									hours, mins, secs,
 											file);
-			snprintf(dest, BUFF_SIZE_TEXT, "%s", tmp);
+			(void)snprintf(dest, BUFF_SIZE_TEXT, "%s", tmp);
 		}
 
 		fclose(fp);

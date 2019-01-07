@@ -13,14 +13,10 @@
 /******************************************************************************
  ******* headers **************************************************************
  ******************************************************************************/
-/*	*	*	*	*	*	*	*	*	*
- *	*	* Standard	*	*	*	*	*	*
- *	*	*	*	*	*	*	*	*	*/
+/* Standard C ----------------------------------------------------------------*/
 	#include <stdbool.h>
 
-/*	*	*	*	*	*	*	*	*	*
- *	*	* Other	*	*	*	*	*	*	*
- *	*	*	*	*	*	*	*	*	*/
+/* Project -------------------------------------------------------------------*/
 		/* struct Game_Iface_... */
 	#include "game_iface.h"
 
@@ -94,17 +90,15 @@ extern	bool	flag_color;
 void	player_tui_init		(int rows, int cols);
 
 int	player_tui_start	(const struct Player_Iface_Position	*position,
-				const char				*title,
-				const char				*subtitle,
-				int					*action);
+				const char *title, const char *subtitle,
+				int *action);
 
 int	player_tui		(const struct Game_Iface_Out		*board,
 				const struct Player_Iface_Position	*position,
-				const char				*title,
-				const char				*subtitle,
-				int					*action);
+				const char *title, const char *subtitle,
+				int *action);
 
-void	player_tui_save_name	(const char *filepath, char *filename, int destsize);
+void	player_tui_save_name	(const char *fpath, char *fname, int destsize);
 void	player_tui_score_name	(char *player_name, int destsize);
 void	player_tui_cleanup	(void);
 

@@ -31,7 +31,7 @@ all: $(ALL)
 xyzzy_mod.o: $(_ALL)
 	@echo	"	LD	$@"
 	$(Q)$(LD) -r $^ -o $@
-	
+
 
 xyzzy.s: $(XYZZY_DEPS)
 	@echo	"	CC	$@"

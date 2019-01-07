@@ -6,18 +6,15 @@
 /******************************************************************************
  ******* headers **************************************************************
  ******************************************************************************/
-/*	*	*	*	*	*	*	*	*	*
- *	*	* Standard	*	*	*	*	*	*
- *	*	*	*	*	*	*	*	*	*/
+/* Standard C ----------------------------------------------------------------*/
 		/* printf() */
 	#include <stdio.h>
 
-/*	*	*	*	*	*	*	*	*	*
- *	*	* Other	*	*	*	*	*	*	*
- *	*	*	*	*	*	*	*	*	*/
+/* libalx ------------------------------------------------------------------*/
 		/* alx_prn_file() */
 	#include "alx_file.h"
 
+/* Project -------------------------------------------------------------------*/
 	#include "about.h"
 
 
@@ -55,23 +52,50 @@ void	snprint_share_file	(char *dest, int destsize, int share_file)
 
 	switch (share_file) {
 	case SHARE_COPYRIGHT:
-		snprintf(file_name, FILENAME_MAX, "%s/%s", share_path, "COPYRIGHT.txt");
+		if (snprintf(file_name, FILENAME_MAX, "%s/%s",
+					share_path,
+					"COPYRIGHT.txt")  >=  FILENAME_MAX) {
+			goto err_path;
+		}
 		break;
 	case SHARE_DISCLAIMER:
-		snprintf(file_name, FILENAME_MAX, "%s/%s", share_path, "DISCLAIMER.txt");
+		if (snprintf(file_name, FILENAME_MAX, "%s/%s",
+					share_path,
+					"DISCLAIMER.txt")  >=  FILENAME_MAX) {
+			goto err_path;
+		}
 		break;
 	case SHARE_HELP:
-		snprintf(file_name, FILENAME_MAX, "%s/%s", share_path, "HELP.txt");
+		if (snprintf(file_name, FILENAME_MAX, "%s/%s",
+					share_path,
+					"HELP.txt")  >=  FILENAME_MAX) {
+			goto err_path;
+		}
 		break;
 	case SHARE_LICENSE:
-		snprintf(file_name, FILENAME_MAX, "%s/%s", share_path, "LICENSE.txt");
+		if (snprintf(file_name, FILENAME_MAX, "%s/%s",
+					share_path,
+					"LICENSE.txt")  >=  FILENAME_MAX) {
+			goto err_path;
+		}
 		break;
 	case SHARE_USAGE:
-		snprintf(file_name, FILENAME_MAX, "%s/%s", share_path, "USAGE.txt");
+		if (snprintf(file_name, FILENAME_MAX, "%s/%s",
+					share_path,
+					"USAGE.txt")  >=  FILENAME_MAX) {
+			goto err_path;
+		}
 		break;
 	}
 
 	alx_snprint_file(dest, destsize, file_name);
+
+	return;
+
+
+err_path:
+	printf("Path is too large and has been truncated\n");
+	printf("File could not be shown!\n");
 }
 
 void	print_share_file	(int share_file)

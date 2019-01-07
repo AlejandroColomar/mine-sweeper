@@ -1,9 +1,9 @@
 #!/usr/bin/make -f
 
 VERSION		= 4
-PATCHLEVEL	= ~b1
+PATCHLEVEL	=
 SUBLEVEL	= 
-EXTRAVERSION	=
+EXTRAVERSION	= ~b2
 NAME		= graphic
 
 export	VERSION
@@ -67,7 +67,7 @@ export	BUILD_VERBOSE
 MAKEFLAGS += --no-print-directory
 
 ################################################################################
-PROGRAMVERSION	= $(VERSION)$(if $(PATCHLEVEL),$(PATCHLEVEL)$(if $(SUBLEVEL),$(SUBLEVEL)))$(EXTRAVERSION)
+PROGRAMVERSION	= $(VERSION)$(if $(PATCHLEVEL),.$(PATCHLEVEL)$(if $(SUBLEVEL),.$(SUBLEVEL)))$(EXTRAVERSION)
 export	PROGRAMVERSION
 
 ################################################################################
@@ -78,6 +78,73 @@ DBG	= false
 export	OS
 export	TST
 export	DBG
+
+################################################################################
+# Make variables (CC, etc...)
+  CC		= gcc
+  AS		= as
+  AR		= ar
+  LD		= ld
+
+export	CC
+export	AS
+export	AR
+export	LD
+
+################################################################################
+# cflags
+CFLAGS_STD	= -std=c11
+CFLAGS_STD     += -Wpedantic
+
+CFLAGS_OPT	= -O3
+CFLAGS_OPT     += -march=native
+
+CFLAGS_W	= -Wall
+CFLAGS_W       += -Werror
+#CFLAGS_W       += -Wstrict-prototypes
+CFLAGS_W       += -Wno-error=format-truncation
+#CFLAGS_W       += -Wno-error=unused-function
+#CFLAGS_W       += -Wno-error=unused-parameter
+
+CFLAGS_PKG	= `pkg-config --cflags ncurses`
+CFLAGS_PKG     += `pkg-config --cflags gtk+-2.0`
+
+CFLAGS_D	= -D PROG_VERSION=\"$(PROGRAMVERSION)\"
+CFLAGS_D       += -D INSTALL_SHARE_DIR=\"$(INSTALL_SHARE_DIR)\"
+CFLAGS_D       += -D SHARE_DIR=\"$(SHARE_DIR)\"
+CFLAGS_D       += -D INSTALL_VAR_DIR=\"$(INSTALL_VAR_DIR)\"
+CFLAGS_D       += -D VAR_DIR=\"$(VAR_DIR)\"
+
+ifeq ($(OS), linux)
+  CFLAGS_D     += -D OS_LINUX
+else ifeq ($(OS), win)
+  CFLAGS_D     += -D OS_WIN
+endif
+
+CFLAGS		= $(CFLAGS_STD)
+CFLAGS         += $(CFLAGS_OPT)
+CFLAGS         += $(CFLAGS_W)
+CFLAGS         += $(CFLAGS_PKG)
+CFLAGS         += $(CFLAGS_D)
+
+export	CFLAGS
+
+################################################################################
+# libs
+LIBS_STATIC	= -static
+
+LIBS_STD	= -l m
+
+LIBS_PKG	= `pkg-config --libs ncurses`
+LIBS_PKG       += `pkg-config --libs gtk+-2.0`
+
+ifeq ($(OS), linux)
+  LIBS		= $(LIBS_STD) $(LIBS_PKG)
+else ifeq ($(OS), win)
+  LIBS		= $(LIBS_STD) $(LIBS_STATIC) $(LIBS_PKG)
+endif
+
+export	LIBS
 
 ################################################################################
 # directories
@@ -127,69 +194,6 @@ endif
 export	BIN_NAME
 
 ################################################################################
-# Make variables (CC, etc...)
-  CC		= gcc
-  AS		= as
-  LD		= ld
-
-export	CC
-export	AS
-export	LD
-
-################################################################################
-# cflags
-CFLAGS_STD	= -std=c11
-
-CFLAGS_OPT	= -O3
-CFLAGS_OPT     += -march=native
-
-CFLAGS_W	= -Wall
-CFLAGS_W       += -Werror
-CFLAGS_W       += -Wno-format-truncation
-CFLAGS_W       += -Wno-format-zero-length
-CFLAGS_W       += -Wno-unused-function
-
-CFLAGS_PKG	= `pkg-config --cflags ncurses`
-CFLAGS_PKG     += `pkg-config --cflags gtk+-2.0`
-
-CFLAGS_D	= -D PROG_VERSION=\"$(PROGRAMVERSION)\"
-CFLAGS_D       += -D INSTALL_SHARE_DIR=\"$(INSTALL_SHARE_DIR)\"
-CFLAGS_D       += -D SHARE_DIR=\"$(SHARE_DIR)\"
-CFLAGS_D       += -D INSTALL_VAR_DIR=\"$(INSTALL_VAR_DIR)\"
-CFLAGS_D       += -D VAR_DIR=\"$(VAR_DIR)\"
-
-ifeq ($(OS), linux)
-  CFLAGS_D     += -D OS_LINUX
-else ifeq ($(OS), win)
-  CFLAGS_D     += -D OS_WIN
-endif
-
-CFLAGS		= $(CFLAGS_STD)
-CFLAGS         += $(CFLAGS_OPT)
-CFLAGS         += $(CFLAGS_W)
-CFLAGS         += $(CFLAGS_PKG)
-CFLAGS         += $(CFLAGS_D)
-
-export	CFLAGS
-
-################################################################################
-# libs
-LIBS_STATIC	= -static
-
-LIBS_STD	= -l m
-
-LIBS_PKG	= `pkg-config --libs ncurses`
-LIBS_PKG       += `pkg-config --libs gtk+-2.0`
-
-ifeq ($(OS), linux)
-  LIBS		= $(LIBS_STD) $(LIBS_PKG)
-else ifeq ($(OS), win)
-  LIBS		= $(LIBS_STD) $(LIBS_STATIC) $(LIBS_PKG)
-endif
-
-export	LIBS
-
-################################################################################
 # target: dependencies
 #	action
 
@@ -226,41 +230,42 @@ binary: main
 
 PHONY += install
 install: uninstall
-	@echo	"Create $(INSTALL_BIN_DIR)/"
+	@echo	"	Install:"
+	@echo	"	MKDIR	$(INSTALL_BIN_DIR)/"
 	$(Q)mkdir -p		$(DESTDIR)/$(INSTALL_BIN_DIR)/
-	@echo	"Copy $(BIN_NAME)"
+	@echo	"	CP	$(BIN_NAME)"
 	$(Q)cp			$(BIN_DIR)/$(BIN_NAME)	$(DESTDIR)/$(INSTALL_BIN_DIR)/
-	@echo
-	
-	@echo	"Create $(INSTALL_SHARE_DIR)/$(SHARE_DIR)/"
+	@echo	"	MKDIR	$(INSTALL_SHARE_DIR)/$(SHARE_DIR)/"
 	$(Q)mkdir -p		$(DESTDIR)/$(INSTALL_SHARE_DIR)/$(SHARE_DIR)/
-	@echo	"Copy share/*"
+	@echo	"	CP -r	share/*"
 	$(Q)cp -r		./share/*		$(DESTDIR)/$(INSTALL_SHARE_DIR)/$(SHARE_DIR)/
 	
-	@echo	"Create $(INSTALL_VAR_DIR)/$(VAR_DIR)/"
+	@echo	"	MKDIR	$(INSTALL_VAR_DIR)/$(VAR_DIR)/"
 	$(Q)mkdir -p		$(DESTDIR)/$(INSTALL_VAR_DIR)/$(VAR_DIR)/
 	$(Q)mkdir		$(DESTDIR)/$(INSTALL_VAR_DIR)/$(VAR_DIR)/boards_beginner/
 	$(Q)mkdir		$(DESTDIR)/$(INSTALL_VAR_DIR)/$(VAR_DIR)/boards_intermediate/
 	$(Q)mkdir		$(DESTDIR)/$(INSTALL_VAR_DIR)/$(VAR_DIR)/boards_expert/
 	$(Q)mkdir		$(DESTDIR)/$(INSTALL_VAR_DIR)/$(VAR_DIR)/boards_custom/
-	@echo	"Copy var/*"
+	@echo	"	CP -r	var/*"
 	$(Q)cp -r		./var/*			$(DESTDIR)/$(INSTALL_VAR_DIR)/$(VAR_DIR)/
-	@echo	"Change owner"
+	@echo	"	CHOWN	$(INSTALL_VAR_DIR)/$(VAR_DIR)/"
 	$(Q)chown root:games -R	$(DESTDIR)/$(INSTALL_VAR_DIR)/$(VAR_DIR)/
-	@echo	"Change permissions"
+	@echo	"	CHMOD	$(INSTALL_VAR_DIR)/$(VAR_DIR)/"
 	$(Q)chmod 664 -R	$(DESTDIR)/$(INSTALL_VAR_DIR)/$(VAR_DIR)/
 	$(Q)chmod +X -R		$(DESTDIR)/$(INSTALL_VAR_DIR)/$(VAR_DIR)/
-	@echo
-	
-	@echo	"Done"
+	@echo	"	Done"
 	@echo
 
 PHONY += uninstall
 uninstall:
-	@echo	"Clean old installations"
-	$(Q)rm -f	$(DESTDIR)/$(INSTALL_BIN_DIR)/$(BIN_NAME)
-	$(Q)rm -f -r	$(DESTDIR)/$(INSTALL_SHARE_DIR)/$(SHARE_DIR)/
-	$(Q)rm -f -r	$(DESTDIR)/$(INSTALL_VAR_DIR)/$(VAR_DIR)/
+	@echo	"	Clean old installations:"
+	@echo	"	RM	bin"
+	$(Q)rm -f		$(DESTDIR)/$(INSTALL_BIN_DIR)/$(BIN_NAME)
+	@echo	"	RM -r	$(INSTALL_SHARE_DIR)/$(SHARE_DIR)/"
+	$(Q)rm -f -r		$(DESTDIR)/$(INSTALL_SHARE_DIR)/$(SHARE_DIR)/
+	@echo	"	RM -r	$(INSTALL_VAR_DIR)/$(VAR_DIR)/"
+	$(Q)rm -f -r		$(DESTDIR)/$(INSTALL_VAR_DIR)/$(VAR_DIR)/
+	@echo	"	Done"
 	@echo
 
 PHONY += clean
@@ -271,17 +276,19 @@ clean:
 	$(Q)$(MAKE) clean	-C $(TMP_DIR)
 	@echo	'	CLEAN	bin'
 	$(Q)$(MAKE) clean	-C $(BIN_DIR)
+	@echo
 
 PHONY += mrproper
 mrproper: clean
 	@echo	'	CLEAN	libalx'
 	$(Q)$(MAKE) clean	-C $(LIBALX_DIR)
+	@echo
 
 PHONY += help
 help:
 	@echo  'Cleaning targets:'
-	@echo  '  clean		  - Remove all object files, but keep the binary'
-	@echo  '  mrproper	  - Remove all generated files'
+	@echo  '  clean		  - Remove all generated files'
+	@echo  '  mrproper	  - Remove all generated files (including libraries)'
 	@echo  ''
 	@echo  'Other generic targets:'
 	@echo  '  all		  - Build all targets marked with [*]'

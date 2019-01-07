@@ -6,14 +6,10 @@
 /******************************************************************************
  ******* headers **************************************************************
  ******************************************************************************/
-/*	*	*	*	*	*	*	*	*	*
- *	*	* Standard	*	*	*	*	*	*
- *	*	*	*	*	*	*	*	*	*/
+/* Standard C ----------------------------------------------------------------*/
 	#include <stdbool.h>
 
-/*	*	*	*	*	*	*	*	*	*
- *	*	* Other	*	*	*	*	*	*	*
- *	*	*	*	*	*	*	*	*	*/
+/* Project -------------------------------------------------------------------*/
 		/* game_action() */
 	#include "game_iface.h"
 
@@ -30,10 +26,10 @@ static	bool	step_notflag;
 /******************************************************************************
  ******* static functions *****************************************************
  ******************************************************************************/
-void	xyzzy_step_all	(const struct Game_Iface_Out	*game_iface_out,
-			struct Game_Iface_In		*game_iface_in);
-void	xyzzy_flag_all	(const struct Game_Iface_Out	*game_iface_out,
-			struct Game_Iface_In		*game_iface_in);
+static	void	xyzzy_step_all	(const struct Game_Iface_Out	*out,
+				struct Game_Iface_In		*in);
+static	void	xyzzy_flag_all	(const struct Game_Iface_Out	*out,
+				struct Game_Iface_In		*in);
 
 
 /******************************************************************************
@@ -41,21 +37,23 @@ void	xyzzy_flag_all	(const struct Game_Iface_Out	*game_iface_out,
  ******************************************************************************/
 void	xyzzy_init	(void)
 {
+
 	x		= 0;
 	step_notflag	= true;
 }
 
-int	xyzzy_lin	(const struct Game_Iface_Out	*game_iface_out,
-			struct Game_Iface_In		*game_iface_in)
+int	xyzzy_lin	(const struct Game_Iface_Out	*out,
+			struct Game_Iface_In		*in)
 {
+
 	if (!x) {
 		x	= 1;
 	}
 
 	if (step_notflag) {
-		xyzzy_step_all(game_iface_out, game_iface_in);
+		xyzzy_step_all(out, in);
 	} else {
-		xyzzy_flag_all(game_iface_out, game_iface_in);
+		xyzzy_flag_all(out, in);
 		x--;
 	}
 
@@ -64,17 +62,15 @@ int	xyzzy_lin	(const struct Game_Iface_Out	*game_iface_out,
 	return	x;
 }
 
-int	xyzzy_p		(const struct Game_Iface_Out	*game_iface_out,
-			struct Game_Iface_In		*game_iface_in)
+int	xyzzy_p		(const struct Game_Iface_Out	*out,
+			struct Game_Iface_In		*in)
 {
-	int	fields;
-	fields	= game_iface_out->rows * game_iface_out->cols;
 
 	if (!x) {
-		x	= fields / 2;
+		x	= (out->rows * out->cols) / 2;
 	}
 
-	xyzzy_lin(game_iface_out, game_iface_in);
+	xyzzy_lin(out, in);
 
 	return	x;
 }
@@ -83,33 +79,33 @@ int	xyzzy_p		(const struct Game_Iface_Out	*game_iface_out,
 /******************************************************************************
  ******* static functions *****************************************************
  ******************************************************************************/
-void	xyzzy_step_all	(const struct Game_Iface_Out	*game_iface_out,
-			struct Game_Iface_In		*game_iface_in)
+static	void	xyzzy_step_all	(const struct Game_Iface_Out	*out,
+				struct Game_Iface_In		*in)
 {
 	int	i;
 	int	j;
 
-	for (i = 0; i < game_iface_out->rows; i++) {
-		for (j = 0; j < game_iface_out->cols; j++) {
-			if (game_iface_out->usr[i][j] == GAME_IFACE_USR_CLEAR) {
-				game_iface_in->act_game[i][j]	= GAME_IFACE_GAME_ACT_STEP;
-			}
+	for (i = 0; i < out->rows; i++) {
+	for (j = 0; j < out->cols; j++) {
+		if (out->usr[i][j] == GAME_IFACE_USR_CLEAR) {
+			in->act_game[i][j]	= GAME_IFACE_GAME_ACT_STEP;
 		}
+	}
 	}
 }
 
-void	xyzzy_flag_all	(const struct Game_Iface_Out	*game_iface_out,
-			struct Game_Iface_In		*game_iface_in)
+static	void	xyzzy_flag_all	(const struct Game_Iface_Out	*out,
+				struct Game_Iface_In		*in)
 {
 	int	i;
 	int	j;
 
-	for (i = 0; i < game_iface_out->rows; i++) {
-		for (j = 0; j < game_iface_out->cols; j++) {
-			if (game_iface_out->usr[i][j] == GAME_IFACE_USR_CLEAR) {
-				game_iface_in->act_game[i][j]	= GAME_IFACE_GAME_ACT_FLAG;
-			}
+	for (i = 0; i < out->rows; i++) {
+	for (j = 0; j < out->cols; j++) {
+		if (out->usr[i][j] == GAME_IFACE_USR_CLEAR) {
+			in->act_game[i][j]	= GAME_IFACE_GAME_ACT_FLAG;
 		}
+	}
 	}
 }
 

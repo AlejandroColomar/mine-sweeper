@@ -6,15 +6,11 @@
 /******************************************************************************
  ******* headers **************************************************************
  ******************************************************************************/
-/*	*	*	*	*	*	*	*	*	*
- *	*	* Standard	*	*	*	*	*	*
- *	*	*	*	*	*	*	*	*	*/
+/* Standard C ----------------------------------------------------------------*/
 		/* snprintf() & fflush() */
 	#include <stdio.h>
 
-/*	*	*	*	*	*	*	*	*	*
- *	*	* Other	*	*	*	*	*	*	*
- *	*	*	*	*	*	*	*	*	*/
+/* Project -------------------------------------------------------------------*/
 		/* struct Game_Iface_... */
 	#include "game_iface.h"
 
@@ -37,14 +33,9 @@
 /******************************************************************************
  ******* variables ************************************************************
  ******************************************************************************/
-/*	*	*	*	*	*	*	*	*	*
- *	*	* Global	*	*	*	*	*	*
- *	*	*	*	*	*	*	*	*	*/
+/* Global --------------------------------------------------------------------*/
 int	player_iface_mode;
-
-/*	*	*	*	*	*	*	*	*	*
- *	*	* Static	*	*	*	*	*	*
- *	*	*	*	*	*	*	*	*	*/
+/* Static --------------------------------------------------------------------*/
 static	struct Player_Iface_Position	player_iface_position;
 static	int				player_action;
 
@@ -53,12 +44,12 @@ static	int				player_action;
  ******* static functions *****************************************************
  ******************************************************************************/
 	/* Actions */
-static	void	player_iface_act	(struct Game_Iface_In	*game_iface_in);
+static	void	player_iface_act	(struct Game_Iface_In	*in);
 
 	/* Actions:  game iface */
 static	void	player_iface_act_start	(void);
-static	void	player_iface_act_play	(struct Game_Iface_In	*game_iface_in);
-static	void	player_iface_act_game	(struct Game_Iface_In	*game_iface_in);
+static	void	player_iface_act_play	(struct Game_Iface_In	*in);
+static	void	player_iface_act_game	(struct Game_Iface_In	*in);
 
 	/* Actions:  player iface */
 static	void	player_iface_move_up	(void);
@@ -69,10 +60,11 @@ static	void	highlight_cursor	(void);
 
 
 /******************************************************************************
- ******* main *****************************************************************
+ ******* global functions *****************************************************
  ******************************************************************************/
 void	player_iface_init	(int rows, int cols)
 {
+
 	player_iface_position.rows	= rows;
 	player_iface_position.cols	= cols;
 
@@ -90,13 +82,13 @@ void	player_iface_init	(int rows, int cols)
 	}
 }
 
-int	player_iface_start	(int *pos_row, int *pos_col)
+int	player_iface_start	(int *row, int *col)
 {
-	/* Title */
 	char	title[TITLE_SIZE];
-	snprintf(title, TITLE_SIZE, "Start:");
-	/* Subtitle */
 	char	subtitle[TITLE_SIZE];
+	int	fail;
+
+	snprintf(title, TITLE_SIZE, "Start:");
 	snprintf(subtitle, TITLE_SIZE, "00:00 | 0");
 
 	/* Start position */
@@ -109,28 +101,27 @@ int	player_iface_start	(int *pos_row, int *pos_col)
 		switch (player_iface_mode) {
 		case PLAYER_IFACE_CLUI:
 			player_clui_start(&player_iface_position,
-						title, subtitle, &player_action);
+					title, subtitle, &player_action);
 			break;
 
 		case PLAYER_IFACE_TUI:
 			player_tui_start(&player_iface_position,
-						title, subtitle, &player_action);
+					title, subtitle, &player_action);
 			break;
 
 		case PLAYER_IFACE_GUI:
 			player_gui_start(&player_iface_position,
-						title, subtitle);
+					title, subtitle);
 			break;
 		}
 
 		player_iface_act_start();
-	} while (player_action != PLAYER_IFACE_ACT_STEP &&
-					player_action != PLAYER_IFACE_ACT_QUIT);
+	} while ((player_action != PLAYER_IFACE_ACT_STEP)  &&
+				(player_action != PLAYER_IFACE_ACT_QUIT));
 
-	*pos_row	= player_iface_position.row;
-	*pos_col	= player_iface_position.col;
+	*row	= player_iface_position.row;
+	*col	= player_iface_position.col;
 
-	int	fail;
 	switch (player_action) {
 	case PLAYER_IFACE_ACT_STEP:
 		fail	= 0;
@@ -147,18 +138,20 @@ int	player_iface_start	(int *pos_row, int *pos_col)
 	return	fail;
 }
 
-void	player_iface		(const	struct Game_Iface_Out	*game_iface_out,
-				const	struct Game_Iface_Score	*game_iface_score,
-					struct Game_Iface_In	*game_iface_in)
+void	player_iface		(const	struct Game_Iface_Out	*out,
+				const	struct Game_Iface_Score	*score,
+					struct Game_Iface_In	*in)
 {
-	/* Title */
 	char	title[TITLE_SIZE];
-	switch (game_iface_out->state) {
+
+	/* Title */
+	switch (out->state) {
 	case GAME_IFACE_STATE_XYZZY:
 	case GAME_IFACE_STATE_CHEATED:
 	case GAME_IFACE_STATE_PLAYING:
 	case GAME_IFACE_STATE_PAUSE:
-		snprintf(title, TITLE_SIZE, "Mines: %i/%i", game_iface_out->flags, game_iface_out->mines);
+		snprintf(title, TITLE_SIZE, "Mines: %i/%i",
+					out->flags, out->mines);
 		break;
 
 	case GAME_IFACE_STATE_GAMEOVER:
@@ -174,15 +167,17 @@ void	player_iface		(const	struct Game_Iface_Out	*game_iface_out,
 	int	hours;
 	int	mins;
 	int	secs;
-	if (game_iface_score->time != CHEATED) {
-		hours	= ((int)game_iface_score->time / 3600);
-		mins	= (((int)game_iface_score->time % 3600) / 60);
-		secs	= ((int)game_iface_score->time % 60);
+	if (score->time != CHEATED) {
+		hours	= ((int)score->time / 3600);
+		mins	= (((int)score->time % 3600) / 60);
+		secs	= ((int)score->time % 60);
 
-		if (game_iface_score->time >= 3600) {
-			snprintf(subtitle, TITLE_SIZE, "%02i:%02i:%02i | %i", hours, mins, secs, game_iface_score->clicks);
+		if (score->time >= 3600) {
+			snprintf(subtitle, TITLE_SIZE, "%02i:%02i:%02i | %i",
+					hours, mins, secs, score->clicks);
 		} else {
-			snprintf(subtitle, TITLE_SIZE, "%02i:%02i | %i", mins, secs, game_iface_score->clicks);
+			snprintf(subtitle, TITLE_SIZE, "%02i:%02i | %i",
+					mins, secs, score->clicks);
 		}
 	} else {
 		snprintf(subtitle, TITLE_SIZE, "N/A");
@@ -191,37 +186,36 @@ void	player_iface		(const	struct Game_Iface_Out	*game_iface_out,
 	/* Request player action */
 	switch (player_iface_mode) {
 	case PLAYER_IFACE_CLUI:
-		player_clui(game_iface_out, &player_iface_position,
-					title, subtitle, &player_action);
+		player_clui(out, &player_iface_position, title, subtitle,
+					&player_action);
 		break;
 
 	case PLAYER_IFACE_TUI:
-		player_tui(game_iface_out, &player_iface_position,
-					title, subtitle, &player_action);
+		player_tui(out, &player_iface_position, title, subtitle,
+					&player_action);
 		break;
 
 	case PLAYER_IFACE_GUI:
-		player_gui(game_iface_out, &player_iface_position,
-					title, subtitle);
+		player_gui(out, &player_iface_position, title, subtitle);
 		break;
 	}
 
-	player_iface_act(game_iface_in);
+	player_iface_act(in);
 }
 
-void	player_iface_save_name	(const char *filepath, char *filename, int destsize)
+void	player_iface_save_name	(const char *fpath, char *fname, int destsize)
 {
 	switch (player_iface_mode) {
 	case PLAYER_IFACE_CLUI:
-		player_clui_save_name(filepath, filename, destsize);
+		player_clui_save_name(fpath, fname, destsize);
 		break;
 
 	case PLAYER_IFACE_TUI:
-		player_tui_save_name(filepath, filename, destsize);
+		player_tui_save_name(fpath, fname, destsize);
 		break;
 
 	case PLAYER_IFACE_GUI:
-		player_gui_save_name(filepath, filename, destsize);
+		player_gui_save_name(fpath, fname, destsize);
 		break;
 	}
 }
@@ -267,14 +261,14 @@ void	player_iface_cleanup	(void)
 /*	*	*	*	*	*	*	*	*	*
  *	*	* Actions	*	*	*	*	*	*
  *	*	*	*	*	*	*	*	*	*/
-static	void	player_iface_act	(struct Game_Iface_In	*game_iface_in)
+static	void	player_iface_act	(struct Game_Iface_In	*in)
 {
 	switch (player_action) {
 	case PLAYER_IFACE_ACT_STEP:
 	case PLAYER_IFACE_ACT_FLAG:
 	case PLAYER_IFACE_ACT_FLAG_POSSIBLE:
 	case PLAYER_IFACE_ACT_RM_FLAG:
-		player_iface_act_play(game_iface_in);
+		player_iface_act_play(in);
 		break;
 
 	case PLAYER_IFACE_ACT_PAUSE:
@@ -285,7 +279,7 @@ static	void	player_iface_act	(struct Game_Iface_In	*game_iface_in)
 	case PLAYER_IFACE_ACT_XYZZY_P:
 	case PLAYER_IFACE_ACT_XYZZY_NP:
 	case PLAYER_IFACE_ACT_QUIT:
-		player_iface_act_game(game_iface_in);
+		player_iface_act_game(in);
 		break;
 
 	case PLAYER_IFACE_ACT_MOVE_UP:
@@ -342,66 +336,66 @@ static	void	player_iface_act_start	(void)
 /*	*	*	*	*	*	*	*	*	*
  *	*	* Actions:  game iface	*	*	*	*	*
  *	*	*	*	*	*	*	*	*	*/
-static	void	player_iface_act_play	(struct Game_Iface_In	*game_iface_in)
+static	void	player_iface_act_play	(struct Game_Iface_In	*in)
 {
 	switch (player_action) {
 	case PLAYER_IFACE_ACT_STEP:
-		game_iface_in->act_game[player_iface_position.row][player_iface_position.col]	=
+		in->act_game[player_iface_position.row][player_iface_position.col]	=
 					GAME_IFACE_GAME_ACT_STEP;
 		break;
 
 	case PLAYER_IFACE_ACT_FLAG:
-		game_iface_in->act_game[player_iface_position.row][player_iface_position.col]	=
+		in->act_game[player_iface_position.row][player_iface_position.col]	=
 					GAME_IFACE_GAME_ACT_FLAG;
 		break;
 
 	case PLAYER_IFACE_ACT_FLAG_POSSIBLE:
-		game_iface_in->act_game[player_iface_position.row][player_iface_position.col]	=
+		in->act_game[player_iface_position.row][player_iface_position.col]	=
 					GAME_IFACE_GAME_ACT_FLAG_POSSIBLE;
 		break;
 
 	case PLAYER_IFACE_ACT_RM_FLAG:
-		game_iface_in->act_game[player_iface_position.row][player_iface_position.col]	=
+		in->act_game[player_iface_position.row][player_iface_position.col]	=
 					GAME_IFACE_GAME_ACT_RM_FLAG;
 		break;
 	}
 
-	game_iface_in->action	= GAME_IFACE_ACT_PLAY;
+	in->action	= GAME_IFACE_ACT_PLAY;
 }
 
-static	void	player_iface_act_game	(struct Game_Iface_In	*game_iface_in)
+static	void	player_iface_act_game	(struct Game_Iface_In	*in)
 {
 	switch (player_action) {
 	case PLAYER_IFACE_ACT_PAUSE:
-		game_iface_in->action	= GAME_IFACE_ACT_PAUSE;
+		in->action	= GAME_IFACE_ACT_PAUSE;
 		break;
 
 	case PLAYER_IFACE_ACT_SAVE:
-		game_iface_in->action	= GAME_IFACE_ACT_SAVE;
+		in->action	= GAME_IFACE_ACT_SAVE;
 		break;
 
 	case PLAYER_IFACE_ACT_XYZZY_ON:
-		game_iface_in->action	= GAME_IFACE_ACT_XYZZY_ON;
+		in->action	= GAME_IFACE_ACT_XYZZY_ON;
 		break;
 
 	case PLAYER_IFACE_ACT_XYZZY_OFF:
-		game_iface_in->action	= GAME_IFACE_ACT_XYZZY_OFF;
+		in->action	= GAME_IFACE_ACT_XYZZY_OFF;
 		break;
 
 	case PLAYER_IFACE_ACT_XYZZY_LIN:
-		game_iface_in->action	= GAME_IFACE_ACT_XYZZY_LIN;
+		in->action	= GAME_IFACE_ACT_XYZZY_LIN;
 		break;
 
 	case PLAYER_IFACE_ACT_XYZZY_P:
-		game_iface_in->action	= GAME_IFACE_ACT_XYZZY_P;
+		in->action	= GAME_IFACE_ACT_XYZZY_P;
 		break;
 
 	case PLAYER_IFACE_ACT_XYZZY_NP:
-		game_iface_in->action	= GAME_IFACE_ACT_XYZZY_NP;
+		in->action	= GAME_IFACE_ACT_XYZZY_NP;
 		break;
 
 	case PLAYER_IFACE_ACT_QUIT:
-		game_iface_in->action	= GAME_IFACE_ACT_QUIT;
+		in->action	= GAME_IFACE_ACT_QUIT;
 		break;
 	}
 }
