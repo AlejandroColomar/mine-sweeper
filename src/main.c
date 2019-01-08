@@ -6,19 +6,12 @@
 /******************************************************************************
  ******* headers **************************************************************
  ******************************************************************************/
-/*	*	*	*	*	*	*	*	*	*
- *	*	* Standard	*	*	*	*	*	*
- *	*	*	*	*	*	*	*	*	*/
-	#include <gtk/gtk.h>
-		/* getchar() */
 	#include <stdio.h>
 
-/*	*	*	*	*	*	*	*	*	*
- *	*	* Other	*	*	*	*	*	*	*
- *	*	*	*	*	*	*	*	*	*/
-	#include "alx_ncur.h"
+	#include <gtk/gtk.h>
 
-		/* about_init() & print_cpright() */
+	#include "libalx/alx_ncur.h"
+
 	#include "about.h"
 	#include "game.h"
 	#include "menu_iface.h"

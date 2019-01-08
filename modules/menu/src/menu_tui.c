@@ -7,24 +7,18 @@
  ******* headers **************************************************************
  ******************************************************************************/
 /* Standard C ----------------------------------------------------------------*/
-		/* INFINITY */
 	#include <math.h>
 	#include <ncurses.h>
 	#include <stdbool.h>
-		/* srand() */
 	#include <stdlib.h>
-
 /* libalx --------------------------------------------------------------------*/
-	#include "alx_ncur.h"
-
+	#include "libalx/alx_ncur.h"
 /* Project -------------------------------------------------------------------*/
 	#include "about.h"
 	#include "game_iface.h"
 	#include "save.h"
 	#include "score.h"
 	#include "start.h"
-
-/* Module --------------------------------------------------------------------*/
 	#include "menu_iface.h"
 
 	#include "menu_tui.h"

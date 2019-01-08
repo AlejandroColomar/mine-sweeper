@@ -8,25 +8,18 @@
  ******************************************************************************/
 /* Standard C ----------------------------------------------------------------*/
 	#include <gtk/gtk.h>
-		/* INFINITY */
 	#include <math.h>
-		/* true & false */
 	#include <stdbool.h>
-		/* snprintf() */
 	#include <stdio.h>
-		/* srand() */
 	#include <stdlib.h>
-
 /* libalx --------------------------------------------------------------------*/
-	#include "alx_input.h"
-
+	#include "libalx/alx_input.h"
 /* Project -------------------------------------------------------------------*/
 	#include "about.h"
 	#include "game_iface.h"
 	#include "save.h"
 	#include "score.h"
 	#include "start.h"
-
 	#include "menu_iface.h"
 
 	#include "menu_gui.h"

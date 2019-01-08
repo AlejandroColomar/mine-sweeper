@@ -8,20 +8,12 @@
  ******************************************************************************/
 /* Standard C ----------------------------------------------------------------*/
 	#include <stdbool.h>
-		/* time_t & time() */
 	#include <time.h>
-
 /* Project -------------------------------------------------------------------*/
-		/* player_iface() */
 	#include "player_iface.h"
-		/* save_game_file() */
 	#include "save.h"
-		/* save_score() */
 	#include "score.h"
-		/* xyzzy_...() */
 	#include "xyzzy.h"
-
-		/* game_action() */
 	#include "game.h"
 
 	#include "game_iface.h"

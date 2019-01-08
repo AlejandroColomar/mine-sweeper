@@ -8,21 +8,16 @@
  ******************************************************************************/
 /* Standard C ----------------------------------------------------------------*/
 	#include <getopt.h>
-		/* FILE & fopen() & snprintf() & FILENAME_MAX */
 	#include <stdio.h>
-		/* exit() */
 	#include <stdlib.h>
-
 /* libalx --------------------------------------------------------------------*/
-	#include "alx_seed.h"
-
+	#include "libalx/alx_seed.h"
 /* Project -------------------------------------------------------------------*/
 	#include "about.h"
 	#include "game_iface.h"
 	#include "player_iface.h"
 	#include "save.h"
 	#include "start.h"
-
 	#include "menu_iface.h"
 
 	#include "parser.h"

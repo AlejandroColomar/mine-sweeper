@@ -8,26 +8,17 @@
  ******* headers **************************************************************
  ******************************************************************************/
 /* Standard C ----------------------------------------------------------------*/
-		/* errno */
 	#include <errno.h>
-		/* bool */
 	#include <stdbool.h>
-		/* fscanf() & fprintf() & FILE & FILENAME_MAX & snprintf() */
 	#include <stdio.h>
-		/* getenv() & exit() */
 	#include <stdlib.h>
-
 /* Linux ---------------------------------------------------------------------*/
 		/* mkdir */
 	#include <sys/stat.h>
-
 /* Project -------------------------------------------------------------------*/
-		/* struct Game_Board */
 	#include "game.h"
-		/* player_iface_save_name() */
 	#include "player_iface.h"
 
-/* Module --------------------------------------------------------------------*/
 	#include "save.h"
 
 

@@ -7,20 +7,15 @@
  ******* headers **************************************************************
  ******************************************************************************/
 /* Standard C ----------------------------------------------------------------*/
-		/* INFINITY */
 	#include <math.h>
-		/* srand() */
 	#include <stdlib.h>
-
 /* libalx --------------------------------------------------------------------*/
-	#include "alx_input.h"
-
+	#include "libalx/alx_input.h"
 /* Project -------------------------------------------------------------------*/
 	#include "about.h"
 	#include "game_iface.h"
 //	#include "save.h"
 	#include "start.h"
-
 	#include "menu_iface.h"
 
 	#include "menu_clui.h"

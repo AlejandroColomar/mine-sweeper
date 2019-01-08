@@ -7,18 +7,12 @@
  ******* headers **************************************************************
  ******************************************************************************/
 /* Standard C ----------------------------------------------------------------*/
-		/* snprintf() & fflush() */
 	#include <stdio.h>
-
 /* Project -------------------------------------------------------------------*/
-		/* struct Game_Iface_... */
 	#include "game_iface.h"
 
-		/* game_tui() */
 	#include "player_clui.h"
-		/* game_tui() */
 	#include "player_tui.h"
-		/* game_gui() */
 	#include "player_gui.h"
 
 	#include "player_iface.h"

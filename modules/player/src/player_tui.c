@@ -7,20 +7,12 @@
  ******* headers **************************************************************
  ******************************************************************************/
 /* Standard C ----------------------------------------------------------------*/
-		/* WINDOW & wgetch() & KEY_... & ... */
 	#include <ncurses.h>
-		/* wchar_t */
-	#include <wchar.h>
-
 /* libalx ------------------------------------------------------------------*/
-		/* alx_..._curses() & alx_ncur_prn_...() */
-	#include "alx_ncur.h"
-
+	#include "libalx/alx_ncur.h"
 /* Project -------------------------------------------------------------------*/
-		/* struct Game_Iface_Out */
 	#include "game_iface.h"
 
-		/* struct Player_Iface_Position */
 	#include "player_iface.h"
 
 	#include "player_tui.h"
@@ -60,11 +52,11 @@ static	void	show_board	(const struct Game_Iface_Out  *board,
 static	void	board_loop	(const struct Game_Iface_Out  *board,
 				const struct Player_Iface_Position  *position);
 
-static	void	highlight_cursor(wchar_t c,
+static	void	highlight_cursor(int c,
 				const struct Player_Iface_Position  *position);
 
-static	wchar_t	set_char	(int tile);
-static	void	show_char	(int row, int col, wchar_t c);
+static	int	set_char	(int tile);
+static	void	show_char	(int row, int col, int c);
 	/* Input */
 static	int	usr_input	(void);
 	/* Help */
@@ -224,7 +216,7 @@ static	void	board_loop_start(const struct Player_Iface_Position  *position)
 	int	j;
 	int	k;
 	int	l;
-	wchar_t	c;
+	int	c;
 
 	c	= PLAYER_TUI_CHAR_HIDDEN_FIELD;
 
@@ -278,7 +270,7 @@ static	void	board_loop	(const struct Game_Iface_Out  *board,
 	int	j;
 	int	k;
 	int	l;
-	wchar_t	c;
+	int	c;
 
 	for (i = 0; i < board->rows; i++) {
 		k = 1 + i;
@@ -317,7 +309,7 @@ static	void	board_loop	(const struct Game_Iface_Out  *board,
 	}
 }
 
-static	void	highlight_cursor(wchar_t c,
+static	void	highlight_cursor(int c,
 				const struct Player_Iface_Position  *position)
 {
 	int	k;
@@ -339,9 +331,9 @@ static	void	highlight_cursor(wchar_t c,
 	}
 }
 
-static	wchar_t	set_char	(int tile)
+static	int	set_char	(int tile)
 {
-	wchar_t	c;
+	int	c;
 
 	switch (tile) {
 	case GAME_IFACE_VIS_KBOOM:
@@ -406,7 +398,7 @@ static	wchar_t	set_char	(int tile)
 	return	c;
 }
 
-static	void	show_char	(int row, int col, wchar_t c)
+static	void	show_char	(int row, int col, int c)
 {
 	int	pair;
 
@@ -482,12 +474,12 @@ static	void	show_char	(int row, int col, wchar_t c)
  *	*	*	*	*	*	*	*	*	*/
 static	int	usr_input	(void)
 {
-	wchar_t	ch;
+	int	c;
 	int	action;
 
-	ch = wgetch(win_board);
+	c = wgetch(win_board);
 
-	switch (ch) {
+	switch (c) {
 	case '+':
 	case '\r':
 	case '\n':
@@ -516,14 +508,14 @@ static	int	usr_input	(void)
 		/* Wait for special sequence "xyzzy" */
 		wtimeout(win_board, 1000);
 
-		ch = wgetch(win_board);
-		if (ch == 'y') {
-			ch = wgetch(win_board);
-			if (ch == 'z') {
-				ch = wgetch(win_board);
-				if (ch == 'z') {
-					ch = wgetch(win_board);
-					if (ch == 'y') {
+		c = wgetch(win_board);
+		if (c == 'y') {
+			c = wgetch(win_board);
+			if (c == 'z') {
+				c = wgetch(win_board);
+				if (c == 'z') {
+					c = wgetch(win_board);
+					if (c == 'y') {
 						action	= PLAYER_IFACE_ACT_XYZZY_ON;
 					}
 				}

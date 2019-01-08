@@ -8,15 +8,10 @@
  ******************************************************************************/
 /* Standard C ----------------------------------------------------------------*/
 	#include <stdbool.h>
-		/* printf() & sscanf() */
 	#include <stdio.h>
 	#include <wchar.h>
-
 /* Project -------------------------------------------------------------------*/
-		/* struct Game_Iface_Out */
 	#include "game_iface.h"
-
-		/* struct Player_Iface_Position */
 	#include "player_iface.h"
 
 	#include "player_clui.h"

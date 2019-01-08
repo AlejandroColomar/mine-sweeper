@@ -18,7 +18,7 @@ SRC_DIR = $(GAME_DIR)/src/
 _ALL	= game.o game_iface.o
 ALL	= $(_ALL) game_mod.o
 
-GAME_INC_LIBALX	= alx_seed.h
+GAME_INC_LIBALX	= libalx/alx_seed.h
 GAME_INC_SAVE	= save.h
 GAME_INC	= game.h
 GAME_DEPS	= $(SRC_DIR)/game.c \

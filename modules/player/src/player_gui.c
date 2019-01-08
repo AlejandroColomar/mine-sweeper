@@ -7,25 +7,16 @@
  ******* headers **************************************************************
  ******************************************************************************/
 /* Standard C ----------------------------------------------------------------*/
-	#include <gtk/gtk.h>
-		/* fmod */
 	#include <math.h>
-		/* true & false */
 	#include <stdbool.h>
-		/* snprintf() */
 	#include <stdio.h>
-
+/* Packages ------------------------------------------------------------------*/
+	#include <gtk/gtk.h>
 /* libalx ------------------------------------------------------------------*/
-		/* alx_sscan_fname() */
-	#include "alx_input.h"
-
+	#include "libalx/alx_input.h"
 /* Project -------------------------------------------------------------------*/
-		/* struct Game_Iface_Out */
 	#include "game_iface.h"
-		/* window_gui */
 	#include "menu_gui.h"
-
-		/* struct Player_Iface_Position */
 	#include "player_iface.h"
 
 	#include "player_gui.h"

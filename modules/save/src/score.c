@@ -9,23 +9,14 @@
  ******************************************************************************/
 /* Standard C ----------------------------------------------------------------*/
 	#include <errno.h>
-		/* fscanf() & fprintf() & FILE & FILENAME_MAX & snprintf() */
 	#include <stdio.h>
-		/* exit() */
 	#include <stdlib.h>
-		/* time_t & time() & struct tm & localtime() */
 	#include <time.h>
-
 /* Project -------------------------------------------------------------------*/
-		/* struct Game_Board */
 	#include "game.h"
-		/* enum Game_Iface_Level */
 	#include "game_iface.h"
-		/* player_iface_score_name() */
 	#include "player_iface.h"
 
-/* Module --------------------------------------------------------------------*/
-		/* saved_name */
 	#include "save.h"
 
 	#include "score.h"
