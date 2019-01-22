@@ -10,7 +10,7 @@
 
 	#include <gtk/gtk.h>
 
-	#include "libalx/alx_ncur.h"
+	#include "libalx/curses/alx_ncur.h"
 
 	#include "about.h"
 	#include "game.h"

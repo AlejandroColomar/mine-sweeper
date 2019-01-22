@@ -13,7 +13,7 @@
 /* Packages ------------------------------------------------------------------*/
 	#include <gtk/gtk.h>
 /* libalx ------------------------------------------------------------------*/
-	#include "libalx/alx_input.h"
+	#include "libalx/io/alx_input.h"
 /* Project -------------------------------------------------------------------*/
 	#include "game_iface.h"
 	#include "menu_gui.h"

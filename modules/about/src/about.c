@@ -10,7 +10,7 @@
 	#include <stdio.h>
 	#include <stdlib.h>
 /* libalx ------------------------------------------------------------------*/
-	#include "libalx/alx_file.h"
+	#include "libalx/io/alx_file.h"
 /* Project -------------------------------------------------------------------*/
 	#include "about.h"
 

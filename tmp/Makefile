@@ -30,7 +30,7 @@ SRC_DIR	= $(MAIN_DIR)/src/
 
 ALL = main.o
 
-MAIN_INC_LIBALX	= libalx/alx_ncur.h
+MAIN_INC_LIBALX	= libalx/curses/alx_ncur.h
 MAIN_INC_ABOUT	= about.h
 MAIN_INC_CTRL	= start.h
 MAIN_INC_GAME	= game.h

@@ -10,7 +10,7 @@
 	#include <math.h>
 	#include <stdlib.h>
 /* libalx --------------------------------------------------------------------*/
-	#include "libalx/alx_input.h"
+	#include "libalx/io/alx_input.h"
 /* Project -------------------------------------------------------------------*/
 	#include "about.h"
 	#include "game_iface.h"

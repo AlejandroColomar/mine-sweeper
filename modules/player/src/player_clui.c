@@ -9,7 +9,6 @@
 /* Standard C ----------------------------------------------------------------*/
 	#include <stdbool.h>
 	#include <stdio.h>
-	#include <wchar.h>
 /* Project -------------------------------------------------------------------*/
 	#include "game_iface.h"
 	#include "player_iface.h"

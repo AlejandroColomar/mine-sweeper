@@ -33,7 +33,7 @@ PLAYCLUI_DEPS		= $(SRC_DIR)/player_clui.c \
 PLAYCLUI_INC_DIRS	= -I $(INC_DIR) \
 				-I $(GAME_INC_DIR)
 
-PLAYTUI_INC_LIBALX	= libalx/alx_ncur.h
+PLAYTUI_INC_LIBALX	= libalx/curses/alx_ncur.h
 PLAYTUI_INC_GAME	= game_iface.h
 PLAYTUI_INC		= player_tui.h	player_iface.h
 PLAYTUI_DEPS		= $(SRC_DIR)/player_tui.c \
@@ -44,7 +44,7 @@ PLAYTUI_INC_DIRS	= -I $(INC_DIR) \
 				-I $(LIBALX_INC_DIR) \
 				-I $(GAME_INC_DIR)
 
-PLAYGUI_INC_LIBALX	= libalx/alx_input.h
+PLAYGUI_INC_LIBALX	= libalx/io/alx_input.h
 PLAYGUI_INC_GAME	= game_iface.h
 PLAYGUI_INC_MENU	= menu_gui.h
 PLAYGUI_INC		= player_gui.h	player_iface.h
