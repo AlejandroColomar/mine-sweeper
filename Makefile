@@ -233,12 +233,12 @@ install: uninstall
 	@echo	"	Install:"
 	@echo	"	MKDIR	$(INSTALL_BIN_DIR)/"
 	$(Q)mkdir -p		$(DESTDIR)/$(INSTALL_BIN_DIR)/
-	@echo	"	CP	$(BIN_NAME)"
-	$(Q)cp			$(BIN_DIR)/$(BIN_NAME)	$(DESTDIR)/$(INSTALL_BIN_DIR)/
+	@echo	"	CP -v	$(BIN_NAME)"
+	$(Q)cp -v		$(BIN_DIR)/$(BIN_NAME)	$(DESTDIR)/$(INSTALL_BIN_DIR)/
 	@echo	"	MKDIR	$(INSTALL_SHARE_DIR)/$(SHARE_DIR)/"
 	$(Q)mkdir -p		$(DESTDIR)/$(INSTALL_SHARE_DIR)/$(SHARE_DIR)/
-	@echo	"	CP -r	share/*"
-	$(Q)cp -r		./share/*		$(DESTDIR)/$(INSTALL_SHARE_DIR)/$(SHARE_DIR)/
+	@echo	"	CP -rv	share/*"
+	$(Q)cp -r -v		./share/*		$(DESTDIR)/$(INSTALL_SHARE_DIR)/$(SHARE_DIR)/
 	
 	@echo	"	MKDIR	$(INSTALL_VAR_DIR)/$(VAR_DIR)/"
 	$(Q)mkdir -p		$(DESTDIR)/$(INSTALL_VAR_DIR)/$(VAR_DIR)/
@@ -246,8 +246,8 @@ install: uninstall
 	$(Q)mkdir		$(DESTDIR)/$(INSTALL_VAR_DIR)/$(VAR_DIR)/boards_intermediate/
 	$(Q)mkdir		$(DESTDIR)/$(INSTALL_VAR_DIR)/$(VAR_DIR)/boards_expert/
 	$(Q)mkdir		$(DESTDIR)/$(INSTALL_VAR_DIR)/$(VAR_DIR)/boards_custom/
-	@echo	"	CP -r	var/*"
-	$(Q)cp -r		./var/*			$(DESTDIR)/$(INSTALL_VAR_DIR)/$(VAR_DIR)/
+	@echo	"	CP -rv	var/*"
+	$(Q)cp -r -v		./var/*			$(DESTDIR)/$(INSTALL_VAR_DIR)/$(VAR_DIR)/
 	@echo	"	CHOWN	$(INSTALL_VAR_DIR)/$(VAR_DIR)/"
 	$(Q)chown root:games -R	$(DESTDIR)/$(INSTALL_VAR_DIR)/$(VAR_DIR)/
 	@echo	"	CHMOD	$(INSTALL_VAR_DIR)/$(VAR_DIR)/"

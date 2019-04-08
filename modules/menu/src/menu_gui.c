@@ -6,15 +6,14 @@
 /******************************************************************************
  ******* headers **************************************************************
  ******************************************************************************/
-/* Standard C ----------------------------------------------------------------*/
 	#include <gtk/gtk.h>
 	#include <math.h>
 	#include <stdbool.h>
 	#include <stdio.h>
 	#include <stdlib.h>
-/* libalx --------------------------------------------------------------------*/
+
 	#include "libalx/io/alx_input.h"
-/* Project -------------------------------------------------------------------*/
+
 	#include "about.h"
 	#include "game_iface.h"
 	#include "save.h"
@@ -282,21 +281,22 @@ static	void		callback_entry_dbl	(GtkWidget	*widget,
 {
 	struct Entry_dbl_Data	*entry;
 	const char		*str;
-	int			err;
 	char			buff [LINE_SIZE];
 
 	entry	= ((struct Entry_dbl_Data *)data);
 
 	str	= gtk_entry_get_text(GTK_ENTRY(entry->ptr));
-	err	= alx_sscan_dbl(entry->num, entry->min, entry->def, entry->max, str);
+	if (alx_sscan_dbl(entry->num, entry->min, entry->def, entry->max, str))
+		goto err;
 
-	if (err) {
-		(void)snprintf(buff, LINE_SIZE, "Error %i", err);
-		gtk_entry_set_text(GTK_ENTRY(entry->ptr), buff);
-		gtk_editable_select_region(GTK_EDITABLE(entry->ptr),
-					0, GTK_ENTRY(entry->ptr)->text_length);
-	}
+	gtk_main_quit();
+	return;
 
+err:
+	(void)snprintf(buff, LINE_SIZE, "Error %i", err);
+	gtk_entry_set_text(GTK_ENTRY(entry->ptr), buff);
+	gtk_editable_select_region(GTK_EDITABLE(entry->ptr),
+				0, GTK_ENTRY(entry->ptr)->text_length);
 	gtk_main_quit();
 }
 
@@ -305,24 +305,24 @@ static	void		callback_entry_int	(GtkWidget	*widget,
 {
 	struct Entry_int_Data	*entry;
 	const char		*str;
-	int			err;
 	int64_t			Z;
 	char			buff [LINE_SIZE];
 
 	entry	= ((struct Entry_int_Data *)data);
 
 	str	= gtk_entry_get_text(GTK_ENTRY(entry->ptr));
-	err	= alx_sscan_i64(&Z, entry->min, entry->def, entry->max, str);
+	if (alx_sscan_i64(&Z, entry->min, entry->def, entry->max, str))
+		goto err;
+	*(entry->num)	= Z;
 
-	if (err) {
-		(void)snprintf(buff, LINE_SIZE, "Error %i", err);
-		gtk_entry_set_text(GTK_ENTRY(entry->ptr), buff);
-		gtk_editable_select_region(GTK_EDITABLE(entry->ptr),
-					0, GTK_ENTRY(entry->ptr)->text_length);
-	} else {
-		*(entry->num)	= Z;
-	}
+	gtk_main_quit();
+	return;
 
+err:
+	(void)snprintf(buff, LINE_SIZE, "Error %i", err);
+	gtk_entry_set_text(GTK_ENTRY(entry->ptr), buff);
+	gtk_editable_select_region(GTK_EDITABLE(entry->ptr),
+				0, GTK_ENTRY(entry->ptr)->text_length);
 	gtk_main_quit();
 }
 
@@ -331,21 +331,22 @@ static	void		callback_entry_fname	(GtkWidget	*widget,
 {
 	struct Entry_fname_Data	*entry;
 	const char		*str;
-	int			err;
 	char			buff [LINE_SIZE];
 
 	entry	= ((struct Entry_fname_Data *)data);
 
 	str	= gtk_entry_get_text(GTK_ENTRY(entry->ptr));
-	err	= alx_sscan_fname(entry->fpath, entry->fname, true, str);
+	if (alx_sscan_fname(entry->fpath, entry->fname, true, str))
+		goto err;
 
-	if (err) {
-		snprintf(buff, LINE_SIZE, "Error %i", err);
-		gtk_entry_set_text(GTK_ENTRY(entry->ptr), buff);
-		gtk_editable_select_region(GTK_EDITABLE(entry->ptr),
-					0, GTK_ENTRY(entry->ptr)->text_length);
-	}
+	gtk_main_quit();
+	return;
 
+err:
+	(void)snprintf(buff, LINE_SIZE, "Error %i", err);
+	gtk_entry_set_text(GTK_ENTRY(entry->ptr), buff);
+	gtk_editable_select_region(GTK_EDITABLE(entry->ptr),
+				0, GTK_ENTRY(entry->ptr)->text_length);
 	gtk_main_quit();
 }
 

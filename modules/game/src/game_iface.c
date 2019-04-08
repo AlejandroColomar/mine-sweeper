@@ -6,10 +6,9 @@
 /******************************************************************************
  ******* headers **************************************************************
  ******************************************************************************/
-/* Standard C ----------------------------------------------------------------*/
 	#include <stdbool.h>
 	#include <time.h>
-/* Project -------------------------------------------------------------------*/
+
 	#include "player_iface.h"
 	#include "save.h"
 	#include "score.h"
@@ -144,23 +143,18 @@ static	void	game_iface_act		(void)
 	case GAME_IFACE_STATE_PLAYING:
 		game_iface_playing_act();
 		break;
-
 	case GAME_IFACE_STATE_CHEATED:
 		game_iface_cheated_act();
 		break;
-
 	case GAME_IFACE_STATE_XYZZY:
 		game_iface_xyzzy_act();
 		break;
-
 	case GAME_IFACE_STATE_PAUSE:
 		game_iface_pause_act();
 		break;
-
 	case GAME_IFACE_STATE_SAFE:
 		game_iface_safe_act();
 		break;
-
 	case GAME_IFACE_STATE_GAMEOVER:
 		game_iface_gameover_act();
 		break;
@@ -174,19 +168,15 @@ static	void	game_iface_playing_act	(void)
 	case GAME_IFACE_ACT_PLAY:
 		game_iface_act_game();
 		break;
-
 	case GAME_IFACE_ACT_PAUSE:
 		game_iface_pause();
 		break;
-
 	case GAME_IFACE_ACT_XYZZY_ON:
 		game_iface_xyzzy_on();
 		break;
-
 	case GAME_IFACE_ACT_SAVE:
 		save_game_file(saved_path);
 		break;
-
 	case GAME_IFACE_ACT_QUIT:
 		game_iface_quit();
 		break;
@@ -456,28 +446,25 @@ static	void	game_iface_update_vis	(int r, int c)
 			field_vis	= GAME_IFACE_VIS_KBOOM;
 			break;
 		case GAME_USR_HIDDEN:
-			if (game_board.gnd[r][c] >= GAME_MINE_YES) {
+			if (game_board.gnd[r][c] >= GAME_MINE_YES)
 				field_vis	= GAME_IFACE_VIS_HIDDEN_MINE;
-			} else {
+			else
 				field_vis	= GAME_IFACE_VIS_HIDDEN_SAFE;
-			}
 			break;
 		case GAME_USR_CLEAR:
 			field_vis	= GAME_IFACE_VIS_0 + game_board.gnd[r][c];
 			break;
 		case GAME_USR_FLAG:
-			if (game_board.gnd[r][c] >= GAME_MINE_YES) {
+			if (game_board.gnd[r][c] >= GAME_MINE_YES)
 				field_vis	= GAME_IFACE_VIS_FLAG;
-			} else {
+			else
 				field_vis	= GAME_IFACE_VIS_FLAG_FALSE;
-			}
 			break;
 		case GAME_USR_POSSIBLE:
-			if (game_board.gnd[r][c] >= GAME_MINE_YES) {
+			if (game_board.gnd[r][c] >= GAME_MINE_YES)
 				field_vis	= GAME_IFACE_VIS_POSSIBLE;
-			} else {
+			else
 				field_vis	= GAME_IFACE_VIS_POSSIBLE_FALSE;
-			}
 			break;
 		}
 		break;
@@ -547,9 +534,8 @@ static	void	game_iface_clean_in	(void)
 	int	j;
 
 	for (i = 0; i < game_board.rows; i++) {
-		for (j = 0; j < game_board.cols; j++) {
+		for (j = 0; j < game_board.cols; j++)
 			game_iface_in.act_game[i][j]	= GAME_IFACE_GAME_ACT_FOO;
-		}
 	}
 	game_iface_in.action	= GAME_IFACE_ACT_FOO;
 }

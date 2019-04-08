@@ -133,7 +133,8 @@ static	void	parse_rows		(char *argument)
 {
 
 	menu_iface_variables.rows	= atoi(argument);
-	if (menu_iface_variables.rows < 2 || menu_iface_variables.rows > ROWS_MAX) {
+	if ((menu_iface_variables.rows < 2)  ||
+			(menu_iface_variables.rows > ROWS_MAX)) {
 		printf("--rows argument not valid\n");
 		printf("It must be an integer [%i U %i]\n", 2, ROWS_MAX);
 		exit(EXIT_FAILURE);
@@ -144,7 +145,8 @@ static	void	parse_columns		(char *argument)
 {
 
 	menu_iface_variables.cols	= atoi(argument);
-	if (menu_iface_variables.cols < 2 || menu_iface_variables.cols > COLS_MAX) {
+	if ((menu_iface_variables.cols < 2)  ||
+			(menu_iface_variables.cols > COLS_MAX)) {
 		printf("--columns argument not valid\n");
 		printf("It must be an integer [%i U %i]\n", 2, COLS_MAX);
 		exit(EXIT_FAILURE);
@@ -157,16 +159,19 @@ static	void	parse_file		(char *argument)
 
 	// FIXME
 	fp	= fopen(argument, "r");
-	if (!fp) {
-		printf("--file argument not valid\n");
-		printf("It must be a valid file name (relative to saved dir)\n");
-		exit(EXIT_FAILURE);
-	} else {
-		fclose(fp);
+	if (!fp)
+		goto err_fp;
+	fclose(fp);
 
-		saved_path[0]	= '\0';
-		snprintf(saved_name, FILENAME_MAX, argument);
-	}
+	saved_path[0]	= '\0';
+	snprintf(saved_name, FILENAME_MAX, argument);
+
+	return;
+
+err_fp:
+	printf("--file argument not valid\n");
+	printf("It must be a valid file name (relative to saved dir)\n");
+	exit(EXIT_FAILURE);
 }
 
 static	void	parse_iface		(char *argument)
@@ -174,9 +179,11 @@ static	void	parse_iface		(char *argument)
 
 	menu_iface_mode		= atoi(argument);
 	player_iface_mode	= menu_iface_mode;
-	if (menu_iface_mode < MENU_IFACE_CLUI || menu_iface_mode > MENU_IFACE_GUI) {
+	if ((menu_iface_mode < MENU_IFACE_CLUI)  ||
+			(menu_iface_mode > MENU_IFACE_GUI)) {
 		printf("--iface argument not valid\n");
-		printf("It must be an integer [%i U %i]\n", MENU_IFACE_CLUI, MENU_IFACE_GUI);
+		printf("It must be an integer [%i U %i]\n",
+					MENU_IFACE_CLUI, MENU_IFACE_GUI);
 		exit(EXIT_FAILURE);
 	}
 }
@@ -185,7 +192,8 @@ static	void	parse_proportion	(char *argument)
 {
 
 	menu_iface_variables.p	= atof(argument);
-	if (menu_iface_variables.p < 0 || menu_iface_variables.p > 1) {
+	if ((menu_iface_variables.p < 0)  ||
+			(menu_iface_variables.p > 1)) {
 		printf("--proportion argument not valid\n");
 		printf("It must be a real [0 U 1]\n");
 		exit(EXIT_FAILURE);
@@ -204,9 +212,10 @@ static	void	parse_start		(char *argument)
 {
 
 	start_mode	= atoi(argument);
-	if (start_mode < START_FOO || start_mode > START_LOAD) {
+	if ((start_mode < START_FOO)  ||  (start_mode > START_LOAD)) {
 		printf("--start argument not valid\n");
-		printf("It must be an integer [%i U %i]\n", START_FOO, START_LOAD);
+		printf("It must be an integer [%i U %i]\n",
+					START_FOO, START_LOAD);
 		exit(EXIT_FAILURE);
 	}
 }

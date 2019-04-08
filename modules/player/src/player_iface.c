@@ -6,11 +6,9 @@
 /******************************************************************************
  ******* headers **************************************************************
  ******************************************************************************/
-/* Standard C ----------------------------------------------------------------*/
 	#include <stdio.h>
-/* Project -------------------------------------------------------------------*/
-	#include "game_iface.h"
 
+	#include "game_iface.h"
 	#include "player_clui.h"
 	#include "player_tui.h"
 	#include "player_gui.h"
@@ -28,7 +26,7 @@
  ******* variables ************************************************************
  ******************************************************************************/
 /* Global --------------------------------------------------------------------*/
-int	player_iface_mode;
+	int	player_iface_mode;
 /* Static --------------------------------------------------------------------*/
 static	struct Player_Iface_Position	player_iface_position;
 static	int				player_action;
@@ -137,6 +135,10 @@ void	player_iface		(const	struct Game_Iface_Out	*out,
 					struct Game_Iface_In	*in)
 {
 	char	title[TITLE_SIZE];
+	char	subtitle[TITLE_SIZE];
+	int	hours;
+	int	mins;
+	int	secs;
 
 	/* Title */
 	switch (out->state) {
@@ -157,10 +159,6 @@ void	player_iface		(const	struct Game_Iface_Out	*out,
 		break;
 	}
 	/* Subtitle */
-	char	subtitle[TITLE_SIZE];
-	int	hours;
-	int	mins;
-	int	secs;
 	if (score->time != CHEATED) {
 		hours	= ((int)score->time / 3600);
 		mins	= (((int)score->time % 3600) / 60);
@@ -183,12 +181,10 @@ void	player_iface		(const	struct Game_Iface_Out	*out,
 		player_clui(out, &player_iface_position, title, subtitle,
 					&player_action);
 		break;
-
 	case PLAYER_IFACE_TUI:
 		player_tui(out, &player_iface_position, title, subtitle,
 					&player_action);
 		break;
-
 	case PLAYER_IFACE_GUI:
 		player_gui(out, &player_iface_position, title, subtitle);
 		break;
@@ -199,15 +195,14 @@ void	player_iface		(const	struct Game_Iface_Out	*out,
 
 void	player_iface_save_name	(const char *fpath, char *fname, int destsize)
 {
+
 	switch (player_iface_mode) {
 	case PLAYER_IFACE_CLUI:
 		player_clui_save_name(fpath, fname, destsize);
 		break;
-
 	case PLAYER_IFACE_TUI:
 		player_tui_save_name(fpath, fname, destsize);
 		break;
-
 	case PLAYER_IFACE_GUI:
 		player_gui_save_name(fpath, fname, destsize);
 		break;
@@ -216,15 +211,14 @@ void	player_iface_save_name	(const char *fpath, char *fname, int destsize)
 
 void	player_iface_score_name	(char *player_name, int destsize)
 {
+
 	switch (player_iface_mode) {
 	case PLAYER_IFACE_CLUI:
 		player_clui_score_name(player_name, destsize);
 		break;
-
 	case PLAYER_IFACE_TUI:
 		player_tui_score_name(player_name, destsize);
 		break;
-
 	case PLAYER_IFACE_GUI:
 		player_gui_score_name(player_name, destsize);
 		break;
@@ -233,14 +227,13 @@ void	player_iface_score_name	(char *player_name, int destsize)
 
 void	player_iface_cleanup	(void)
 {
+
 	switch (player_iface_mode) {
 	case PLAYER_IFACE_CLUI:
 		break;
-
 	case PLAYER_IFACE_TUI:
 		player_tui_cleanup();
 		break;
-
 	case PLAYER_IFACE_GUI:
 		player_gui_cleanup();
 		break;
@@ -257,6 +250,7 @@ void	player_iface_cleanup	(void)
  *	*	*	*	*	*	*	*	*	*/
 static	void	player_iface_act	(struct Game_Iface_In	*in)
 {
+
 	switch (player_action) {
 	case PLAYER_IFACE_ACT_STEP:
 	case PLAYER_IFACE_ACT_FLAG:
@@ -264,7 +258,6 @@ static	void	player_iface_act	(struct Game_Iface_In	*in)
 	case PLAYER_IFACE_ACT_RM_FLAG:
 		player_iface_act_play(in);
 		break;
-
 	case PLAYER_IFACE_ACT_PAUSE:
 	case PLAYER_IFACE_ACT_SAVE:
 	case PLAYER_IFACE_ACT_XYZZY_ON:
@@ -275,23 +268,18 @@ static	void	player_iface_act	(struct Game_Iface_In	*in)
 	case PLAYER_IFACE_ACT_QUIT:
 		player_iface_act_game(in);
 		break;
-
 	case PLAYER_IFACE_ACT_MOVE_UP:
 		player_iface_move_up();
 		break;
-
 	case PLAYER_IFACE_ACT_MOVE_DOWN:
 		player_iface_move_down();
 		break;
-
 	case PLAYER_IFACE_ACT_MOVE_RIGHT:
 		player_iface_move_right();
 		break;
-
 	case PLAYER_IFACE_ACT_MOVE_LEFT:
 		player_iface_move_left();
 		break;
-
 	case PLAYER_IFACE_ACT_HIGHLIGHT:
 		highlight_cursor();
 		break;
@@ -300,27 +288,23 @@ static	void	player_iface_act	(struct Game_Iface_In	*in)
 
 static	void	player_iface_act_start	(void)
 {
+
 	switch (player_action) {
 	case PLAYER_IFACE_ACT_STEP:
 	case PLAYER_IFACE_ACT_QUIT:
 		break;
-
 	case PLAYER_IFACE_ACT_MOVE_UP:
 		player_iface_move_up();
 		break;
-
 	case PLAYER_IFACE_ACT_MOVE_DOWN:
 		player_iface_move_down();
 		break;
-
 	case PLAYER_IFACE_ACT_MOVE_RIGHT:
 		player_iface_move_right();
 		break;
-
 	case PLAYER_IFACE_ACT_MOVE_LEFT:
 		player_iface_move_left();
 		break;
-
 	case PLAYER_IFACE_ACT_HIGHLIGHT:
 		highlight_cursor();
 		break;
@@ -332,25 +316,21 @@ static	void	player_iface_act_start	(void)
  *	*	*	*	*	*	*	*	*	*/
 static	void	player_iface_act_play	(struct Game_Iface_In	*in)
 {
+	const int	r = player_iface_position.row;
+	const int	c = player_iface_position.col;
+
 	switch (player_action) {
 	case PLAYER_IFACE_ACT_STEP:
-		in->act_game[player_iface_position.row][player_iface_position.col]	=
-					GAME_IFACE_GAME_ACT_STEP;
+		in->act_game[r][c]	= GAME_IFACE_GAME_ACT_STEP;
 		break;
-
 	case PLAYER_IFACE_ACT_FLAG:
-		in->act_game[player_iface_position.row][player_iface_position.col]	=
-					GAME_IFACE_GAME_ACT_FLAG;
+		in->act_game[r][c]	= GAME_IFACE_GAME_ACT_FLAG;
 		break;
-
 	case PLAYER_IFACE_ACT_FLAG_POSSIBLE:
-		in->act_game[player_iface_position.row][player_iface_position.col]	=
-					GAME_IFACE_GAME_ACT_FLAG_POSSIBLE;
+		in->act_game[r][c]	= GAME_IFACE_GAME_ACT_FLAG_POSSIBLE;
 		break;
-
 	case PLAYER_IFACE_ACT_RM_FLAG:
-		in->act_game[player_iface_position.row][player_iface_position.col]	=
-					GAME_IFACE_GAME_ACT_RM_FLAG;
+		in->act_game[r][c]	= GAME_IFACE_GAME_ACT_RM_FLAG;
 		break;
 	}
 
@@ -359,35 +339,29 @@ static	void	player_iface_act_play	(struct Game_Iface_In	*in)
 
 static	void	player_iface_act_game	(struct Game_Iface_In	*in)
 {
+
 	switch (player_action) {
 	case PLAYER_IFACE_ACT_PAUSE:
 		in->action	= GAME_IFACE_ACT_PAUSE;
 		break;
-
 	case PLAYER_IFACE_ACT_SAVE:
 		in->action	= GAME_IFACE_ACT_SAVE;
 		break;
-
 	case PLAYER_IFACE_ACT_XYZZY_ON:
 		in->action	= GAME_IFACE_ACT_XYZZY_ON;
 		break;
-
 	case PLAYER_IFACE_ACT_XYZZY_OFF:
 		in->action	= GAME_IFACE_ACT_XYZZY_OFF;
 		break;
-
 	case PLAYER_IFACE_ACT_XYZZY_LIN:
 		in->action	= GAME_IFACE_ACT_XYZZY_LIN;
 		break;
-
 	case PLAYER_IFACE_ACT_XYZZY_P:
 		in->action	= GAME_IFACE_ACT_XYZZY_P;
 		break;
-
 	case PLAYER_IFACE_ACT_XYZZY_NP:
 		in->action	= GAME_IFACE_ACT_XYZZY_NP;
 		break;
-
 	case PLAYER_IFACE_ACT_QUIT:
 		in->action	= GAME_IFACE_ACT_QUIT;
 		break;
@@ -399,42 +373,43 @@ static	void	player_iface_act_game	(struct Game_Iface_In	*in)
  *	*	*	*	*	*	*	*	*	*/
 static	void	player_iface_move_up	(void)
 {
-	if (player_iface_position.row) {
+
+	if (player_iface_position.row)
 		(player_iface_position.row)--;
-	} else {
+	else
 		player_iface_position.row	= player_iface_position.rows - 1;
-	}
 }
 
 static	void	player_iface_move_down	(void)
 {
-	if (player_iface_position.row != player_iface_position.rows - 1) {
+
+	if (player_iface_position.row != player_iface_position.rows - 1)
 		(player_iface_position.row)++;
-	} else {
+	else
 		player_iface_position.row	= 0;
-	}
 }
 
 static	void	player_iface_move_right	(void)
 {
-	if (player_iface_position.col != player_iface_position.cols - 1) {
+
+	if (player_iface_position.col != player_iface_position.cols - 1)
 		(player_iface_position.col)++;
-	} else {
+	else
 		player_iface_position.col	= 0;
-	}
 }
 
 static	void	player_iface_move_left	(void)
 {
-	if (player_iface_position.col) {
+
+	if (player_iface_position.col)
 		(player_iface_position.col)--;
-	} else {
+	else
 		player_iface_position.col	= player_iface_position.cols - 1;
-	}
 }
 
 static	void	highlight_cursor	(void)
 {
+
 	player_iface_position.highlight	= !player_iface_position.highlight;
 }
 

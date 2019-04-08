@@ -44,10 +44,8 @@ void	menu_iface_init_iface	(void)
 	switch (menu_iface_mode) {
 	case MENU_IFACE_CLUI:
 		break;
-
 	case MENU_IFACE_TUI:
 		break;
-
 	case MENU_IFACE_GUI:
 		menu_gui_init();
 		break;
@@ -60,10 +58,8 @@ void	menu_iface_cleanup	(void)
 	switch (menu_iface_mode) {
 	case MENU_IFACE_CLUI:
 		break;
-
 	case MENU_IFACE_TUI:
 		break;
-
 	case MENU_IFACE_GUI:
 		menu_gui_cleanup();
 		break;
@@ -82,33 +78,28 @@ void	menu_iface_board	(int *level, int *rows, int *cols, int *mines)
 		*cols	= GAME_IFACE_LEVEL_BEGINNER_COLS;
 		*mines	= GAME_IFACE_LEVEL_BEGINNER_MINES;
 		break;
-
 	case GAME_IFACE_LEVEL_INTERMEDIATE:
 		*rows	= GAME_IFACE_LEVEL_INTERMEDIATE_ROWS;
 		*cols	= GAME_IFACE_LEVEL_INTERMEDIATE_COLS;
 		*mines	= GAME_IFACE_LEVEL_INTERMEDIATE_MINES;
 		break;
-
 	case GAME_IFACE_LEVEL_EXPERT:
 		*rows	= GAME_IFACE_LEVEL_EXPERT_ROWS;
 		*cols	= GAME_IFACE_LEVEL_EXPERT_COLS;
 		*mines	= GAME_IFACE_LEVEL_EXPERT_MINES;
 		break;
-
 	case GAME_IFACE_LEVEL_EXPERT_INV:
 		*rows	= GAME_IFACE_LEVEL_EXPERT_COLS;
 		*cols	= GAME_IFACE_LEVEL_EXPERT_ROWS;
 		*mines	= GAME_IFACE_LEVEL_EXPERT_MINES;
 		break;
-
 	case GAME_IFACE_LEVEL_CUSTOM:
 		*rows	= menu_iface_variables.rows;
 		*cols	= menu_iface_variables.cols;
 		*mines	= menu_iface_variables.p * (*rows) * (*cols);
 		/* at least one safe field */
-		if ((*mines) == (*rows) * (*cols)) {
+		if ((*mines) == (*rows) * (*cols))
 			(*mines)--;
-		}
 		break;
 	}
 }
@@ -118,23 +109,21 @@ void	menu_iface		(void)
 
 	start_mode	= START_RAND;
 
-	if (!flag_exit) {
-		switch (menu_iface_mode) {
-		case MENU_IFACE_FOO:
-			break;
+	if (flag_exit)
+		return;
 
-		case MENU_IFACE_CLUI:
-			menu_clui();
-			break;
-
-		case MENU_IFACE_TUI:
-			menu_tui();
-			break;
-
-		case MENU_IFACE_GUI:
-			menu_gui();
-			break;
-		}
+	switch (menu_iface_mode) {
+	case MENU_IFACE_FOO:
+		break;
+	case MENU_IFACE_CLUI:
+		menu_clui();
+		break;
+	case MENU_IFACE_TUI:
+		menu_tui();
+		break;
+	case MENU_IFACE_GUI:
+		menu_gui();
+		break;
 	}
 }
 

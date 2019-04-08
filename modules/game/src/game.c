@@ -6,14 +6,13 @@
 /******************************************************************************
  ******* headers **************************************************************
  ******************************************************************************/
-/* Standard C ----------------------------------------------------------------*/
 	#include <stdbool.h>
 	#include <stdlib.h>
 	#include <time.h>
 	#include <unistd.h>
-/* libalx --------------------------------------------------------------------*/
+
 	#include "libalx/alx_seed.h"
-/* Project -------------------------------------------------------------------*/
+
 	#include "save.h"
 
 	#include "game.h"
@@ -93,15 +92,12 @@ void	game_action	(int action, int row, int col)
 	case GAME_ACT_STEP:
 		game_step(row, col);
 		break;
-
 	case GAME_ACT_FLAG:
 		game_flag(row, col);
 		break;
-
 	case GAME_ACT_FLAG_POSSIBLE:
 		game_possible(row, col);
 		break;
-
 	case GAME_ACT_RM_FLAG:
 		game_rmflag(row, col);
 		break;
@@ -188,7 +184,6 @@ static	void	game_step		(int r, int c)
 	case GAME_USR_POSSIBLE:
 		game_discover(r, c);
 		break;
-
 	case GAME_USR_CLEAR:
 		game_big_step(r, c);
 		break;
@@ -208,12 +203,10 @@ static	void	game_discover		(int r, int c)
 		game_board.usr[r][c]	= GAME_USR_CLEAR;
 		game_board.clr++;
 
-		if (game_board.clr == safe_fields) {
+		if (game_board.clr == safe_fields)
 			game_board.state	= GAME_STATE_SAFE;
-
-		} else if (game_board.gnd[r][c] == GAME_MINE_NO) {
+		else if (game_board.gnd[r][c] == GAME_MINE_NO)
 			game_discover_recursive(r, c);
-		}
 	}
 }
 
@@ -237,9 +230,8 @@ static	void	game_big_step		(int r, int c)
 	int	cnt;
 
 	cnt	= game_count_flags(r, c);
-	if (cnt && (game_board.gnd[r][c] == cnt)) {
+	if (cnt && (game_board.gnd[r][c] == cnt))
 		game_step_recursive(r, c);
-	}
 }
 
 static	int	game_count_flags	(int r, int c)
@@ -253,9 +245,8 @@ static	int	game_count_flags	(int r, int c)
 		for (j = c - 1; j < c + 2; j++) {
 			if (i >= 0 && i < game_board.rows &&
 						j >= 0 && j < game_board.cols) {
-				if (game_board.usr[i][j] == GAME_USR_FLAG) {
+				if (game_board.usr[i][j] == GAME_USR_FLAG)
 					cnt++;
-				}
 			}
 		}
 	}
@@ -344,9 +335,8 @@ static	void	game_all_flags		(int r, int c)
 	int	cnt;
 
 	cnt =	game_count_nclear(r, c);
-	if (cnt && (game_board.gnd[r][c] == cnt)) {
+	if (cnt && (game_board.gnd[r][c] == cnt))
 		game_flag_recursive(r, c);
-	}
 }
 
 static	int	game_count_nclear	(int r, int c)
@@ -360,9 +350,8 @@ static	int	game_count_nclear	(int r, int c)
 		for (j = c - 1; j < c + 2; j++) {
 			if (i >= 0 && i < game_board.rows &&
 						j >= 0 && j < game_board.cols) {
-				if (game_board.usr[i][j] != GAME_USR_CLEAR) {
+				if (game_board.usr[i][j] != GAME_USR_CLEAR)
 					cnt++;
-				}
 			}
 		}
 	}

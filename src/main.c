@@ -25,8 +25,8 @@
 /******************************************************************************
  ******* static functions *****************************************************
  ******************************************************************************/
-void	init_all	(int *argc, char *(*argv[]));
-void	cleanup		(void);
+static	void	init_all	(int *argc, char *(*argv[]));
+static	void	cleanup		(void);
 
 
 /******************************************************************************
@@ -55,7 +55,7 @@ int	main	(int argc, char *argv[])
 /******************************************************************************
  ******* static functions *****************************************************
  ******************************************************************************/
-void	init_all	(int *argc, char *(*argv[]))
+static	void	init_all	(int *argc, char *(*argv[]))
 {
 	/* Init gtk & curses */
 	gtk_init_check(argc, argv);
@@ -82,7 +82,7 @@ void	init_all	(int *argc, char *(*argv[]))
 	menu_iface_init_iface();
 }
 
-void	cleanup		(void)
+static	void	cleanup		(void)
 {
 	/* Clean iface */
 	menu_iface_cleanup();

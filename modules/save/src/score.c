@@ -81,11 +81,11 @@ void	score_init	(void)
 		goto err_path;
 	}
 	snprintf(var_hiscores_beginner_name, FILENAME_MAX, "%s",
-						HISCORES_BEGINNER_NAME);
+				HISCORES_BEGINNER_NAME);
 	snprintf(var_hiscores_intermediate_name, FILENAME_MAX, "%s",
-						HISCORES_INTERMEDIATE_NAME);
+				HISCORES_INTERMEDIATE_NAME);
 	snprintf(var_hiscores_expert_name, FILENAME_MAX, "%s",
-						HISCORES_EXPERT_NAME);
+				HISCORES_EXPERT_NAME);
 
 	return;
 
@@ -102,6 +102,7 @@ void	save_score	(const struct Game_Iface_Score  *game_iface_score)
 	char	file_name [FILENAME_MAX];
 	char	player_name [BUFF_SIZE];
 	FILE	*fp;
+	time_t	date_secs;
 
 	/* File name */
 	switch (game_iface_score->level) {
@@ -134,7 +135,6 @@ void	save_score	(const struct Game_Iface_Score  *game_iface_score)
 	}
 
 	/* Date & time */
-	time_t		date_secs;
 	date_secs	= time(NULL);
 	date_format	= localtime(&date_secs);
 
@@ -142,32 +142,28 @@ void	save_score	(const struct Game_Iface_Score  *game_iface_score)
 	player_iface_score_name(player_name, BUFF_SIZE);
 
 	/* Write to file (append) */
-	errno = 0;
+	errno	= 0;
 	fp	= fopen(file_name, "a");
-	if (fp) {
-		fprintf(fp, "\n");
-		fprintf(fp, "name	%s\n", player_name);
-		fprintf(fp, "date	%i\n", (int)date_secs);
-		fprintf(fp, "{\n");
-		fprintf(fp, "	isdst	%i\n", date_format->tm_isdst);
-		fprintf(fp, "	yday	%i\n", date_format->tm_yday);
-		fprintf(fp, "	wday	%i\n", date_format->tm_wday);
-		fprintf(fp, "	year	%i\n", date_format->tm_year);
-		fprintf(fp, "	mon	%i\n", date_format->tm_mon);
-		fprintf(fp, "	mday	%i\n", date_format->tm_mday);
-		fprintf(fp, "	hour	%i\n", date_format->tm_hour);
-		fprintf(fp, "	min	%i\n", date_format->tm_min);
-		fprintf(fp, "	sec	%i\n", date_format->tm_sec);
-		fprintf(fp, "}\n");
-		fprintf(fp, "time	%i\n", game_iface_score->time);
-		fprintf(fp, "clicks	%i\n", game_iface_score->clicks);
-		fprintf(fp, "file	%s\n", saved_name);
-
-		fclose(fp);
-	} else {
-		printf("errno: %i", errno);
-		exit(EXIT_FAILURE);
-	}
+	if (!fp)
+		goto err_fp;
+	fprintf(fp, "\n");
+	fprintf(fp, "name	%s\n", player_name);
+	fprintf(fp, "date	%i\n", (int)date_secs);
+	fprintf(fp, "{\n");
+	fprintf(fp, "	isdst	%i\n", date_format->tm_isdst);
+	fprintf(fp, "	yday	%i\n", date_format->tm_yday);
+	fprintf(fp, "	wday	%i\n", date_format->tm_wday);
+	fprintf(fp, "	year	%i\n", date_format->tm_year);
+	fprintf(fp, "	mon	%i\n", date_format->tm_mon);
+	fprintf(fp, "	mday	%i\n", date_format->tm_mday);
+	fprintf(fp, "	hour	%i\n", date_format->tm_hour);
+	fprintf(fp, "	min	%i\n", date_format->tm_min);
+	fprintf(fp, "	sec	%i\n", date_format->tm_sec);
+	fprintf(fp, "}\n");
+	fprintf(fp, "time	%i\n", game_iface_score->time);
+	fprintf(fp, "clicks	%i\n", game_iface_score->clicks);
+	fprintf(fp, "file	%s\n", saved_name);
+	fclose(fp);
 
 	return;
 
@@ -175,6 +171,12 @@ void	save_score	(const struct Game_Iface_Score  *game_iface_score)
 err_path:
 	printf("Path is too large and has been truncated\n");
 	printf("Score could not be saved!\n");
+	return;
+
+err_fp:
+	printf("errno: %i", errno);
+	printf("Score could not be saved!\n");
+	return;
 }
 
 void	snprint_scores	(char *dest, int destsize)
@@ -244,63 +246,63 @@ static	void	snprint_scores_file	(char *dest, int destsize, char *file_name)
 	char	file [FILENAME_MAX];
 
 	fp	= fopen(file_name, "r");
+	if (!fp)
+		return;
 
-	if (fp) {
-		/* Title */
-		fscanf(fp, "%[^\n]s", title);
-		/* For some reason, a space after "%[^\n]s" doesn't skip spaces */
-		fscanf(fp, " ");
+	/* Title */
+	fscanf(fp, "%[^\n]s", title);
+	/* For some reason, a space after "%[^\n]s" doesn't skip spaces */
+	fscanf(fp, " ");
+
+	/* Print */
+	(void)snprintf(dest, destsize,
+			"_______________________________________________________\n"
+			"%s\n\n"
+			"name	date		clicks	time		file\n\n",
+			title);
+
+	while ((c = getc(fp)) != EOF) {
+		ungetc(c, fp);
+
+		/* Read */
+		fscanf(fp, "name	%s ", name);
+		fscanf(fp, "date	%*i ");
+		fscanf(fp, "{ ");
+		fscanf(fp, "	isdst	%*i ");
+		fscanf(fp, "	yday	%*i ");
+		fscanf(fp, "	wday	%*i ");
+		fscanf(fp, "	year	%i ", &year);
+		fscanf(fp, "	mon	%i ", &mon);
+		fscanf(fp, "	mday	%i ", &day);
+		fscanf(fp, "	hour	%*i ");
+		fscanf(fp, "	min	%*i ");
+		fscanf(fp, "	sec	%*i ");
+		fscanf(fp, "} ");
+		fscanf(fp, "time	%i ", &time);
+		fscanf(fp, "clicks	%i ", &clicks);
+		fscanf(fp, "file	%s ", file);
+
+		/* Adjust date & time */
+		year	+= 1900;
+		hours	= (time / 3600);
+		mins	= ((time % 3600) / 60);
+		secs	= (time % 60);
 
 		/* Print */
-		(void)snprintf(dest, destsize,
-				"_______________________________________________________\n"
-				"%s\n\n"
-				"name	date		clicks	time		file\n\n",
-				title);
-
-		while ((c = getc(fp)) != EOF){
-			ungetc(c, fp);
-
-			/* Read */
-			fscanf(fp, "name	%s ", name);
-			fscanf(fp, "date	%*i ");
-			fscanf(fp, "{ ");
-			fscanf(fp, "	isdst	%*i ");
-			fscanf(fp, "	yday	%*i ");
-			fscanf(fp, "	wday	%*i ");
-			fscanf(fp, "	year	%i ", &year);
-			fscanf(fp, "	mon	%i ", &mon);
-			fscanf(fp, "	mday	%i ", &day);
-			fscanf(fp, "	hour	%*i ");
-			fscanf(fp, "	min	%*i ");
-			fscanf(fp, "	sec	%*i ");
-			fscanf(fp, "} ");
-			fscanf(fp, "time	%i ", &time);
-			fscanf(fp, "clicks	%i ", &clicks);
-			fscanf(fp, "file	%s ", file);
-
-			/* Adjust date & time */
-			year	+= 1900;
-			hours	= (time / 3600);
-			mins	= ((time % 3600) / 60);
-			secs	= (time % 60);
-
-			/* Print */
-			(void)snprintf(tmp, BUFF_SIZE_TEXT,
-					"%s"
-					"%s\n"
-					"	%4i/%2i/%2i	%i	%i:%02i:%02i	\t%s\n\n",
-					dest,
-					name,
-						year, 1 + mon, day,
-								clicks,
-									hours, mins, secs,
-											file);
-			(void)snprintf(dest, BUFF_SIZE_TEXT, "%s", tmp);
-		}
-
-		fclose(fp);
+		(void)snprintf(tmp, BUFF_SIZE_TEXT,
+				"%s"
+				"%s\n"
+				"	%4i/%2i/%2i	%i	%i:%02i:%02i	\t%s\n\n",
+				dest,
+				name,
+					year, 1 + mon, day,
+							clicks,
+								hours, mins, secs,
+										file);
+		(void)snprintf(dest, BUFF_SIZE_TEXT, "%s", tmp);
 	}
+
+	fclose(fp);
 }
 
 

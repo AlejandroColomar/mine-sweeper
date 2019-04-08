@@ -6,15 +6,14 @@
 /******************************************************************************
  ******* headers **************************************************************
  ******************************************************************************/
-/* Standard C ----------------------------------------------------------------*/
 	#include <math.h>
 	#include <stdbool.h>
 	#include <stdio.h>
-/* Packages ------------------------------------------------------------------*/
+
 	#include <gtk/gtk.h>
-/* libalx ------------------------------------------------------------------*/
+
 	#include "libalx/io/alx_input.h"
-/* Project -------------------------------------------------------------------*/
+
 	#include "game_iface.h"
 	#include "menu_gui.h"
 	#include "player_iface.h"
@@ -459,9 +458,8 @@ static	void	show_board	(const struct Game_Iface_Out  *board,
 	gtk_label_set_text(GTK_LABEL(label_stit.ptr), label_stit.text);
 
 	/* Timeout */
-	if (board->state == GAME_IFACE_STATE_PLAYING) {
+	if (board->state == GAME_IFACE_STATE_PLAYING)
 		timeout.id	= g_timeout_add_seconds(1, callback_timeout, (void *)&timeout);
-	}
 
 	/* Refresh */
 	gtk_widget_show_all(box_board);
@@ -649,23 +647,18 @@ static	void	show_help		(const struct Game_Iface_Out	*board)
 		case GAME_IFACE_STATE_PLAYING:
 			show_help_play();
 			break;
-
 		case GAME_IFACE_STATE_PAUSE:
 			show_help_pause();
 			break;
-
 		case GAME_IFACE_STATE_XYZZY:
 			show_help_xyzzy();
 			break;
-
 		case GAME_IFACE_STATE_CHEATED:
 			show_help_cheat();
 			break;
-
 		case GAME_IFACE_STATE_SAFE:
 			show_help_safe();
 			break;
-
 		case GAME_IFACE_STATE_GAMEOVER:
 			show_help_gameover();
 			break;
@@ -808,9 +801,8 @@ static	gboolean	callback_field		(GtkWidget *widget,
 {
 	struct Field_Data	*field_ij;
 
-	if (state == GAME_IFACE_STATE_PLAYING && timeout.id) {
+	if (state == GAME_IFACE_STATE_PLAYING && timeout.id)
 		g_source_remove(timeout.id);
-	}
 
 	field_ij		= ((struct Field_Data *)data);
 	*(field_ij->row)	= field_ij->r;
@@ -819,16 +811,14 @@ static	gboolean	callback_field		(GtkWidget *widget,
 	switch (event->button) {
 	case 1:
 		//1 is left mouse btn
-		if (event->type == GDK_BUTTON_PRESS) {
+		if (event->type == GDK_BUTTON_PRESS)
 			*(field_ij->act)	= PLAYER_IFACE_ACT_STEP;
-		}
 		break;
 
 	case 3:
 		//3 is right mouse btn
-		if (event->type == GDK_BUTTON_PRESS) {
+		if (event->type == GDK_BUTTON_PRESS)
 			*(field_ij->act)	= PLAYER_IFACE_ACT_FLAG;
-		}
 		break;
 	}
 
@@ -843,19 +833,18 @@ static	gboolean	callback_ebox		(GtkWidget *widget,
 {
 	struct EBox_Data	*ebox;
 
-	if ((state == GAME_IFACE_STATE_PLAYING)  &&  timeout.id) {
+	if ((state == GAME_IFACE_STATE_PLAYING)  &&  timeout.id)
 		g_source_remove(timeout.id);
-	}
 
 	ebox	= ((struct EBox_Data *)data);
 
 	switch (event->button) {
 	case 1:
 		//1 is left mouse btn
-		if (event->type == GDK_BUTTON_PRESS) {
+		if (event->type == GDK_BUTTON_PRESS)
 			*(ebox->act)		= ebox->val;
-		} else if (event->type == GDK_2BUTTON_PRESS) {
-		}
+		else if (event->type == GDK_2BUTTON_PRESS)
+			; /* TODO */
 		break;
 
 	case 3:
@@ -872,9 +861,8 @@ static	void		callback_button		(GtkWidget *widget, void *data)
 {
 	struct Button_Data	*button;
 
-	if ((state == GAME_IFACE_STATE_PLAYING)  &&  timeout.id) {
+	if ((state == GAME_IFACE_STATE_PLAYING)  &&  timeout.id)
 		g_source_remove(timeout.id);
-	}
 
 	button		= ((struct Button_Data *)data);
 	*(button->act)	= button->val;
@@ -887,9 +875,8 @@ static	gboolean	callback_tbutton	(GtkWidget *widget, void *data)
 {
 	struct TButton_Data	*tbutton;
 
-	if ((state == GAME_IFACE_STATE_PLAYING)  &&  timeout.id) {
+	if ((state == GAME_IFACE_STATE_PLAYING)  &&  timeout.id)
 		g_source_remove(timeout.id);
-	}
 
 	tbutton	= ((struct TButton_Data *)data);
 

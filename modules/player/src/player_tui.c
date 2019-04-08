@@ -6,11 +6,10 @@
 /******************************************************************************
  ******* headers **************************************************************
  ******************************************************************************/
-/* Standard C ----------------------------------------------------------------*/
 	#include <ncurses.h>
-/* libalx ------------------------------------------------------------------*/
+
 	#include "libalx/curses/alx_ncur.h"
-/* Project -------------------------------------------------------------------*/
+
 	#include "game_iface.h"
 
 	#include "player_iface.h"
@@ -28,7 +27,7 @@
  ******* variables ************************************************************
  ******************************************************************************/
 /* Global --------------------------------------------------------------------*/
-bool	flag_color;
+	bool	flag_color;
 /* Static --------------------------------------------------------------------*/
 static	WINDOW	*win_board;
 static	WINDOW	*win_help;
@@ -232,9 +231,8 @@ static	void	board_loop_start(const struct Player_Iface_Position  *position)
 	}
 
 	/* Highlight cursor */
-	if (position->highlight) {
+	if (position->highlight)
 		highlight_cursor(c, position);
-	}
 }
 
 /*	*	*	*	*	*	*	*	*	*
@@ -320,15 +318,13 @@ static	void	highlight_cursor(int c,
 	l	= 2 + 2 * position->col;
 
 	pair	= PAIR_HILITE;
-	if (flag_color) {
+	if (flag_color)
 		wattron(win_board, A_BOLD | COLOR_PAIR(pair));
-	}
 	mvwaddch(win_board, k, l - 1, '<');
 	mvwaddch(win_board, k, l, c);
 	mvwaddch(win_board, k, l + 1, '>');
-	if (flag_color) {
+	if (flag_color)
 		wattroff(win_board, A_BOLD | COLOR_PAIR(pair));
-	}
 }
 
 static	int	set_char	(int tile)
@@ -458,15 +454,13 @@ static	void	show_char	(int row, int col, int c)
 		break;
 	}
 
-	if (flag_color) {
+	if (flag_color)
 		wattron(win_board, A_BOLD | COLOR_PAIR(pair));
-	}
 	mvwaddch(win_board, row, col - 1, ' ');
 	mvwaddch(win_board, row, col, c);
 	mvwaddch(win_board, row, col + 1, ' ');
-	if (flag_color) {
+	if (flag_color)
 		wattroff(win_board, A_BOLD | COLOR_PAIR(pair));
-	}
 }
 
 /*	*	*	*	*	*	*	*	*	*
@@ -515,9 +509,8 @@ static	int	usr_input	(void)
 				c = wgetch(win_board);
 				if (c == 'z') {
 					c = wgetch(win_board);
-					if (c == 'y') {
+					if (c == 'y')
 						action	= PLAYER_IFACE_ACT_XYZZY_ON;
-					}
 				}
 			}
 		}
@@ -572,33 +565,34 @@ static	int	usr_input	(void)
  *	*	*	*	*	*	*	*	*	*/
 static	void	show_help		(const struct Game_Iface_Out	*board)
 {
-	if (last_help != board->state) {
-		werase(win_help);
+	if (last_help == board->state) {
+		return;
 
-		switch (board->state) {
-		case GAME_IFACE_STATE_PLAYING:
-			show_help_play();
-			break;
-		case GAME_IFACE_STATE_PAUSE:
-			show_help_pause();
-			break;
-		case GAME_IFACE_STATE_XYZZY:
-			show_help_xyzzy();
-			break;
-		case GAME_IFACE_STATE_CHEATED:
-			show_help_cheat();
-			break;
-		case GAME_IFACE_STATE_SAFE:
-			show_help_safe();
-			break;
-		case GAME_IFACE_STATE_GAMEOVER:
-			show_help_gameover();
-			break;
-		}
+	werase(win_help);
 
-		wrefresh(win_help);
-		last_help	= board->state;
+	switch (board->state) {
+	case GAME_IFACE_STATE_PLAYING:
+		show_help_play();
+		break;
+	case GAME_IFACE_STATE_PAUSE:
+		show_help_pause();
+		break;
+	case GAME_IFACE_STATE_XYZZY:
+		show_help_xyzzy();
+		break;
+	case GAME_IFACE_STATE_CHEATED:
+		show_help_cheat();
+		break;
+	case GAME_IFACE_STATE_SAFE:
+		show_help_safe();
+		break;
+	case GAME_IFACE_STATE_GAMEOVER:
+		show_help_gameover();
+		break;
 	}
+
+	wrefresh(win_help);
+	last_help	= board->state;
 }
 
 static	void	show_help_start		(void)

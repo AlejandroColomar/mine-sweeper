@@ -7,15 +7,14 @@
 /******************************************************************************
  ******* headers **************************************************************
  ******************************************************************************/
-/* Standard C ----------------------------------------------------------------*/
 	#include <errno.h>
 	#include <stdbool.h>
 	#include <stdio.h>
 	#include <stdlib.h>
-/* Linux ---------------------------------------------------------------------*/
+
 		/* mkdir */
 	#include <sys/stat.h>
-/* Project -------------------------------------------------------------------*/
+
 	#include "game.h"
 	#include "player_iface.h"
 
@@ -125,16 +124,14 @@ void	load_game_file	(void)
 		fscanf(fp, " gnd");
 		for (i = 0; i < game_board.rows; i++) {
 			fscanf(fp, " %i", &game_board.gnd[i][0]);
-			for (j = 1; j < game_board.cols; j++) {
+			for (j = 1; j < game_board.cols; j++)
 				fscanf(fp, ",%i", &game_board.gnd[i][j]);
-			}
 		}
 		fscanf(fp, " usr");
 		for (i = 0; i < game_board.rows; i++) {
 			fscanf(fp, " %i", &game_board.usr[i][0]);
-			for (j = 1; j < game_board.cols; j++) {
+			for (j = 1; j < game_board.cols; j++)
 				fscanf(fp, ",%i", &game_board.usr[i][j]);
-			}
 		}
 		fscanf(fp, " flags %i", &game_board.flags);
 		fscanf(fp, " cleared %i", &game_board.clr);
@@ -163,9 +160,8 @@ void	save_game_file	(char *filepath)
 	bool	x;
 
 	/* Don't change saved_name variable if not in default dir */
-	if (filepath != NULL) {
+	if (filepath)
 		snprintf(old_saved, FILENAME_MAX, "%s", saved_name);
-	}
 
 	/* Default path & name */
 	save_clr();
@@ -223,17 +219,15 @@ void	save_game_file	(char *filepath)
 		fprintf(fp, "gnd\n");
 		for (i = 0; i < game_board.rows; i++) {
 			fprintf(fp, "%i", game_board.gnd[i][0]);
-			for (j = 1; j < game_board.cols; j++) {
+			for (j = 1; j < game_board.cols; j++)
 				fprintf(fp, ",%i", game_board.gnd[i][j]);
-			}
 			fprintf(fp, "\n");
 		}
 		fprintf(fp, "usr\n");
 		for (i = 0; i < game_board.rows; i++) {
 			fprintf(fp, "%i", game_board.usr[i][0]);
-			for (j = 1; j < game_board.cols; j++) {
+			for (j = 1; j < game_board.cols; j++)
 				fprintf(fp, ",%i", game_board.usr[i][j]);
-			}
 			fprintf(fp, "\n");
 		}
 		fprintf(fp, "flags %i\n", game_board.flags);
@@ -243,9 +237,8 @@ void	save_game_file	(char *filepath)
 	}
 
 	/* Don't change saved_name if saving in non-default dir */
-	if (filepath != NULL) {
+	if (filepath)
 		snprintf(saved_name, FILENAME_MAX, "%s", old_saved);
-	}
 
 	return;
 

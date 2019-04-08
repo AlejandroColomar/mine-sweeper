@@ -6,14 +6,13 @@
 /******************************************************************************
  ******* headers **************************************************************
  ******************************************************************************/
-/* Standard C ----------------------------------------------------------------*/
 	#include <math.h>
 	#include <ncurses.h>
 	#include <stdbool.h>
 	#include <stdlib.h>
-/* libalx --------------------------------------------------------------------*/
+
 	#include "libalx/curses/alx_ncur.h"
-/* Project -------------------------------------------------------------------*/
+
 	#include "about.h"
 	#include "game_iface.h"
 	#include "save.h"
@@ -27,17 +26,17 @@
 /******************************************************************************
  ******* macros ***************************************************************
  ******************************************************************************/
-	# define	ROWS_TUI_MAX	(22)
+#define ROWS_TUI_MAX		(22)
 #if (ROWS_TUI_MAX > ROWS_MAX)
-#	error	"rows max (tui)"
+	#error	"rows max (tui)"
 #endif
 
-	# define	COLS_TUI_MAX	(33)
+#define COLS_TUI_MAX		(33)
 #if (COLS_TUI_MAX > COLS_MAX)
-#	error	"cols max (tui)"
+	#error	"cols max (tui)"
 #endif
 
-	# define	BUFF_SIZE_TEXT	(1048576)
+#define BUFF_SIZE_TEXT		(1048576)
 
 
 /******************************************************************************
@@ -149,7 +148,7 @@ static	void	menu_tui_continue	(void)
 	/* Input box */
 	w2	= w - 8;
 	r2	= r + h - 5;
-	static	const char	*txt[]	= {"File name:"};
+	static	const char	*const txt[]	= {"File name:"};
 
 	/* Menu */
 	wh	= true;
@@ -318,7 +317,7 @@ static	void	menu_tui_custom	(void)
 	/* Input box */
 	w2	= w - 8;
 	r2	= r + h - 5;
-	static	const char	*txt[]	= {
+	static	const char	*const txt[]	= {
 		"Rows:",
 		"Columns:",
 		"Proportion:"
@@ -391,7 +390,7 @@ static	void	menu_tui_devel	(void)
 	/* Input box */
 	w2	= w - 8;
 	r2	= r + h - 5;
-	static	const char	*txt[]	= {"Seed:"};
+	static	const char	*const txt[]	= {"Seed:"};
 
 	/* Menu */
 	win	= newwin(h, w, r, c);

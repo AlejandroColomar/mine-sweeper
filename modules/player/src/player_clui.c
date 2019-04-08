@@ -6,10 +6,9 @@
 /******************************************************************************
  ******* headers **************************************************************
  ******************************************************************************/
-/* Standard C ----------------------------------------------------------------*/
 	#include <stdbool.h>
 	#include <stdio.h>
-/* Project -------------------------------------------------------------------*/
+
 	#include "game_iface.h"
 	#include "player_iface.h"
 
@@ -126,12 +125,10 @@ static	void	show_board_start(const struct Player_Iface_Position  *position,
 				const char *title, const char *subtitle)
 {
 
-	printf("________________________________________"
-		"________________________________________\n");
+	printf("________________________________________________________________________________\n");
 	board_loop_start(position);
 	printf("%s	-	%s\n", subtitle, title);
-	printf("----------------------------------------"
-		"----------------------------------------\n");
+	printf("--------------------------------------------------------------------------------\n");
 }
 
 static	void	board_loop_start(const struct Player_Iface_Position  *position)
@@ -169,12 +166,10 @@ static	void	show_board	(const struct Game_Iface_Out  *board,
 				const char *title, const char *subtitle)
 {
 
-	printf("________________________________________"
-		"________________________________________\n");
+	printf("________________________________________________________________________________\n");
 	board_loop(board, position);
 	printf("%s	-	%s\n", subtitle, title);
-	printf("----------------------------------------"
-		"----------------------------------------\n");
+	printf("--------------------------------------------------------------------------------\n");
 
 }
 
@@ -214,75 +209,57 @@ static	char	set_char	(int game_iface_visible)
 	case GAME_IFACE_VIS_KBOOM:
 		c	= PLAYER_CLUI_CHAR_KBOOM;
 		break;
-
 	case GAME_IFACE_VIS_HIDDEN_FIELD:
 		c	= PLAYER_CLUI_CHAR_HIDDEN_FIELD;
 		break;
-
 	case GAME_IFACE_VIS_HIDDEN_MINE:
 		c	= PLAYER_CLUI_CHAR_HIDDEN_MINE;
 		break;
-
 	case GAME_IFACE_VIS_HIDDEN_SAFE:
 		c	= PLAYER_CLUI_CHAR_HIDDEN_SAFE;
 		break;
-
 	case GAME_IFACE_VIS_SAFE_MINE:
 		c	= PLAYER_CLUI_CHAR_SAFE_MINE;
 		break;
-
 	case GAME_IFACE_VIS_0:
 		c	= PLAYER_CLUI_CHAR_0;
 		break;
-
 	case GAME_IFACE_VIS_1:
 		c	= PLAYER_CLUI_CHAR_1;
 		break;
-
 	case GAME_IFACE_VIS_2:
 		c	= PLAYER_CLUI_CHAR_2;
 		break;
-
 	case GAME_IFACE_VIS_3:
 		c	= PLAYER_CLUI_CHAR_3;
 		break;
-
 	case GAME_IFACE_VIS_4:
 		c	= PLAYER_CLUI_CHAR_4;
 		break;
-
 	case GAME_IFACE_VIS_5:
 		c	= PLAYER_CLUI_CHAR_5;
 		break;
-
 	case GAME_IFACE_VIS_6:
 		c	= PLAYER_CLUI_CHAR_6;
 		break;
-
 	case GAME_IFACE_VIS_7:
 		c	= PLAYER_CLUI_CHAR_7;
 		break;
-
 	case GAME_IFACE_VIS_8:
 		c	= PLAYER_CLUI_CHAR_8;
 		break;
-
 	case GAME_IFACE_VIS_FLAG:
 		c	= PLAYER_CLUI_CHAR_FLAG;
 		break;
-
 	case GAME_IFACE_VIS_FLAG_FALSE:
 		c	= PLAYER_CLUI_CHAR_FLAG_FALSE;
 		break;
-
 	case GAME_IFACE_VIS_POSSIBLE:
 		c	= PLAYER_CLUI_CHAR_POSSIBLE;
 		break;
-
 	case GAME_IFACE_VIS_POSSIBLE_FALSE:
 		c	= PLAYER_CLUI_CHAR_POSSIBLE_FALSE;
 		break;
-
 	default:
 		c	= PLAYER_CLUI_CHAR_ERROR;
 		break;
@@ -306,29 +283,25 @@ static	int	usr_input	(void)
 	/* Wait for input */
 	buff[0]	= '\0';
 	c	= '\0';
-	if (!fgets(buff, BUFF_SIZE, stdin)) {
+	if (!fgets(buff, BUFF_SIZE, stdin))
 		goto err_fgets;
-	}
 	p	= buff;
 
 	/* Interpret input */
-	if (sscanf(p, "%c", &c) != 1) {
+	if (sscanf(p, "%c", &c) != 1)
 		goto err_sscanf;
-	}
 	p++;
 	switch (c) {
 		/* Escape sequence */
 	case 27:
 			/* Arrows */
-		if (sscanf(p, "%c", &c) != 1) {
+		if (sscanf(p, "%c", &c) != 1)
 			goto err_sscanf;
-		}
 		p++;
 		switch (c) {
 		case 91:
-			if (sscanf(p, "%c", &c) != 1) {
+			if (sscanf(p, "%c", &c) != 1)
 				goto err_sscanf;
-			}
 			p++;
 			switch (c) {
 			case 65:
@@ -395,28 +368,23 @@ static	int	usr_input	(void)
 
 	case 'x':
 		/* Special sequence "xyzzy" */
-		if (sscanf(p, "%c", &c) != 1) {
+		if (sscanf(p, "%c", &c) != 1)
 			goto err_sscanf;
-		}
 		p++;
 		if (c == 'y') {
-			if (sscanf(p, "%c", &c) != 1) {
+			if (sscanf(p, "%c", &c) != 1)
 				goto err_sscanf;
-			}
 			p++;
 			if (c == 'z') {
-				if (sscanf(p, "%c", &c) != 1) {
+				if (sscanf(p, "%c", &c) != 1)
 					goto err_sscanf;
-				}
 				p++;
 				if (c == 'z') {
-					if (sscanf(p, "%c", &c) != 1) {
+					if (sscanf(p, "%c", &c) != 1)
 						goto err_sscanf;
-					}
 					p++;
-					if (c == 'y') {
+					if (c == 'y')
 						action	= PLAYER_IFACE_ACT_XYZZY_ON;
-					}
 				}
 			}
 		}
@@ -446,7 +414,6 @@ static	int	usr_input	(void)
 
 err_sscanf:
 err_fgets:
-
 	return	action;
 }
 
@@ -460,23 +427,18 @@ static	void	show_help		(const struct Game_Iface_Out  *board)
 	case GAME_IFACE_STATE_PLAYING:
 		show_help_play();
 		break;
-
 	case GAME_IFACE_STATE_PAUSE:
 		show_help_pause();
 		break;
-
 	case GAME_IFACE_STATE_XYZZY:
 		show_help_xyzzy();
 		break;
-
 	case GAME_IFACE_STATE_CHEATED:
 		show_help_cheat();
 		break;
-
 	case GAME_IFACE_STATE_SAFE:
 		show_help_safe();
 		break;
-
 	case GAME_IFACE_STATE_GAMEOVER:
 		show_help_gameover();
 		break;
@@ -486,65 +448,50 @@ static	void	show_help		(const struct Game_Iface_Out  *board)
 static	void	show_help_start		(void)
 {
 
-	printf("Move      "      "|Step " "|Quit " "|Confirm\n");
-	printf(" %c%c%c%c %c%c%c%c| %c   ""| %c   ""| Enter\n",
-		'h','j','k','l',
-			'<','v','^','>',
-				'+',	'q');
+	printf("Move      |Step |Quit |Confirm\n");
+	printf(" hjkl <v^>| +   | q   | Enter\n");
 }
 
 static	void	show_help_play		(void)
 {
 
-	printf("Move      "      "|Step " "|Flag  |? " "|Remove |Pause " "|Save " "|Quit " "|Confirm\n");
-	printf(" %c%c%c%c %c%c%c%c| %c   ""| Space| %c""| BS    | %c    ""| %c   ""| %c   ""| Enter\n",
-		'h','j','k','l',
-			'<','v','^','>',
-					'+',	'f',	'p',	's',	'q');
+	printf("Move      |Step |Flag  |? |Remove |Pause |Save |Quit |Confirm\n");
+	printf(" hjkl <v^>| +   | Space| f| BS    | p    | s   | q   | Enter\n");
 }
 
 static	void	show_help_pause		(void)
 {
 
-	printf("Continue " "|Save " "|Quit " "|Confirm\n");
-	printf(" %c       ""| %c   ""| %c   ""| Enter",
-		'p',	's',	'q');
+	printf("Continue |Save |Quit |Confirm\n");
+	printf(" p       | s   | q   | Enter");
 }
 
 static	void	show_help_xyzzy		(void)
 {
 
-	printf("XYZZY |Move      "      "|Step " "|Flag  |? " "|Remove |Save " "|Quit " "|Confirm\n");
-	printf(" 0 1 2| %c%c%c%c %c%c%c%c| %c   ""| Space| %c""| BS    | %c   ""| %c   ""| Enter\n",
-			'h','j','k','l',
-				'<','v','^','>',
-						'+',	'f',	's',	'q');
+	printf("XYZZY |Move      |Step |Flag  |? |Remove |Save |Quit |Confirm\n");
+	printf(" 0 1 2| hjkl <v^>| +   | Space| f| BS    | s   | q   | Enter\n");
 }
 
 static	void	show_help_cheat		(void)
 {
 
-	printf("Move      "      "|Step " "|Flag  |? " "|Remove |Save " "|Quit " "|Confirm\n");
-	printf(" %c%c%c%c %c%c%c%c| %c   ""| Space| %c""| BS    | %c   ""| %c   ""| Enter\n",
-		'h','j','k','l',
-			'<','v','^','>',
-					'+',	'f',	's',	'q');
+	printf("Move      |Step |Flag  |? |Remove |Save |Quit |Confirm\n");
+	printf(" hjkl <v^>| +   | Space| f| BS    | s   | q   | Enter\n");
 }
 
 static	void	show_help_safe		(void)
 {
 
-	printf("Save " "|Quit " "|Confirm\n");
-	printf(" %c   ""| %c   ""| Enter\n",
-		's',	'q');
+	printf("Save |Quit |Confirm\n");
+	printf(" s   | q   | Enter\n");
 }
 
 static	void	show_help_gameover	(void)
 {
 
-	printf("Quit " "|Confirm\n");
-	printf(" %c   ""| Enter\n",
-		'q');
+	printf("Quit |Confirm\n");
+	printf(" q   | Enter\n");
 }
 
 

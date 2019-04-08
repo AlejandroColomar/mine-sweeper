@@ -6,12 +6,11 @@
 /******************************************************************************
  ******* headers **************************************************************
  ******************************************************************************/
-/* Standard C ----------------------------------------------------------------*/
 	#include <math.h>
 	#include <stdlib.h>
-/* libalx --------------------------------------------------------------------*/
+
 	#include "libalx/io/alx_input.h"
-/* Project -------------------------------------------------------------------*/
+
 	#include "about.h"
 	#include "game_iface.h"
 //	#include "save.h"
@@ -24,17 +23,17 @@
 /******************************************************************************
  ******* macros ***************************************************************
  ******************************************************************************/
-	# define	ROWS_CLUI_MAX	(99)
+#define ROWS_CLUI_MAX		(99)
 #if (ROWS_CLUI_MAX > ROWS_MAX)
-#	error	"rows max (clui)"
+	#error "rows max (clui)"
 #endif
 
-	# define	COLS_CLUI_MAX	(26)
+#define COLS_CLUI_MAX		(26)
 #if (COLS_CLUI_MAX > COLS_MAX)
-#	error	"cols max (clui)"
+	#error "cols max (clui)"
 #endif
 
-	# define	BUFF_SIZE	(1024)
+#define BUFF_SIZE		(1024)
 
 
 /******************************************************************************
@@ -56,12 +55,10 @@ void	menu_clui	(void)
 
 	c	= 'n';
 	printf("Read 'Disclaimer of warranty'? (yes/NO): ");
-	if (!fgets(buff, BUFF_SIZE, stdin)) {
+	if (!fgets(buff, BUFF_SIZE, stdin))
 		goto err_fgets;
-	}
-	if (sscanf(buff, " %c", &c) != 1) {
+	if (sscanf(buff, " %c", &c) != 1)
 		goto err_sscanf;
-	}
 	if (c == 'y' || c == 'Y') {
 		printf(" >yes\n");
 		print_share_file(SHARE_DISCLAIMER);
@@ -71,12 +68,10 @@ void	menu_clui	(void)
 
 	c	= 'n';
 	printf("Read 'License'? (yes/NO): ");
-	if (!fgets(buff, BUFF_SIZE, stdin)) {
+	if (!fgets(buff, BUFF_SIZE, stdin))
 		goto err_fgets;
-	}
-	if (sscanf(buff, " %c", &c) != 1) {
+	if (sscanf(buff, " %c", &c) != 1)
 		goto err_sscanf;
-	}
 	if (c == 'y' || c == 'Y') {
 		printf(" >yes\n");
 		print_share_file(SHARE_LICENSE);
@@ -96,12 +91,10 @@ void	menu_clui	(void)
 #endif
 	c	= 'n';
 	printf("New game or load game? (NEW/load): ");
-	if (!fgets(buff, BUFF_SIZE, stdin)) {
+	if (!fgets(buff, BUFF_SIZE, stdin))
 		goto err_fgets;
-	}
-	if (sscanf(buff, " %c", &c) != 1) {
+	if (sscanf(buff, " %c", &c) != 1)
 		goto err_sscanf;
-	}
 	if (c == 'l' || c == 'L') {
 		printf(" >load\n");
 		menu_clui_load();
@@ -136,12 +129,10 @@ static	void	menu_clui_rand		(void)
 
 	c	= 'n';
 	printf("Set seed for random generator? (yes/NO): ");
-	if (!fgets(buff, BUFF_SIZE, stdin)) {
+	if (!fgets(buff, BUFF_SIZE, stdin))
 		goto err_fgets;
-	}
-	if (sscanf(buff, " %c", &c) != 1) {
+	if (sscanf(buff, " %c", &c) != 1)
 		goto err_sscanf;
-	}
 	if (c == 'y' || c == 'Y') {
 		printf(" >yes\n");
 		seed	= alx_getint(-INFINITY, 1, INFINITY, "Seed:", NULL);
@@ -152,12 +143,10 @@ static	void	menu_clui_rand		(void)
 
 	c	= 'b';
 	printf("Level? (BEGINNER/intermediate/(expert)/custom): ");
-	if (!fgets(buff, BUFF_SIZE, stdin)) {
+	if (!fgets(buff, BUFF_SIZE, stdin))
 		goto err_fgets;
-	}
-	if (sscanf(buff, " %c", &c) != 1) {
+	if (sscanf(buff, " %c", &c) != 1)
 		goto err_sscanf;
-	}
 	if (c == 'i' || c == 'I') {
 		printf(" >intermediate\n");
 		menu_iface_variables.level	= GAME_IFACE_LEVEL_INTERMEDIATE;
@@ -166,7 +155,6 @@ static	void	menu_clui_rand		(void)
 		printf(" >expert\n");
 		menu_iface_variables.level	= GAME_IFACE_LEVEL_EXPERT_INV;
 		menu_clui_start();
-
 	} else if (c == 'c' || c == 'C') {
 		printf(" >custom\n");
 		menu_iface_variables.level	= GAME_IFACE_LEVEL_CUSTOM;
@@ -221,12 +209,10 @@ static	void	menu_clui_start		(void)
 
 	c	= 'm';
 	printf("Play again? (MENU/play/exit): ");
-	if (!fgets(buff, BUFF_SIZE, stdin)) {
+	if (!fgets(buff, BUFF_SIZE, stdin))
 		goto err_fgets;
-	}
-	if (sscanf(buff, " %c", &c) != 1) {
+	if (sscanf(buff, " %c", &c) != 1)
 		goto err_sscanf;
-	}
 	if (c == 'p' || c == 'P') {
 		printf(" >play\n");
 		menu_clui_start();
