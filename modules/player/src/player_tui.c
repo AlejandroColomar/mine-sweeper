@@ -565,7 +565,7 @@ static	int	usr_input	(void)
  *	*	*	*	*	*	*	*	*	*/
 static	void	show_help		(const struct Game_Iface_Out	*board)
 {
-	if (last_help == board->state) {
+	if (last_help == board->state)
 		return;
 
 	werase(win_help);

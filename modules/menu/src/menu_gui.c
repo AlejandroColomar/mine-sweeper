@@ -293,7 +293,7 @@ static	void		callback_entry_dbl	(GtkWidget	*widget,
 	return;
 
 err:
-	(void)snprintf(buff, LINE_SIZE, "Error %i", err);
+	(void)snprintf(buff, LINE_SIZE, "Error in alx_sscan_dbl()");
 	gtk_entry_set_text(GTK_ENTRY(entry->ptr), buff);
 	gtk_editable_select_region(GTK_EDITABLE(entry->ptr),
 				0, GTK_ENTRY(entry->ptr)->text_length);
@@ -319,7 +319,7 @@ static	void		callback_entry_int	(GtkWidget	*widget,
 	return;
 
 err:
-	(void)snprintf(buff, LINE_SIZE, "Error %i", err);
+	(void)snprintf(buff, LINE_SIZE, "Error in alx_sscan_i64()");
 	gtk_entry_set_text(GTK_ENTRY(entry->ptr), buff);
 	gtk_editable_select_region(GTK_EDITABLE(entry->ptr),
 				0, GTK_ENTRY(entry->ptr)->text_length);
@@ -343,7 +343,7 @@ static	void		callback_entry_fname	(GtkWidget	*widget,
 	return;
 
 err:
-	(void)snprintf(buff, LINE_SIZE, "Error %i", err);
+	(void)snprintf(buff, LINE_SIZE, "Error in alx_sscan_fname()");
 	gtk_entry_set_text(GTK_ENTRY(entry->ptr), buff);
 	gtk_editable_select_region(GTK_EDITABLE(entry->ptr),
 				0, GTK_ENTRY(entry->ptr)->text_length);
