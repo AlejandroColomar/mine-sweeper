@@ -6,75 +6,102 @@
 /******************************************************************************
  ******* headers **************************************************************
  ******************************************************************************/
-#include <stdio.h>
-
-#include "libalx/extra/ncurses/common.h"
-
-#include "mine-sweeper/about/about.h"
 #include "mine-sweeper/ctrl/start.h"
+
+#include <errno.h>
+#include <stddef.h>
+#include <stdio.h>
+#include <string.h>
+
 #include "mine-sweeper/game/core.h"
+#include "mine-sweeper/game/iface.h"
 #include "mine-sweeper/menu/iface.h"
-#include "mine-sweeper/menu/parser.h"
 #include "mine-sweeper/player/iface.h"
-#include "mine-sweeper/save/save.h"
-#include "mine-sweeper/save/score.h"
+
+
+/******************************************************************************
+ ******* variables ************************************************************
+ ******************************************************************************/
+int	start_mode;
 
 
 /******************************************************************************
  ******* static functions *****************************************************
  ******************************************************************************/
-static	void	init_all	(int *argc, char *(*argv[]));
-static	void	cleanup		(void);
+static	void	start_foo	(void);
+static	void	start_rand	(void);
+static	void	start_load	(void);
 
 
 /******************************************************************************
  ******* main *****************************************************************
  ******************************************************************************/
-int	main	(int argc, char *argv[])
+void	start_switch	(void)
 {
-	init_all(&argc, &argv);
 
-	print_share_file(SHARE_COPYRIGHT);
-
-	start_switch();
-
-	menu_iface();
-
-	cleanup();
-
-	return	0;
+	switch (start_mode) {
+	case START_FOO:
+		start_foo();
+		break;
+	case START_RAND:
+		start_rand();
+		break;
+	case START_LOAD:
+		start_load();
+		break;
+	}
 }
 
 
 /******************************************************************************
  ******* static functions *****************************************************
  ******************************************************************************/
-static	void	init_all	(int *argc, char *(*argv[]))
+static	void	start_foo	(void)
 {
-
-	alx_ncurses_init();
-	alx_ncurses_pause();
-
-	/* Init modules */
-	menu_iface_init();
-	game_init();
-	save_init();
-
-	/* Modes */
-	start_mode		= START_FOO;
-	flag_exit		= false;
-	menu_iface_mode		= MENU_IFACE_TUI;
-	player_iface_mode	= PLAYER_IFACE_TUI;
-
-	/* Parse command line options */
-	parser(*argc, *argv);
 }
 
-static	void	cleanup		(void)
+static	void	start_rand	(void)
 {
+	int		level;
+	ptrdiff_t	rows, cols;
+	int		mines;
+	ptrdiff_t	r, c;
 
-	alx_ncurses_resume();
-	alx_ncurses_deinit();
+	menu_iface_board(&level, &rows, &cols, &mines);
+	player_iface_init(rows, cols);
+	if (player_iface_start(&r, &c))
+		goto err;
+	game_init_rand(rows, cols, mines, r, c);
+	game_iface_init_rand(level, r, c);
+
+	/* game loop */
+	game_iface();
+
+err:
+	player_iface_cleanup();
+}
+
+static	void	start_load	(void)
+{
+	ptrdiff_t	rows, cols;
+
+	/* size & game init (sets errno) */
+	errno	= 0;
+	if (game_init_load(&rows, &cols))
+		goto err;
+
+	player_iface_init(rows, cols);
+	game_iface_init_load();
+
+	/* game loop */
+	game_iface();
+
+	player_iface_cleanup();
+	return;
+
+err:
+	fprintf(stderr, "%s:%i: %s(): %s", __FILE__, __LINE__, __func__,
+							strerror(errno));
 }
 
 

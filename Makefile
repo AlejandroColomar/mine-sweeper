@@ -1,10 +1,10 @@
-#!/usr/bin/make -f
+#! /usr/bin/make -f
 
-VERSION		= 4
-PATCHLEVEL	=
-SUBLEVEL	= 
-EXTRAVERSION	= ~b2
-NAME		= graphic
+VERSION		= 5
+PATCHLEVEL	= ~a1
+SUBLEVEL	=
+EXTRAVERSION	=
+NAME		=
 
 export	VERSION
 export	PATCHLEVEL
@@ -71,125 +71,106 @@ PROGRAMVERSION	= $(VERSION)$(if $(PATCHLEVEL),.$(PATCHLEVEL)$(if $(SUBLEVEL),.$(
 export	PROGRAMVERSION
 
 ################################################################################
-OS	= linux
-TST	= false
-DBG	= false
+# directories
 
-export	OS
-export	TST
-export	DBG
+MAIN_DIR	= $(CURDIR)
+
+LIBALX_DIR	= $(CURDIR)/libalx/
+LIBALX_INC_DIR	= $(LIBALX_DIR)/inc/
+LIBALX_LIB_DIR	= $(LIBALX_DIR)/lib/libalx/
+
+BIN_DIR		= $(CURDIR)/bin/
+INC_DIR		= $(CURDIR)/inc/
+SRC_DIR		= $(CURDIR)/src/
+TMP_DIR		= $(CURDIR)/tmp/
+
+export	MAIN_DIR
+export	LIBALX_DIR
+export	LIBALX_INC_DIR
+export	LIBALX_LIB_DIR
+export	BIN_DIR
+export	INC_DIR
+export	SRC_DIR
+export	TMP_DIR
+
+# FIXME: Set local or not local when building a package
+INSTALL_BIN_DIR		= /usr/local/bin/
+#INSTALL_BIN_DIR	= /usr/bin/
+INSTALL_SHARE_DIR	= /usr/local/share/
+#INSTALL_SHARE_DIR	= /usr/share/
+INSTALL_VAR_DIR		= /var/local/
+#INSTALL_VAR_DIR	= /var/lib/
 
 ################################################################################
 # Make variables (CC, etc...)
-  CC		= gcc
-  AS		= as
-  AR		= ar
-  LD		= ld
+CC	= gcc
+AS	= as
+AR	= ar
+LD	= ld
+SZ	= size --format=SysV
 
 export	CC
 export	AS
 export	AR
 export	LD
+export	SZ
 
 ################################################################################
 # cflags
-CFLAGS_STD	= -std=c11
+CFLAGS_STD	= -std=c17
 CFLAGS_STD     += -Wpedantic
 
 CFLAGS_OPT	= -O3
 CFLAGS_OPT     += -march=native
+CFLAGS_OPT     += -flto
 
 CFLAGS_W	= -Wall
+CFLAGS_W       += -Wextra
+CFLAGS_W       += -Wstrict-prototypes
 CFLAGS_W       += -Werror
-#CFLAGS_W       += -Wstrict-prototypes
 CFLAGS_W       += -Wno-error=format-truncation
 #CFLAGS_W       += -Wno-error=unused-function
 #CFLAGS_W       += -Wno-error=unused-parameter
 
 CFLAGS_PKG	= `pkg-config --cflags ncurses`
-CFLAGS_PKG     += `pkg-config --cflags gtk+-2.0`
+CFLAGS_PKG     += -I $(LIBALX_INC_DIR)
 
 CFLAGS_D	= -D PROG_VERSION=\"$(PROGRAMVERSION)\"
 CFLAGS_D       += -D INSTALL_SHARE_DIR=\"$(INSTALL_SHARE_DIR)\"
-CFLAGS_D       += -D SHARE_DIR=\"$(SHARE_DIR)\"
 CFLAGS_D       += -D INSTALL_VAR_DIR=\"$(INSTALL_VAR_DIR)\"
-CFLAGS_D       += -D VAR_DIR=\"$(VAR_DIR)\"
 
-ifeq ($(OS), linux)
-  CFLAGS_D     += -D OS_LINUX
-else ifeq ($(OS), win)
-  CFLAGS_D     += -D OS_WIN
-endif
+CFLAGS_I	= -I $(INC_DIR)
 
 CFLAGS		= $(CFLAGS_STD)
 CFLAGS         += $(CFLAGS_OPT)
 CFLAGS         += $(CFLAGS_W)
 CFLAGS         += $(CFLAGS_PKG)
 CFLAGS         += $(CFLAGS_D)
+CFLAGS         += $(CFLAGS_I)
 
 export	CFLAGS
 
 ################################################################################
 # libs
-LIBS_STATIC	= -static
-
 LIBS_STD	= -l m
 
-LIBS_PKG	= `pkg-config --libs ncurses`
-LIBS_PKG       += `pkg-config --libs gtk+-2.0`
+LIBS_OPT	= -O3
+LIBS_OPT       += -march=native
+LIBS_OPT       += -flto
+LIBS_OPT       += -fuse-linker-plugin
 
-ifeq ($(OS), linux)
-  LIBS		= $(LIBS_STD) $(LIBS_PKG)
-else ifeq ($(OS), win)
-  LIBS		= $(LIBS_STD) $(LIBS_STATIC) $(LIBS_PKG)
-endif
+LIBS_PKG	= `pkg-config --libs ncurses`
+
+LIBS		= $(LIBS_STD)
+LIBS           += $(LIBS_OPT)
+LIBS           += $(LIBS_PKG)
 
 export	LIBS
 
 ################################################################################
-# directories
-
-MAIN_DIR	= $(CURDIR)
-
-LIBALX_DIR	= $(CURDIR)/libalx/
-MODULES_DIR	= $(CURDIR)/modules/
-TMP_DIR		= $(CURDIR)/tmp/
-BIN_DIR		= $(CURDIR)/bin/
-
-export	MAIN_DIR
-export	LIBALX_DIR
-export	MODULES_DIR
-
-# FIXME: Set local or not local when building a package
-ifeq ($(OS), linux)
-  INSTALL_BIN_DIR	= /usr/local/games/
-#  INSTALL_BIN_DIR	= /usr/games/
-  INSTALL_SHARE_DIR	= /usr/local/share/
-#  INSTALL_SHARE_DIR	= /usr/share/
-  SHARE_DIR		= mine-sweeper/
-  INSTALL_VAR_DIR	= /var/local/
-#  INSTALL_VAR_DIR	= /var/games/
-  VAR_DIR		= mine-sweeper/
-else ifeq ($(OS), win)
-  INSTALL_DIR		= c:/Program files (x86)/
-  INSTALL_SHARE_DIR	= $(INSTALL_DIR)/mine-sweeper/
-  SHARE_DIR		= share/
-  INSTALL_VAR_DIR	= $(INSTALL_DIR)/mine-sweeper/
-  VAR_DIR		= var/
-endif
-
-export	INSTALL_DIR
-export	INSTALL_SHARE_DIR
-export	SHARE_DIR
-
-################################################################################
 # executables
 
-ifeq ($(OS), linux)
-  BIN_NAME	= mine-sweeper
-else ifeq ($(OS), win)
-  BIN_NAME	= mine-sweeper.exe
-endif
+BIN_NAME	= mine-sweeper
 
 export	BIN_NAME
 
@@ -199,60 +180,52 @@ export	BIN_NAME
 
 # That's the default target when none is given on the command line
 PHONY := all
-all: libalx modules main binary
+all: bin
 
 
 PHONY += libalx
 libalx:
-	@echo	'	MAKE	libalx'
+	@echo	"	MAKE	$@"
 	$(Q)$(MAKE) base	-C $(LIBALX_DIR)
-	$(Q)$(MAKE) io		-C $(LIBALX_DIR)
-	$(Q)$(MAKE) curses	-C $(LIBALX_DIR)
+	$(Q)$(MAKE) ncurses	-C $(LIBALX_DIR)
 	@echo
 
-PHONY += modules
-modules: libalx
-	@echo	'	MAKE	modules'
-	$(Q)$(MAKE) -C $(MODULES_DIR)
+PHONY += tmp
+tmp:
+	@echo	"	MAKE	$@"
+	$(Q)$(MAKE)	-C $(TMP_DIR)
 	@echo
 
-PHONY += main
-main: libalx modules
-	@echo	'	MAKE	main'
-	$(Q)$(MAKE) -C $(TMP_DIR)
-	@echo
-
-PHONY += binary
-binary: main
-	@echo	'	MAKE	bin'
-	$(Q)$(MAKE) -C $(BIN_DIR)
+PHONY += bin
+bin: tmp libalx
+	@echo	"	MAKE	$@"
+	$(Q)$(MAKE)	-C $(BIN_DIR)
 	@echo
 
 PHONY += install
 install: uninstall
 	@echo	"	Install:"
-	@echo	"	MKDIR	$(INSTALL_BIN_DIR)/"
+	@echo	"	MKDIR	$(DESTDIR)/$(INSTALL_BIN_DIR)/"
 	$(Q)mkdir -p		$(DESTDIR)/$(INSTALL_BIN_DIR)/
-	@echo	"	CP -v	$(BIN_NAME)"
+	@echo	"	CP	$(BIN_NAME)"
 	$(Q)cp -v		$(BIN_DIR)/$(BIN_NAME)	$(DESTDIR)/$(INSTALL_BIN_DIR)/
-	@echo	"	MKDIR	$(INSTALL_SHARE_DIR)/$(SHARE_DIR)/"
-	$(Q)mkdir -p		$(DESTDIR)/$(INSTALL_SHARE_DIR)/$(SHARE_DIR)/
-	@echo	"	CP -rv	share/*"
-	$(Q)cp -r -v		./share/*		$(DESTDIR)/$(INSTALL_SHARE_DIR)/$(SHARE_DIR)/
-	
-	@echo	"	MKDIR	$(INSTALL_VAR_DIR)/$(VAR_DIR)/"
-	$(Q)mkdir -p		$(DESTDIR)/$(INSTALL_VAR_DIR)/$(VAR_DIR)/
-	$(Q)mkdir		$(DESTDIR)/$(INSTALL_VAR_DIR)/$(VAR_DIR)/boards_beginner/
-	$(Q)mkdir		$(DESTDIR)/$(INSTALL_VAR_DIR)/$(VAR_DIR)/boards_intermediate/
-	$(Q)mkdir		$(DESTDIR)/$(INSTALL_VAR_DIR)/$(VAR_DIR)/boards_expert/
-	$(Q)mkdir		$(DESTDIR)/$(INSTALL_VAR_DIR)/$(VAR_DIR)/boards_custom/
-	@echo	"	CP -rv	var/*"
-	$(Q)cp -r -v		./var/*			$(DESTDIR)/$(INSTALL_VAR_DIR)/$(VAR_DIR)/
-	@echo	"	CHOWN	$(INSTALL_VAR_DIR)/$(VAR_DIR)/"
-	$(Q)chown root:games -R	$(DESTDIR)/$(INSTALL_VAR_DIR)/$(VAR_DIR)/
-	@echo	"	CHMOD	$(INSTALL_VAR_DIR)/$(VAR_DIR)/"
-	$(Q)chmod 664 -R	$(DESTDIR)/$(INSTALL_VAR_DIR)/$(VAR_DIR)/
-	$(Q)chmod +X -R		$(DESTDIR)/$(INSTALL_VAR_DIR)/$(VAR_DIR)/
+	@echo	"	MKDIR	$(DESTDIR)/$(INSTALL_SHARE_DIR)/mine-sweeper/"
+	$(Q)mkdir -p		$(DESTDIR)/$(INSTALL_SHARE_DIR)/mine-sweeper/
+	@echo	"	CP -r	share/mine-sweeper/*"
+	$(Q)cp -r -v		./share/mine-sweeper/*	$(DESTDIR)/$(INSTALL_SHARE_DIR)/mine-sweeper/
+	@echo	"	MKDIR	$(DESTDIR)/$(INSTALL_VAR_DIR)/mine-sweeper/"
+	$(Q)mkdir -p		$(DESTDIR)/$(INSTALL_VAR_DIR)/mine-sweeper/
+	$(Q)mkdir -p		$(DESTDIR)/$(INSTALL_VAR_DIR)/mine-sweeper/boards/beginner/
+	$(Q)mkdir		$(DESTDIR)/$(INSTALL_VAR_DIR)/mine-sweeper/boards/intermediate/
+	$(Q)mkdir		$(DESTDIR)/$(INSTALL_VAR_DIR)/mine-sweeper/boards/expert/
+	$(Q)mkdir		$(DESTDIR)/$(INSTALL_VAR_DIR)/mine-sweeper/boards/custom/
+	@echo	"	CP -rv	var/mine-sweeper/*"
+	$(Q)cp -r -v		./var/mine-sweeper/*	$(DESTDIR)/$(INSTALL_VAR_DIR)/mine-sweeper/
+	@echo	"	CHOWN	$(DESTDIR)/$(INSTALL_VAR_DIR)/mine-sweeper/"
+	$(Q)chown root:games -R	$(DESTDIR)/$(INSTALL_VAR_DIR)/mine-sweeper/
+	@echo	"	CHMOD	$(DESTDIR)/$(INSTALL_VAR_DIR)/mine-sweeper/"
+	$(Q)chmod 664 -R	$(DESTDIR)/$(INSTALL_VAR_DIR)/mine-sweeper/
+	$(Q)chmod +X -R		$(DESTDIR)/$(INSTALL_VAR_DIR)/mine-sweeper/
 	@echo	"	Done"
 	@echo
 
@@ -261,25 +234,22 @@ uninstall:
 	@echo	"	Clean old installations:"
 	@echo	"	RM	bin"
 	$(Q)rm -f		$(DESTDIR)/$(INSTALL_BIN_DIR)/$(BIN_NAME)
-	@echo	"	RM -r	$(INSTALL_SHARE_DIR)/$(SHARE_DIR)/"
-	$(Q)rm -f -r		$(DESTDIR)/$(INSTALL_SHARE_DIR)/$(SHARE_DIR)/
-	@echo	"	RM -r	$(INSTALL_VAR_DIR)/$(VAR_DIR)/"
-	$(Q)rm -f -r		$(DESTDIR)/$(INSTALL_VAR_DIR)/$(VAR_DIR)/
+	@echo	"	RM -r	$(DESTDIR)/$(INSTALL_SHARE_DIR)/mine-sweeper/"
+	$(Q)rm -f -r		$(DESTDIR)/$(INSTALL_SHARE_DIR)/mine-sweeper/
+	@echo	"	RM -r	$(DESTDIR)/$(INSTALL_VAR_DIR)/mine-sweeper/"
+	$(Q)rm -f -r		$(DESTDIR)/$(INSTALL_VAR_DIR)/mine-sweeper/
 	@echo	"	Done"
 	@echo
 
 PHONY += clean
 clean:
-	@echo	'	CLEAN	modules'
-	$(Q)$(MAKE) clean	-C $(MODULES_DIR)
-	@echo	'	CLEAN	tmp'
-	$(Q)$(MAKE) clean	-C $(TMP_DIR)
-	@echo	'	CLEAN	bin'
-	$(Q)$(MAKE) clean	-C $(BIN_DIR)
-	@echo
+	@echo	"	RM	*.o *.s *.a $(BIN_NAME)"
+	$(Q)find $(TMP_DIR) -type f -name '*.o' -exec rm '{}' '+'
+	$(Q)find $(TMP_DIR) -type f -name '*.s' -exec rm '{}' '+'
+	$(Q)find $(BIN_DIR) -type f -name '*$(BIN_NAME)' -exec rm '{}' '+'
 
-PHONY += mrproper
-mrproper: clean
+PHONY += distclean
+distclean: clean
 	@echo	'	CLEAN	libalx'
 	$(Q)$(MAKE) clean	-C $(LIBALX_DIR)
 	@echo
@@ -288,14 +258,13 @@ PHONY += help
 help:
 	@echo  'Cleaning targets:'
 	@echo  '  clean		  - Remove all generated files'
-	@echo  '  mrproper	  - Remove all generated files (including libraries)'
+	@echo  '  distclean	  - Remove all generated files (including libraries)'
 	@echo  ''
 	@echo  'Other generic targets:'
 	@echo  '  all		  - Build all targets marked with [*]'
 	@echo  '* libalx	  - Build the libalx library'
-	@echo  '* modules	  - Build all modules'
-	@echo  '* object	  - Build the main object'
-	@echo  '* binary	  - Build the binary'
+	@echo  '* tmp		  - Compile all files'
+	@echo  '* bin		  - Build the binary'
 	@echo  '  install	  - Install the program into the filesystem'
 	@echo  '  uninstall	  - Uninstall the program off the filesystem'
 	@echo  ''
@@ -307,8 +276,6 @@ help:
 ################################################################################
 # Declare the contents of the .PHONY variable as phony.
 .PHONY: $(PHONY)
-
-
 
 
 ################################################################################

@@ -13,77 +13,37 @@
 # dependencies
 
 OBJ		=							\
-		main.o
+		start.o
 
-MAIN_INC	=							\
-		$(LIBALX_INC_DIR)/libalx/extra/ncurses/common.h		\
-		$(INC_DIR)/mine-sweeper/about/about.h			\
+START_INC	=							\
 		$(INC_DIR)/mine-sweeper/ctrl/start.h			\
 		$(INC_DIR)/mine-sweeper/game/core.h			\
+		$(INC_DIR)/mine-sweeper/game/iface.h			\
 		$(INC_DIR)/mine-sweeper/menu/iface.h			\
-		$(INC_DIR)/mine-sweeper/menu/parser.h			\
-		$(INC_DIR)/mine-sweeper/player/iface.h			\
-		$(INC_DIR)/mine-sweeper/save/save.h			\
-		$(INC_DIR)/mine-sweeper/save/score.h
-MAIN_SRC	=							\
-		$(SRC_DIR)/main.c
+		$(INC_DIR)/mine-sweeper/player/iface.h
+START_SRC	=							\
+		$(SRC_DIR)/ctrl/start.c
 
-
+################################################################################
 # target: dependencies
 #	action
 
 PHONY := all
-all: $(OBJ) about ctrl game menu player save xyzzy
+all: $(OBJ)
 
 
-PHONY += about
-about:
-	@echo	"	MAKE	tmp/$@"
-	$(Q)$(MAKE)	-C $(TMP_DIR)/$@/
-
-PHONY += ctrl
-ctrl:
-	@echo	"	MAKE	tmp/$@"
-	$(Q)$(MAKE)	-C $(TMP_DIR)/$@/
-
-PHONY += game
-game:
-	@echo	"	MAKE	tmp/$@"
-	$(Q)$(MAKE)	-C $(TMP_DIR)/$@/
-
-PHONY += menu
-menu:
-	@echo	"	MAKE	tmp/$@"
-	$(Q)$(MAKE)	-C $(TMP_DIR)/$@/
-
-PHONY += player
-player:
-	@echo	"	MAKE	tmp/$@"
-	$(Q)$(MAKE)	-C $(TMP_DIR)/$@/
-
-PHONY += save
-save:
-	@echo	"	MAKE	tmp/$@"
-	$(Q)$(MAKE)	-C $(TMP_DIR)/$@/
-
-PHONY += xyzzy
-xyzzy:
-	@echo	"	MAKE	tmp/$@"
-	$(Q)$(MAKE)	-C $(TMP_DIR)/$@/
-
-
-main.s: $(MAIN_SRC) $(MAIN_INC)
-	@echo	"	CC	mine-sweeper/tmp/$@"
+start.s: $(START_SRC) $(START_INC)
+	@echo	"	CC	mine-sweeper/ctrl/$@"
 	$(Q)$(CC) $(CFLAGS) -S $< -o $@
-main.o: main.s
-	@echo	"	AS	mine-sweeper/tmp/$@"
+start.o: start.s
+	@echo	"	AS	mine-sweeper/ctrl/$@"
 	$(Q)$(AS) $< -o $@
 
 
 PHONY += clean
 clean:
 	@echo	"	RM	*.o *.s"
-	$(Q)rm -f	*.o *.s
+	$(Q)rm -f *.o *.s
 
 ################################################################################
 # Declare the contents of the .PHONY variable as phony.

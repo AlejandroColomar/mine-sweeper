@@ -1,45 +1,61 @@
-# -*- MakeFile -*-
+#! /usr/bin/make -f
+
+# MACRO = substitute with this
 
 # directories
 
-LIBALX_LIB_DIR	= $(LIBALX_DIR)/lib/
+OBJS		=							\
+		$(TMP_DIR)/main.o					\
+		$(TMP_DIR)/about/about.o				\
+		$(TMP_DIR)/ctrl/start.o					\
+		$(TMP_DIR)/game/core.o					\
+		$(TMP_DIR)/game/iface.o					\
+		$(TMP_DIR)/menu/parser.o				\
+		$(TMP_DIR)/menu/clui.o					\
+		$(TMP_DIR)/menu/tui.o					\
+		$(TMP_DIR)/menu/iface.o					\
+		$(TMP_DIR)/player/clui.o				\
+		$(TMP_DIR)/player/tui.o					\
+		$(TMP_DIR)/player/iface.o				\
+		$(TMP_DIR)/save/save.o					\
+		$(TMP_DIR)/save/score.o					\
+		$(TMP_DIR)/xyzzy/xyzzy.o
+DEPS_LIBS	= 							\
+		$(LIBALX_LIB_DIR)/libalx-ncurses.a			\
+		$(LIBALX_LIB_DIR)/libalx-base.a
 
-MODULES_TMP_DIR	= $(MODULES_DIR)/tmp/
-
-TMP_DIR	= $(MAIN_DIR)/tmp/
-
-# dependencies
-_ALL	= $(BIN_NAME) $(BIN_NAME).exe
-
-ALL	= $(BIN_NAME)
-
-MAIN_OBJ_MODULES	= modules.o
-MAIN_OBJS		= $(TMP_DIR)/main.o \
-				$(patsubst %,$(LIBALX_TMP_DIR)/%,$(MAIN_OBJ_LIBALX)) \
-				$(patsubst %,$(MODULES_TMP_DIR)/%,$(MAIN_OBJ_MODULES))
+ALL	= $(BIN_NAME) size
 
 # static libs
-STATIC_LIB_LIBALX	= -L $(LIBALX_LIB_DIR) \
-				-l alx-curses \
-				-l alx-io \
-				-l alx-base
 
-STATIC_LIBS	= $(STATIC_LIB_LIBALX)
+STATIC_LIBS	= -L $(LIBALX_LIB_DIR)					\
+		-l alx-ncurses						\
+		-l alx-base
 
 
 # target: dependencies
 #	action
 
+PHONY := all
 all: $(ALL)
 
 
-$(BIN_NAME): $(MAIN_OBJS)
-	@echo  "	CC	$@"
-	$(Q)$(CC) $^ -o $@ $(STATIC_LIBS) $(LIBS)
+$(BIN_NAME): $(OBJS) $(DEPS_LIBS)
+	@echo	"	CC	$@"
+	$(Q)$(CC) $(OBJS) -o $@ $(STATIC_LIBS) $(LIBS)
+
+size: $(BIN_NAME)
+	@echo	"	SZ	$(BIN_NAME)"
+	$(Q)$(SZ) $(BIN_NAME)
 
 
 clean:
-	$(Q)rm -f $(_ALL)
+	@echo	"	RM	$(ALL)"
+	$(Q)rm -f	$(ALL)
+
+################################################################################
+# Declare the contents of the .PHONY variable as phony.
+.PHONY: $(PHONY)
 
 ################################################################################
 ######## End of file ###########################################################
