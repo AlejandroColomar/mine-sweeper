@@ -15,8 +15,8 @@
 
 #include <sys/stat.h>
 
-#include "libalx/base/errno/perror.h"
-#include "libalx/base/stdio/wait.h"
+#include "libalx/base/errno/error.h"
+#include "libalx/base/stdio/seekc.h"
 
 #include "mine-sweeper/game/core.h"
 #include "mine-sweeper/player/iface.h"

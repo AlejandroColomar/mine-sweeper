@@ -9,17 +9,25 @@
  ******************************************************************************/
 #include "mine-sweeper/about/about.h"
 
+#include <errno.h>
 #include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "libalx/base/errno/perror.h"
-#include "libalx/base/stddef/size.h"
+#include "libalx/base/compiler/size.h"
+#include "libalx/base/errno/error.h"
+#include "libalx/base/stdio/printf/sbprintf.h"
 
 
 /******************************************************************************
  ******* macros ***************************************************************
  ******************************************************************************/
+#define SHARE_DIR		"" INSTALL_SHARE_DIR "/mine-sweeper/"
+#define SHARE_COPYRIGHT_FILE	"" SHARE_DIR "/COPYRIGHT.txt"
+#define SHARE_DISCLAIMER_FILE	"" SHARE_DIR "/DISCLAIMER.txt"
+#define SHARE_HELP_FILE		"" SHARE_DIR "/HELP.txt"
+#define SHARE_LICENSE_FILE	"" SHARE_DIR "/LICENSE.txt"
+#define SHARE_USAGE_FILE	"" SHARE_DIR "/USAGE.txt"
 
 
 /******************************************************************************
@@ -68,10 +76,10 @@ void	print_share_file	(int file)
 		break;
 	}
 
-	if (snprintf(cmd, sizeof(cmd), "less %s", fname)  >=  SSIZEOF(cmd))
+	if (alx_sbprintf(cmd, NULL, "less %s", fname))
 		goto err;
 	if (system(cmd))
-		alx_perror(NULL);
+		goto err;
 
 	return;
 err:
@@ -81,7 +89,7 @@ err:
 void	print_version		(void)
 {
 
-	printf("%s %s\n\n", PROG_NAME, PROG_VERSION);
+	printf("%s %s\n\n", program_invocation_short_name, PROG_VERSION);
 }
 
 

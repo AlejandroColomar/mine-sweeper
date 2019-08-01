@@ -17,8 +17,8 @@ OBJ		=							\
 
 ABOUT_INC	=							\
 		$(INC_DIR)/mine-sweeper/about/about.h			\
-		$(LIBALX_INC_DIR)/libalx/base/errno/perror.h		\
-		$(LIBALX_INC_DIR)/libalx/base/stddef/size.h
+		$(LIBALX_INC_DIR)/libalx/base/compiler/size.h		\
+		$(LIBALX_INC_DIR)/libalx/base/errno/error.h
 ABOUT_SRC	=							\
 		$(SRC_DIR)/about/about.c
 

@@ -8,14 +8,15 @@
  ******************************************************************************/
 #include "mine-sweeper/menu/tui.h"
 
+#include <limits.h>
 #include <math.h>
 #include <stdbool.h>
 #include <stdlib.h>
 
 #include <ncurses.h>
 
-#include "libalx/base/stddef/size.h"
-#include "libalx/base/stdio/wait.h"
+#include "libalx/base/compiler/size.h"
+#include "libalx/base/stdio/seekc.h"
 #include "libalx/extra/ncurses/common.h"
 #include "libalx/extra/ncurses/get.h"
 #include "libalx/extra/ncurses/menu.h"
@@ -51,12 +52,6 @@ static	void	menu_tui_continue	(void);
 static	void	menu_tui_select		(void);
 static	void	menu_tui_level		(void);
 static	void	menu_tui_custom		(void);
-#if 0
-static	void	menu_tui_devel		(void);
-#endif
-#if 0
-static	void	menu_tui_verbose	(void);
-#endif
 
 
 /******************************************************************************
@@ -117,15 +112,12 @@ void	menu_tui		(void)
  ******************************************************************************/
 static	void	menu_tui_continue	(void)
 {
-	WINDOW	*win;
-	int	h;
-	int	w;
-	int	r;
-	int	c;
-	int	w2;
-	int	r2;
-	bool	wh;
-	int	sw;
+	WINDOW		*win;
+	int_fast8_t	h, w;
+	int_fast8_t	r, c;
+	int_fast8_t	w2, r2;
+	bool		wh;
+	int_fast8_t	sw;
 
 	/* Menu dimensions & options */
 	h	= 18;
@@ -147,16 +139,13 @@ static	void	menu_tui_continue	(void)
 	r2	= r + h - 5;
 	static	const char	*const txt[]	= {"File name:"};
 
-	/* Menu */
 	wh	= true;
 	while (wh) {
-		/* Menu loop */
 		win	= newwin(h, w, r, c);
-		mvwprintw(win, mnu[4].r, mnu[4].c, "%s (File: \"%s\")", mnu[4].t, saved_name);
-		wrefresh(win);
-		sw	= alx_ncurses_menu_w(win, ARRAY_SIZE(mnu), mnu, "CONTINUE:");
+		mvwprintw(win, mnu[4].r, mnu[4].c, "%s (File: \"%s\")",
+							mnu[4].t, saved_name);
+		sw = alx_ncurses_menu_w(win, ARRAY_SIZE(mnu), mnu, "CONTINUE:");
 
-		/* Selection */
 		switch (sw) {
 		case 0:
 			alx_ncurses_delwin(win);
@@ -178,8 +167,8 @@ static	void	menu_tui_continue	(void)
 			break;
 		case 4:
 			save_clr();
-			alx_ncurses_get_fname(saved_path, saved_name, true, w2, r2,
-								txt[0], NULL, 2);
+			alx_ncurses_get_fname(saved_path, saved_name, true,
+						w2, r2, txt[0], NULL, 2);
 			alx_ncurses_delwin(win);
 			break;
 		case 5:
@@ -200,6 +189,11 @@ static	void	menu_tui_continue	(void)
 
 static	void	menu_tui_select	(void)
 {
+	static	const struct Alx_Ncurses_Menu	mnu[]	= {
+		{6, 4, "[0]	Back"},
+		{2, 4, "[1]	New map"},
+		{4, 4, "[2]	Load map"}
+	};
 	WINDOW	*win;
 	int	h;
 	int	w;
@@ -212,16 +206,11 @@ static	void	menu_tui_select	(void)
 	w	= 70;
 	r	= 1;
 	c	= (80 - w) / 2;
-	static	const struct Alx_Ncurses_Menu	mnu[]	= {
-		{6, 4, "[0]	Back"},
-		{2, 4, "[1]	New map"},
-		{4, 4, "[2]	Load map"}
-	};
 
 	/* Menu loop */
 	win	= newwin(h, w, r, c);
-	mvwprintw(win, mnu[2].r, mnu[2].c, "%s (File: \"%s\")", mnu[1].t, saved_name);
-	wrefresh(win);
+	mvwprintw(win, mnu[2].r, mnu[2].c, "%s (File: \"%s\")", mnu[1].t,
+								saved_name);
 	sw	= alx_ncurses_menu_w(win, ARRAY_SIZE(mnu), mnu, "SELECT MAP:");
 	alx_ncurses_delwin(win);
 
@@ -234,18 +223,10 @@ static	void	menu_tui_select	(void)
 		start_mode =	START_LOAD;
 		break;
 	}
-
 }
 
 static	void	menu_tui_level	(void)
 {
-	int	h;
-	int	w;
-	int	sw;
-
-	/* Menu dimensions & options */
-	h	= 10;
-	w	= 70;
 	static	const struct Alx_Ncurses_Menu	mnu[]	= {
 		{7, 4, "[0]	Back"},
 		{2, 4, "[1]	Beginner"},
@@ -253,24 +234,26 @@ static	void	menu_tui_level	(void)
 		{4, 4, "[3]	Expert"},
 		{5, 4, "[4]	Custom"}
 	};
+	int	h;
+	int	w;
+	int	sw;
 
-	/* Menu loop */
+	h	= 10;
+	w	= 70;
+
+
 	sw	= alx_ncurses_menu(h, w, ARRAY_SIZE(mnu), mnu, "SELECT LEVEL:");
 
-	/* Selection */
 	switch (sw) {
 	case 1:
 		menu_iface_variables.level	= GAME_IFACE_LVL_BEGINNER;
 		break;
-
 	case 2:
 		menu_iface_variables.level	= GAME_IFACE_LVL_INTERMEDIATE;
 		break;
-
 	case 3:
 		menu_iface_variables.level	= GAME_IFACE_LVL_EXPERT;
 		break;
-
 	case 4:
 		menu_iface_variables.level	= GAME_IFACE_LVL_CUSTOM;
 		menu_tui_custom();
@@ -281,36 +264,33 @@ static	void	menu_tui_level	(void)
 
 static	void	menu_tui_custom	(void)
 {
-	WINDOW	*win;
-	int	h;
-	int	w;
-	int	r;
-	int	c;
-	int	w2;
-	int	r2;
-	bool	wh;
-	int	sw;
-
-	/* Menu dimensions & options */
-	h	= 16;
-	w	= 76;
-	r	= 1;
-	c	= (80 - w) / 2;
 	static	const struct Alx_Ncurses_Menu	mnu[]	= {
 		{8, 4, "[0]	Back"},
 		{2, 4, "[1]	Change rows:"},
 		{4, 4, "[2]	Change columns:"},
 		{6, 4, "[3]	Change proportion of mines:"}
 	};
-
-	/* Input box */
-	w2	= w - 8;
-	r2	= r + h - 5;
 	static	const char	*const txt[]	= {
 		"Rows:",
 		"Columns:",
 		"Proportion:"
 	};
+	WINDOW		*win;
+	int_fast8_t	h, w;
+	int_fast8_t	r, c;
+	int_fast8_t	w2, r2;
+	bool		wh;
+	int_fast8_t	sw;
+
+	/* Menu dimensions & options */
+	h	= 16;
+	w	= 76;
+	r	= 1;
+	c	= (80 - w) / 2;
+
+	/* Input box */
+	w2	= w - 8;
+	r2	= r + h - 5;
 
 	/* Menu */
 	win	= newwin(h, w, r, c);
@@ -354,58 +334,6 @@ static	void	menu_tui_custom	(void)
 
 	alx_ncurses_delwin(win);
 }
-#if 0
-static	void	menu_tui_devel	(void)
-{
-	WINDOW	*win;
-	int	h;
-	int	w;
-	int	r;
-	int	c;
-	int	w2;
-	int	r2;
-	bool	wh;
-	int	sw;
-	int	seed;
-
-	h	= 12;
-	w	= 50;
-	r	= 1;
-	c	= (80 - w) / 2;
-	static	const struct Alx_Ncurses_Menu	mnu[]	= {
-		{5, 4, "[0]	Back"},
-		{2, 4, "[1]	Change seed (srand)"}
-	};
-
-	/* Input box */
-	w2	= w - 8;
-	r2	= r + h - 5;
-	static	const char	*const txt[]	= {"Seed:"};
-
-	/* Menu */
-	win	= newwin(h, w, r, c);
-
-	/* Menu loop */
-	wh	= true;
-	while (wh) {
-		/* Selection */
-		sw	= alx_ncurses_menu_2(win, ARRAY_SIZE(mnu), mnu, "DEVELOPER OPTIONS:");
-
-		switch (sw) {
-		case 0:
-			wh	= false;
-			break;
-		case 1:
-			seed	= alx_w_getint(w2, r2, txt[0],
-						-INFINITY, 1, INFINITY, NULL);
-			srand(seed);
-			break;
-		}
-	}
-
-	alx_win_del(win);
-}
-#endif
 
 
 /******************************************************************************

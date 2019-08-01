@@ -22,13 +22,6 @@
 #define PROG_NAME	"mine-sweeper"
 #define PROG_YEAR	"2015"
 
-#define SHARE_DIR		"" INSTALL_SHARE_DIR "/mine-sweeper/"
-#define SHARE_COPYRIGHT_FILE	"" SHARE_DIR "/COPYRIGHT.txt"
-#define SHARE_DISCLAIMER_FILE	"" SHARE_DIR "/DISCLAIMER.txt"
-#define SHARE_HELP_FILE		"" SHARE_DIR "/HELP.txt"
-#define SHARE_LICENSE_FILE	"" SHARE_DIR "/LICENSE.txt"
-#define SHARE_USAGE_FILE	"" SHARE_DIR "/USAGE.txt"
-
 
 /******************************************************************************
  ******* enums ****************************************************************
