@@ -18,14 +18,12 @@ OBJ		=							\
 
 CORE_INC	=							\
 		$(INC_DIR)/mine-sweeper/game/core.h			\
-		$(LIBALX_INC_DIR)/libalx/base/stdlib/seed_mix.h		\
 		$(INC_DIR)/mine-sweeper/save/save.h
 CORE_SRC	=							\
 		$(SRC_DIR)/game/core.c
 
 IFACE_INC	=							\
 		$(INC_DIR)/mine-sweeper/game/iface.h			\
-		$(LIBALX_INC_DIR)/libalx/base/stdlib/seed_mix.h		\
 		$(INC_DIR)/mine-sweeper/game/core.h			\
 		$(INC_DIR)/mine-sweeper/player/iface.h			\
 		$(INC_DIR)/mine-sweeper/save/save.h			\

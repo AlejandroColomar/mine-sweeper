@@ -20,7 +20,6 @@ OBJ		=							\
 
 PARSER_INC	=							\
 		$(INC_DIR)/mine-sweeper/menu/parser.h			\
-		$(LIBALX_INC_DIR)/libalx/base/stdlib/seed_mix.h		\
 		$(INC_DIR)/mine-sweeper/about/about.h			\
 		$(INC_DIR)/mine-sweeper/ctrl/start.h			\
 		$(INC_DIR)/mine-sweeper/game/iface.h			\
@@ -32,7 +31,6 @@ PARSER_SRC	=							\
 
 CLUI_INC	=							\
 		$(INC_DIR)/mine-sweeper/menu/clui.h			\
-		$(LIBALX_INC_DIR)/libalx/base/stdio/get.h		\
 		$(INC_DIR)/mine-sweeper/about/about.h			\
 		$(INC_DIR)/mine-sweeper/ctrl/start.h			\
 		$(INC_DIR)/mine-sweeper/game/iface.h			\
@@ -43,9 +41,6 @@ CLUI_SRC	=							\
 
 TUI_INC		=							\
 		$(INC_DIR)/mine-sweeper/menu/tui.h			\
-		$(LIBALX_INC_DIR)/libalx/extra/ncurses/common.h		\
-		$(LIBALX_INC_DIR)/libalx/extra/ncurses/get.h		\
-		$(LIBALX_INC_DIR)/libalx/extra/ncurses/menu.h		\
 		$(INC_DIR)/mine-sweeper/about/about.h			\
 		$(INC_DIR)/mine-sweeper/ctrl/start.h			\
 		$(INC_DIR)/mine-sweeper/game/iface.h			\

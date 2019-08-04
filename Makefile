@@ -117,8 +117,7 @@ export	SZ
 
 ################################################################################
 # cflags
-CFLAGS_STD	= -std=c17
-CFLAGS_STD     += -Wpedantic
+CFLAGS_STD	= -std=gnu17
 
 CFLAGS_OPT	= -O3
 CFLAGS_OPT     += -march=native
@@ -128,9 +127,7 @@ CFLAGS_W	= -Wall
 CFLAGS_W       += -Wextra
 CFLAGS_W       += -Wstrict-prototypes
 CFLAGS_W       += -Werror
-CFLAGS_W       += -Wno-error=format-truncation
-#CFLAGS_W       += -Wno-error=unused-function
-#CFLAGS_W       += -Wno-error=unused-parameter
+#CFLAGS_W       += -Wno-error=format-truncation
 
 CFLAGS_PKG	= `pkg-config --cflags ncurses`
 CFLAGS_PKG     += -I $(LIBALX_INC_DIR)

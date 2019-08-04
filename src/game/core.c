@@ -11,11 +11,8 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdlib.h>
-#include <time.h>
 
-#include <unistd.h>
-
-#include "libalx/base/stdlib/seed_mix.h"
+#include "libalx/base/stdlib/seed.h"
 
 #include "mine-sweeper/save/save.h"
 
@@ -56,10 +53,8 @@ static	void	game_flag_recursive	(ptrdiff_t r, ptrdiff_t c);
  ******************************************************************************/
 void	game_init	(void)
 {
-	unsigned	seed;
 
-	seed	= alx_seed_mix(clock(), time(NULL), getpid());
-	srand(seed);
+	alx_rsrand();
 }
 
 void	game_init_rand	(ptrdiff_t rows, ptrdiff_t cols, int mines,

@@ -83,7 +83,7 @@ void	print_share_file	(int file)
 
 	return;
 err:
-	alx_perror(cmd);
+	alx_perror(fname);
 }
 
 void	print_version		(void)

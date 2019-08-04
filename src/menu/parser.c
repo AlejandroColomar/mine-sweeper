@@ -12,7 +12,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "libalx/base/stdlib/seed_mix.h"
+#include "libalx/base/stdlib/seed.h"
 
 #include "mine-sweeper/about/about.h"
 #include "mine-sweeper/ctrl/start.h"

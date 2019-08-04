@@ -13,6 +13,8 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "libalx/base/errno/error.h"
+
 #include "mine-sweeper/game/core.h"
 #include "mine-sweeper/game/iface.h"
 #include "mine-sweeper/menu/iface.h"
@@ -98,10 +100,8 @@ static	void	start_load	(void)
 
 	player_iface_cleanup();
 	return;
-
 err:
-	fprintf(stderr, "%s:%i: %s(): %s", __FILE__, __LINE__, __func__,
-							strerror(errno));
+	alx_perror("game_init_load");
 }
 
 
