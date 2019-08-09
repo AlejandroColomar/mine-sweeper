@@ -12,7 +12,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "libalx/base/stdlib/seed.h"
+#include <libalx/base/stdio/printf/sbprintf.h>
+#include <libalx/base/stdlib/seed.h>
 
 #include "mine-sweeper/about/about.h"
 #include "mine-sweeper/ctrl/start.h"
@@ -159,15 +160,16 @@ static	void	parse_file		(char *argument)
 	// FIXME
 	fp	= fopen(argument, "r");
 	if (!fp)
-		goto err_fp;
+		goto err;
 	fclose(fp);
 
 	saved_path[0]	= '\0';
-	snprintf(saved_name, FILENAME_MAX, argument);
+	if (alx_sbprintf(saved_name, NULL, "%s", argument))
+		goto err;
 
 	return;
 
-err_fp:
+err:
 	printf("--file argument not valid\n");
 	printf("It must be a valid file name (relative to saved dir)\n");
 	exit(EXIT_FAILURE);

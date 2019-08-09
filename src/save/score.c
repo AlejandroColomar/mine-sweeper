@@ -14,9 +14,10 @@
 #include <stdlib.h>
 #include <time.h>
 
-#include "libalx/base/errno/error.h"
-#include "libalx/base/compiler/size.h"
-#include "libalx/base/stdio/seekc.h"
+#include <libalx/base/errno/error.h>
+#include <libalx/base/compiler/size.h>
+#include <libalx/base/stdio/printf/sbprintf.h>
+#include <libalx/base/stdio/seekc.h>
 
 #include "mine-sweeper/game/core.h"
 #include "mine-sweeper/game/iface.h"
@@ -97,24 +98,24 @@ void	save_score	(const struct Game_Iface_Score  *game_iface_score)
 	return;
 
 err_fp:
-	alx_perror("Score could not be saved");
+	alx_perror(fname);
 }
 
 void	print_scores	(void)
 {
 	char	cmd[_POSIX_ARG_MAX];
 
-	if (snprintf(cmd, sizeof(cmd), "less %s %s %s",
-				HISCORES_BEGINNER_FILE,
-				HISCORES_INTERMEDIATE_FILE,
-				HISCORES_EXPERT_FILE)  >=  SSIZEOF(cmd)) {
+	if (alx_sbprintf(cmd, NULL, "less %s %s %s",
+					HISCORES_BEGINNER_FILE,
+					HISCORES_INTERMEDIATE_FILE,
+					HISCORES_EXPERT_FILE)) {
 		goto err;
 	}
 	if (system(cmd))
-		alx_perror(NULL);
+		goto err;
 	return;
 err:
-	alx_perror("Path is too large and has been truncated");
+	alx_perror(cmd);
 }
 
 

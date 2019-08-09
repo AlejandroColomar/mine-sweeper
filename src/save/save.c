@@ -15,8 +15,10 @@
 
 #include <sys/stat.h>
 
-#include "libalx/base/errno/error.h"
-#include "libalx/base/stdio/seekc.h"
+#include <libalx/base/compiler/unused.h>
+#include <libalx/base/errno/error.h>
+#include <libalx/base/stdio/printf/sbprintf.h>
+#include <libalx/base/stdio/seekc.h>
 
 #include "mine-sweeper/game/core.h"
 #include "mine-sweeper/player/iface.h"
@@ -37,18 +39,12 @@
 void	save_init	(void)
 {
 
-	if (snprintf(home_path, sizeof(home_path), "%s/",
-				getenv(ENV_HOME))  >=  FILENAME_MAX) {
+	if (alx_sbprintf(home_path, NULL, "%s/", getenv(ENV_HOME)))
 		goto err_path;
-	}
-	if (snprintf(user_game_path, sizeof(user_game_path), "%s/%s/",
-				home_path, USER_GAME_DIR)  >=  FILENAME_MAX) {
+	if (alx_sbprintf(user_game_path,NULL,"%s/%s/",home_path, USER_GAME_DIR))
 		goto err_path;
-	}
-	if (snprintf(saved_path, sizeof(saved_path), "%s/%s/",
-				home_path, USER_SAVED_DIR)  >=  FILENAME_MAX) {
+	if (alx_sbprintf(saved_path, NULL, "%s/%s/", home_path, USER_SAVED_DIR))
 		goto err_path;
-	}
 	saved_name[0]	= '\0';
 
 	if (mkdir(user_game_path, 0700)) {
@@ -60,29 +56,24 @@ void	save_init	(void)
 			goto err_mkdir;
 		return;
 	}
-
 	return;
 
 err_path:
-	alx_perror("Path is too large and has been truncated");
+	alx_perror(getenv(ENV_HOME));
 	exit(EXIT_FAILURE);
 err_mkdir:
-	alx_perror(NULL);
+	alx_perror(home_path);
 }
 
 void	save_clr	(void)
 {
 
-	if (snprintf(saved_path, sizeof(saved_path), "%s/%s/",
-				home_path, USER_SAVED_DIR)  >=  FILENAME_MAX) {
-		goto err_path;
-	}
-
+	if (alx_sbprintf(saved_path, NULL, "%s/%s/", home_path, USER_SAVED_DIR))
+		goto err;
 	return;
 
-
-err_path:
-	alx_perror("Path is too large and has been truncated");
+err:
+	alx_perror(home_path);
 	exit(EXIT_FAILURE);
 }
 
@@ -93,10 +84,8 @@ int	load_game_file	(void)
 	int	i;
 	int	j;
 
-	if (snprintf(fname, sizeof(fname), "%s/%s",
-				saved_path, saved_name)  >=  FILENAME_MAX) {
+	if (alx_sbprintf(fname, NULL, "%s/%s", saved_path, saved_name))
 		goto err_path;
-	}
 
 	fp	= fopen(fname, "r");
 	if (!fp)
@@ -126,7 +115,7 @@ int	load_game_file	(void)
 
 
 err_path:
-	alx_perror("Path is too large and has been truncated");
+	alx_perror(saved_name);
 	alx_wait4enter();
 	exit(EXIT_FAILURE);
 }
@@ -144,11 +133,11 @@ void	save_game_file	(char fpath[static restrict FILENAME_MAX])
 
 	/* Don't change saved_name variable if not in default dir */
 	if (fpath)
-		snprintf(old_saved, sizeof(old_saved), "%s", saved_name);
+		UNUSED(alx_sbprintf(old_saved, NULL, "%s", saved_name));
 
 	/* Default path & name */
 	save_clr();
-	snprintf(saved_name, sizeof(saved_name), "%s", SAVED_NAME_DEFAULT);
+	UNUSED(alx_sbprintf(saved_name, NULL, "%s", SAVED_NAME_DEFAULT));
 	file_num[0]	= '\0';
 
 	/* Request file name */
@@ -158,15 +147,15 @@ void	save_game_file	(char fpath[static restrict FILENAME_MAX])
 	x	= true;
 	for (i = 0; x; i++) {
 		if (!fpath) {
-			if (snprintf(fname, sizeof(fname), "%s/%s%s%s",
+			if (alx_sbprintf(fname, NULL, "%s/%s%s%s",
 					saved_path, saved_name, file_num,
-					FILE_EXTENSION)  >=  FILENAME_MAX) {
+					FILE_EXTENSION)) {
 				goto err_path;
 			}
 		} else {
-			if (snprintf(fname, sizeof(fname), "%s/%s%s%s",
+			if (alx_sbprintf(fname, NULL, "%s/%s%s%s",
 					fpath, saved_name, file_num,
-					FILE_EXTENSION)  >=  FILENAME_MAX) {
+					FILE_EXTENSION)) {
 				goto err_path;
 			}
 		}
@@ -181,12 +170,11 @@ void	save_game_file	(char fpath[static restrict FILENAME_MAX])
 			file_num[4] =	'\0';
 		} else {
 			x	= false;
-			if (snprintf(tmp, sizeof(tmp), "%s%s%s",
-					saved_name, file_num,
-					FILE_EXTENSION)  >=  FILENAME_MAX) {
+			if (alx_sbprintf(tmp, NULL, "%s%s%s",
+					saved_name, file_num, FILE_EXTENSION)) {
 				goto err_path;
 			}
-			snprintf(saved_name, sizeof(saved_name), "%s", tmp);
+			UNUSED(alx_sbprintf(saved_name, NULL, "%s", tmp));
 		}
 	}
 
@@ -221,13 +209,13 @@ void	save_game_file	(char fpath[static restrict FILENAME_MAX])
 err_fopen:
 	/* Don't change saved_name if saving in non-default dir */
 	if (fpath)
-		snprintf(saved_name, sizeof(saved_name), "%s", old_saved);
+		UNUSED(alx_sbprintf(saved_name, NULL, "%s", old_saved));
 
 	return;
 
 
 err_path:
-	alx_perror("Path is too large and has been truncated");
+	alx_perror(fname);
 	alx_wait4enter();
 	exit(EXIT_FAILURE);
 }

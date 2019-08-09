@@ -11,6 +11,9 @@
 #include <stddef.h>
 #include <stdio.h>
 
+#include <libalx/base/compiler/unused.h>
+#include <libalx/base/stdio/printf/sbprintf.h>
+
 #include "mine-sweeper/game/iface.h"
 #include "mine-sweeper/player/clui.h"
 #include "mine-sweeper/player/tui.h"
@@ -75,8 +78,8 @@ int	player_iface_start	(ptrdiff_t *row, ptrdiff_t *col)
 	char	subtitle[TITLE_SIZE];
 	int	fail;
 
-	snprintf(title, TITLE_SIZE, "Start:");
-	snprintf(subtitle, TITLE_SIZE, "00:00 | 0");
+	UNUSED(alx_sbprintf(title, NULL, "Start:"));
+	UNUSED(alx_sbprintf(subtitle, NULL, "00:00 | 0"));
 
 	/* Start position */
 	player_iface_position.row	= 0;
@@ -135,16 +138,16 @@ void	player_iface		(const	struct Game_Iface_Out	*out,
 	case GAME_IFACE_STATE_CHEATED:
 	case GAME_IFACE_STATE_PLAYING:
 	case GAME_IFACE_STATE_PAUSE:
-		snprintf(title, TITLE_SIZE, "Mines: %i/%i",
-					out->flags, out->mines);
+		UNUSED(alx_sbprintf(title, NULL, "Mines: %i/%i",
+						out->flags, out->mines));
 		break;
 
 	case GAME_IFACE_STATE_GAMEOVER:
-		snprintf(title, TITLE_SIZE, "GAME OVER");
+		UNUSED(alx_sbprintf(title, NULL, "GAME OVER"));
 		break;
 
 	case GAME_IFACE_STATE_SAFE:
-		snprintf(title, TITLE_SIZE, "You win!");
+		UNUSED(alx_sbprintf(title, NULL, "You win!"));
 		break;
 	}
 	/* Subtitle */
@@ -154,14 +157,14 @@ void	player_iface		(const	struct Game_Iface_Out	*out,
 		secs	= ((int)score->time % 60);
 
 		if (score->time >= 3600) {
-			snprintf(subtitle, TITLE_SIZE, "%02i:%02i:%02i | %i",
-					hours, mins, secs, score->clicks);
+			UNUSED(alx_sbprintf(subtitle,NULL,"%02i:%02i:%02i | %i",
+					hours, mins, secs, score->clicks));
 		} else {
-			snprintf(subtitle, TITLE_SIZE, "%02i:%02i | %i",
-					mins, secs, score->clicks);
+			UNUSED(alx_sbprintf(subtitle, NULL, "%02i:%02i | %i",
+					mins, secs, score->clicks));
 		}
 	} else {
-		snprintf(subtitle, TITLE_SIZE, "N/A");
+		UNUSED(alx_sbprintf(subtitle, NULL, "N/A"));
 	}
 
 	/* Request player action */
