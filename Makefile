@@ -227,12 +227,6 @@ clean:
 	$(Q)find $(TMP_DIR) -type f -name '*.s' -exec rm '{}' '+'
 	$(Q)find $(BIN_DIR) -type f -name '*$(BIN_NAME)' -exec rm '{}' '+'
 
-PHONY += distclean
-distclean: clean
-	@echo	'	CLEAN	libalx'
-	$(Q)$(MAKE) clean	-C $(LIBALX_DIR)
-	@echo
-
 PHONY += help
 help:
 	@echo  'Cleaning targets:'
