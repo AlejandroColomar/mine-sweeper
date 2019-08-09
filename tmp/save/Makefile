@@ -18,8 +18,6 @@ OBJ		=							\
 
 SAVE_INC	=							\
 		$(INC_DIR)/mine-sweeper/save/save.h			\
-		$(LIBALX_INC_DIR)/libalx/base/errno/error.h		\
-		$(LIBALX_INC_DIR)/libalx/base/stdio/seekc.h		\
 		$(INC_DIR)/mine-sweeper/game/core.h			\
 		$(INC_DIR)/mine-sweeper/player/iface.h
 SAVE_SRC	=							\
@@ -27,9 +25,6 @@ SAVE_SRC	=							\
 
 SCORE_INC	=							\
 		$(INC_DIR)/mine-sweeper/save/score.h			\
-		$(LIBALX_INC_DIR)/libalx/base/compiler/size.h		\
-		$(LIBALX_INC_DIR)/libalx/base/errno/error.h		\
-		$(LIBALX_INC_DIR)/libalx/base/stdio/seekc.h		\
 		$(INC_DIR)/mine-sweeper/game/core.h			\
 		$(INC_DIR)/mine-sweeper/game/iface.h			\
 		$(INC_DIR)/mine-sweeper/player/iface.h

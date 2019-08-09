@@ -1,7 +1,7 @@
 #! /usr/bin/make -f
 
 VERSION		= 5
-PATCHLEVEL	= ~a1
+PATCHLEVEL	= ~a2
 SUBLEVEL	=
 EXTRAVERSION	=
 NAME		=
@@ -75,19 +75,12 @@ export	PROGRAMVERSION
 
 MAIN_DIR	= $(CURDIR)
 
-LIBALX_DIR	= $(CURDIR)/libalx/
-LIBALX_INC_DIR	= $(LIBALX_DIR)/inc/
-LIBALX_LIB_DIR	= $(LIBALX_DIR)/lib/libalx/
-
 BIN_DIR		= $(CURDIR)/bin/
 INC_DIR		= $(CURDIR)/inc/
 SRC_DIR		= $(CURDIR)/src/
 TMP_DIR		= $(CURDIR)/tmp/
 
 export	MAIN_DIR
-export	LIBALX_DIR
-export	LIBALX_INC_DIR
-export	LIBALX_LIB_DIR
 export	BIN_DIR
 export	INC_DIR
 export	SRC_DIR
@@ -95,11 +88,8 @@ export	TMP_DIR
 
 # FIXME: Set local or not local when building a package
 INSTALL_BIN_DIR		= /usr/local/bin/
-#INSTALL_BIN_DIR	= /usr/bin/
 INSTALL_SHARE_DIR	= /usr/local/share/
-#INSTALL_SHARE_DIR	= /usr/share/
 INSTALL_VAR_DIR		= /var/local/
-#INSTALL_VAR_DIR	= /var/lib/
 
 ################################################################################
 # Make variables (CC, etc...)
@@ -127,14 +117,12 @@ CFLAGS_W	= -Wall
 CFLAGS_W       += -Wextra
 CFLAGS_W       += -Wstrict-prototypes
 CFLAGS_W       += -Werror
-#CFLAGS_W       += -Wno-error=format-truncation
 
 CFLAGS_PKG	= `pkg-config --cflags ncurses`
-CFLAGS_PKG     += -I $(LIBALX_INC_DIR)
+CFLAGS_PKG     += `pkg-config --cflags libalx-ncurses`
+CFLAGS_PKG     += `pkg-config --cflags libalx-base`
 
-CFLAGS_D	= -D _GNU_SOURCE
-CFLAGS_D       += -D _POSIX_C_SOURCE=200809L
-CFLAGS_D       += -D PROG_VERSION=\"$(PROGRAMVERSION)\"
+CFLAGS_D	= -D PROG_VERSION=\"$(PROGRAMVERSION)\"
 CFLAGS_D       += -D INSTALL_SHARE_DIR=\"$(INSTALL_SHARE_DIR)\"
 CFLAGS_D       += -D INSTALL_VAR_DIR=\"$(INSTALL_VAR_DIR)\"
 
@@ -151,17 +139,16 @@ export	CFLAGS
 
 ################################################################################
 # libs
-LIBS_STD	= -l m
-
 LIBS_OPT	= -O3
 LIBS_OPT       += -march=native
 LIBS_OPT       += -flto
 LIBS_OPT       += -fuse-linker-plugin
 
 LIBS_PKG	= `pkg-config --libs ncurses`
+LIBS_PKG       += `pkg-config --libs libalx-ncurses`
+LIBS_PKG       += `pkg-config --libs libalx-base`
 
-LIBS		= $(LIBS_STD)
-LIBS           += $(LIBS_OPT)
+LIBS		= $(LIBS_OPT)
 LIBS           += $(LIBS_PKG)
 
 export	LIBS
@@ -182,13 +169,6 @@ PHONY := all
 all: bin
 
 
-PHONY += libalx
-libalx:
-	@echo	"	MAKE	$@"
-	$(Q)$(MAKE) base	-C $(LIBALX_DIR)
-	$(Q)$(MAKE) ncurses	-C $(LIBALX_DIR)
-	@echo
-
 PHONY += tmp
 tmp:
 	@echo	"	MAKE	$@"
@@ -196,7 +176,7 @@ tmp:
 	@echo
 
 PHONY += bin
-bin: tmp libalx
+bin: tmp
 	@echo	"	MAKE	$@"
 	$(Q)$(MAKE)	-C $(BIN_DIR)
 	@echo

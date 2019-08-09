@@ -16,7 +16,6 @@ OBJ		=							\
 		main.o
 
 MAIN_INC	=							\
-		$(LIBALX_INC_DIR)/libalx/extra/ncurses/common.h		\
 		$(INC_DIR)/mine-sweeper/about/about.h			\
 		$(INC_DIR)/mine-sweeper/ctrl/start.h			\
 		$(INC_DIR)/mine-sweeper/game/core.h			\

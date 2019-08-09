@@ -10,8 +10,10 @@
 
 #include <limits.h>
 #include <math.h>
+#include <stdio.h>
 #include <stdlib.h>
 
+#include "libalx/base/compiler/size.h"
 #include "libalx/base/stdio/get.h"
 
 #include "mine-sweeper/about/about.h"
@@ -33,8 +35,6 @@
 	#error "cols max (clui)"
 #endif
 
-#define BUFF_SIZE		(1024)
-
 
 /******************************************************************************
  ******* static functions *****************************************************
@@ -50,12 +50,12 @@ static	void	menu_clui_start		(void);
  ******************************************************************************/
 void	menu_clui	(void)
 {
-	char	buff [BUFF_SIZE];
+	char	buff [BUFSIZ];
 	char	c;
 
 	c	= 'n';
 	printf("Read 'Disclaimer of warranty'? (yes/NO): ");
-	if (!fgets(buff, BUFF_SIZE, stdin))
+	if (!fgets(buff, ARRAY_SIZE(buff), stdin))
 		goto err_fgets;
 	if (sscanf(buff, " %c", &c) != 1)
 		goto err_sscanf;
@@ -68,7 +68,7 @@ void	menu_clui	(void)
 
 	c	= 'n';
 	printf("Read 'License'? (yes/NO): ");
-	if (!fgets(buff, BUFF_SIZE, stdin))
+	if (!fgets(buff, ARRAY_SIZE(buff), stdin))
 		goto err_fgets;
 	if (sscanf(buff, " %c", &c) != 1)
 		goto err_sscanf;
@@ -91,7 +91,7 @@ void	menu_clui	(void)
 #endif
 	c	= 'n';
 	printf("New game or load game? (NEW/load): ");
-	if (!fgets(buff, BUFF_SIZE, stdin))
+	if (!fgets(buff, ARRAY_SIZE(buff), stdin))
 		goto err_fgets;
 	if (sscanf(buff, " %c", &c) != 1)
 		goto err_sscanf;
@@ -121,7 +121,7 @@ err_sscanf:
 static	void	menu_clui_rand		(void)
 {
 	unsigned	seed;
-	char	buff [BUFF_SIZE];
+	char	buff [BUFSIZ];
 	char	c;
 
 	/* Random */
@@ -129,7 +129,7 @@ static	void	menu_clui_rand		(void)
 
 	c	= 'n';
 	printf("Set seed for random generator? (yes/NO): ");
-	if (!fgets(buff, BUFF_SIZE, stdin))
+	if (!fgets(buff, ARRAY_SIZE(buff), stdin))
 		goto err_fgets;
 	if (sscanf(buff, " %c", &c) != 1)
 		goto err_sscanf;
@@ -143,7 +143,7 @@ static	void	menu_clui_rand		(void)
 
 	c	= 'b';
 	printf("Level? (BEGINNER/intermediate/(expert)/custom): ");
-	if (!fgets(buff, BUFF_SIZE, stdin))
+	if (!fgets(buff, ARRAY_SIZE(buff), stdin))
 		goto err_fgets;
 	if (sscanf(buff, " %c", &c) != 1)
 		goto err_sscanf;
@@ -204,7 +204,7 @@ static	void	menu_clui_load		(void)
 
 static	void	menu_clui_start		(void)
 {
-	char	buff [BUFF_SIZE];
+	char	buff [BUFSIZ];
 	char	c;
 
 	printf(" >>START:\n");
@@ -212,7 +212,7 @@ static	void	menu_clui_start		(void)
 
 	c	= 'm';
 	printf("Play again? (MENU/play/exit): ");
-	if (!fgets(buff, BUFF_SIZE, stdin))
+	if (!fgets(buff, ARRAY_SIZE(buff), stdin))
 		goto err_fgets;
 	if (sscanf(buff, " %c", &c) != 1)
 		goto err_sscanf;

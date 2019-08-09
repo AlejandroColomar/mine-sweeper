@@ -20,17 +20,8 @@ OBJS		=							\
 		$(TMP_DIR)/save/save.o					\
 		$(TMP_DIR)/save/score.o					\
 		$(TMP_DIR)/xyzzy/xyzzy.o
-DEPS_LIBS	= 							\
-		$(LIBALX_LIB_DIR)/libalx-ncurses.a			\
-		$(LIBALX_LIB_DIR)/libalx-base.a
 
 ALL	= $(BIN_NAME) size
-
-# static libs
-
-STATIC_LIBS	= -L $(LIBALX_LIB_DIR)					\
-		-l alx-ncurses						\
-		-l alx-base
 
 
 # target: dependencies
@@ -40,9 +31,9 @@ PHONY := all
 all: $(ALL)
 
 
-$(BIN_NAME): $(OBJS) $(DEPS_LIBS)
+$(BIN_NAME): $(OBJS)
 	@echo	"	CC	$@"
-	$(Q)$(CC) $(OBJS) -o $@ $(STATIC_LIBS) $(LIBS)
+	$(Q)$(CC) $(OBJS) -o $@ $(LIBS)
 
 size: $(BIN_NAME)
 	@echo	"	SZ	$(BIN_NAME)"

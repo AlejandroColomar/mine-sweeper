@@ -26,8 +26,6 @@ CLUI_SRC	=							\
 
 TUI_INC		=							\
 		$(INC_DIR)/mine-sweeper/player/tui.h			\
-		$(LIBALX_INC_DIR)/libalx/extra/ncurses/common.h		\
-		$(LIBALX_INC_DIR)/libalx/extra/ncurses/get.h		\
 		$(INC_DIR)/mine-sweeper/game/iface.h			\
 		$(INC_DIR)/mine-sweeper/player/iface.h
 TUI_SRC		=							\
