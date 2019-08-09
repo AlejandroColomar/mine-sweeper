@@ -13,8 +13,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "libalx/base/compiler/size.h"
-#include "libalx/base/stdio/get.h"
+#include <libalx/base/compiler/size.h>
+#include <libalx/base/errno/error.h>
+#include <libalx/base/stdio/get.h>
 
 #include "mine-sweeper/about/about.h"
 #include "mine-sweeper/ctrl/start.h"
@@ -107,10 +108,10 @@ void	menu_clui	(void)
 
 
 err_fgets:
-	printf("fgets() error\n");
+	alx_perror("fgets() error\n");
 	exit(EXIT_FAILURE);
 err_sscanf:
-	printf("sscanf() error\n");
+	alx_perror(buff);
 	exit(EXIT_FAILURE);
 }
 
@@ -169,10 +170,10 @@ static	void	menu_clui_rand		(void)
 
 
 err_fgets:
-	printf("fgets() error\n");
+	alx_perror("fgets() error\n");
 	exit(EXIT_FAILURE);
 err_sscanf:
-	printf("sscanf() error\n");
+	alx_perror(buff);
 	exit(EXIT_FAILURE);
 }
 
@@ -230,10 +231,10 @@ static	void	menu_clui_start		(void)
 
 
 err_fgets:
-	printf("fgets() error\n");
+	alx_perror("fgets() error\n");
 	exit(EXIT_FAILURE);
 err_sscanf:
-	printf("sscanf() error\n");
+	alx_perror(buff);
 	exit(EXIT_FAILURE);
 }
 
