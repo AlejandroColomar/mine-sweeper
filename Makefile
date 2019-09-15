@@ -150,6 +150,7 @@ LIBS_PKG       += `pkg-config --libs libalx-base`
 
 LIBS		= $(LIBS_OPT)
 LIBS           += $(LIBS_PKG)
+LIBS           += -l m
 
 export	LIBS
 
