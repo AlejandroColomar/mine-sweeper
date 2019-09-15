@@ -14,6 +14,8 @@
 
 #include <libalx/base/stdio/printf/sbprintf.h>
 #include <libalx/base/stdlib/seed.h>
+#include <libalx/base/stdlib/strto/strtof_s.h>
+#include <libalx/base/stdlib/strto/strtoi_s.h>
 
 #include "mine-sweeper/about/about.h"
 #include "mine-sweeper/ctrl/start.h"
@@ -32,15 +34,15 @@
 /******************************************************************************
  ******* static functions *****************************************************
  ******************************************************************************/
-static	void	parse_rows		(char *argument);
-static	void	parse_columns		(char *argument);
-static	void	parse_file		(char *argument);
-static	void	parse_iface		(char *argument);
-static	void	parse_proportion	(char *argument);
+static	void	parse_rows		(const char *argument);
+static	void	parse_columns		(const char *argument);
+static	void	parse_file		(const char *argument);
+static	void	parse_iface		(const char *argument);
+static	void	parse_proportion	(const char *argument);
 #if 0
-static	void	parse_rand_seed		(char *argument);
+static	void	parse_rand_seed		(const char *argument);
 #endif
-static	void	parse_start		(char *argument);
+static	void	parse_start		(const char *argument);
 
 
 /******************************************************************************
@@ -129,31 +131,37 @@ void	parser	(int argc, char *argv[])
 /******************************************************************************
  ******* static functions *****************************************************
  ******************************************************************************/
-static	void	parse_rows		(char *argument)
+static	void	parse_rows		(const char *argument)
 {
 
-	menu_iface_variables.rows	= atoi(argument);
+	if (alx_strtoi64_s(&menu_iface_variables.rows, argument, 0, NULL))
+		goto err;
 	if ((menu_iface_variables.rows < 2)  ||
-			(menu_iface_variables.rows > ROWS_MAX)) {
-		printf("--rows argument not valid\n");
-		printf("It must be an integer [%i U %i]\n", 2, ROWS_MAX);
-		exit(EXIT_FAILURE);
-	}
+			(menu_iface_variables.rows > ROWS_MAX))
+		goto err;
+	return;
+err:
+	printf("--rows argument not valid\n");
+	printf("It must be an integer [%i U %i]\n", 2, ROWS_MAX);
+	exit(EXIT_FAILURE);
 }
 
-static	void	parse_columns		(char *argument)
+static	void	parse_columns		(const char *argument)
 {
 
-	menu_iface_variables.cols	= atoi(argument);
+	if (alx_strtoi64_s(&menu_iface_variables.cols, argument, 0, NULL))
+		goto err;
 	if ((menu_iface_variables.cols < 2)  ||
-			(menu_iface_variables.cols > COLS_MAX)) {
-		printf("--columns argument not valid\n");
-		printf("It must be an integer [%i U %i]\n", 2, COLS_MAX);
-		exit(EXIT_FAILURE);
-	}
+			(menu_iface_variables.cols > COLS_MAX))
+		goto err;
+	return;
+err:
+	printf("--columns argument not valid\n");
+	printf("It must be an integer [%i U %i]\n", 2, COLS_MAX);
+	exit(EXIT_FAILURE);
 }
 
-static	void	parse_file		(char *argument)
+static	void	parse_file		(const char *argument)
 {
 	FILE	*fp;
 
@@ -175,33 +183,38 @@ err:
 	exit(EXIT_FAILURE);
 }
 
-static	void	parse_iface		(char *argument)
+static	void	parse_iface		(const char *argument)
 {
 
-	menu_iface_mode		= atoi(argument);
+	if (alx_strtoi32_s(&menu_iface_mode, argument, 0, NULL))
+		goto err;
 	player_iface_mode	= menu_iface_mode;
 	if ((menu_iface_mode < MENU_IFACE_CLUI)  ||
-			(menu_iface_mode > MENU_IFACE_GUI)) {
-		printf("--iface argument not valid\n");
-		printf("It must be an integer [%i U %i]\n",
+					(menu_iface_mode > MENU_IFACE_GUI))
+		goto err;
+	return;
+err:
+	printf("--iface argument not valid\n");
+	printf("It must be an integer [%i U %i]\n",
 					MENU_IFACE_CLUI, MENU_IFACE_GUI);
-		exit(EXIT_FAILURE);
-	}
+	exit(EXIT_FAILURE);
 }
 
-static	void	parse_proportion	(char *argument)
+static	void	parse_proportion	(const char *argument)
 {
 
-	menu_iface_variables.p	= atof(argument);
-	if ((menu_iface_variables.p < 0)  ||
-			(menu_iface_variables.p > 1)) {
-		printf("--proportion argument not valid\n");
-		printf("It must be a real [0 U 1]\n");
-		exit(EXIT_FAILURE);
-	}
+	if (alx_strtod_s(&menu_iface_variables.p, argument, NULL))
+		goto err;
+	if ((menu_iface_variables.p < 0)  ||  (menu_iface_variables.p > 1))
+		goto err;
+	return;
+err:
+	printf("--proportion argument not valid\n");
+	printf("It must be a real [0 U 1]\n");
+	exit(EXIT_FAILURE);
 }
 #if 0
-static	void	parse_rand_seed		(char *argument)
+static	void	parse_rand_seed		(const char *argument)
 {
 	int	seed;
 
@@ -209,16 +222,18 @@ static	void	parse_rand_seed		(char *argument)
 	srand(seed);
 }
 #endif
-static	void	parse_start		(char *argument)
+static	void	parse_start		(const char *argument)
 {
 
-	start_mode	= atoi(argument);
-	if ((start_mode < START_FOO)  ||  (start_mode > START_LOAD)) {
-		printf("--start argument not valid\n");
-		printf("It must be an integer [%i U %i]\n",
-					START_FOO, START_LOAD);
-		exit(EXIT_FAILURE);
-	}
+	if (alx_strtoi32_s(&start_mode, argument, 0, NULL))
+		goto err;
+	if ((start_mode < START_FOO)  ||  (start_mode > START_LOAD))
+		goto err;
+	return;
+err:
+	printf("--start argument not valid\n");
+	printf("It must be an integer [%i U %i]\n", START_FOO, START_LOAD);
+	exit(EXIT_FAILURE);
 }
 
 
