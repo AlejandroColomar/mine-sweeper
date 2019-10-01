@@ -13,6 +13,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define ALX_NO_PREFIX
 #include <libalx/base/compiler/size.h>
 #include <libalx/base/errno/error.h>
 #include <libalx/base/stdio/get.h>
@@ -108,10 +109,10 @@ void	menu_clui	(void)
 
 
 err_fgets:
-	alx_perror("fgets() error\n");
+	perrorx("fgets() error\n");
 	exit(EXIT_FAILURE);
 err_sscanf:
-	alx_perror(buff);
+	perrorx(buff);
 	exit(EXIT_FAILURE);
 }
 
@@ -170,10 +171,10 @@ static	void	menu_clui_rand		(void)
 
 
 err_fgets:
-	alx_perror("fgets() error\n");
+	perrorx("fgets() error\n");
 	exit(EXIT_FAILURE);
 err_sscanf:
-	alx_perror(buff);
+	perrorx(buff);
 	exit(EXIT_FAILURE);
 }
 
@@ -231,10 +232,10 @@ static	void	menu_clui_start		(void)
 
 
 err_fgets:
-	alx_perror("fgets() error\n");
+	perrorx("fgets() error\n");
 	exit(EXIT_FAILURE);
 err_sscanf:
-	alx_perror(buff);
+	perrorx(buff);
 	exit(EXIT_FAILURE);
 }
 

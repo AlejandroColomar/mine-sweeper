@@ -11,6 +11,7 @@
 #include <stddef.h>
 #include <stdio.h>
 
+#define ALX_NO_PREFIX
 #include <libalx/base/compiler/unused.h>
 #include <libalx/base/stdio/printf/sbprintf.h>
 
@@ -78,8 +79,8 @@ int	player_iface_start	(ptrdiff_t *row, ptrdiff_t *col)
 	char	subtitle[TITLE_SIZE];
 	int	fail;
 
-	UNUSED(alx_sbprintf(title, NULL, "Start:"));
-	UNUSED(alx_sbprintf(subtitle, NULL, "00:00 | 0"));
+	UNUSED(sbprintf(title, NULL, "Start:"));
+	UNUSED(sbprintf(subtitle, NULL, "00:00 | 0"));
 
 	/* Start position */
 	player_iface_position.row	= 0;
@@ -138,16 +139,16 @@ void	player_iface		(const	struct Game_Iface_Out	*out,
 	case GAME_IFACE_STATE_CHEATED:
 	case GAME_IFACE_STATE_PLAYING:
 	case GAME_IFACE_STATE_PAUSE:
-		UNUSED(alx_sbprintf(title, NULL, "Mines: %i/%i",
+		UNUSED(sbprintf(title, NULL, "Mines: %i/%i",
 						out->flags, out->mines));
 		break;
 
 	case GAME_IFACE_STATE_GAMEOVER:
-		UNUSED(alx_sbprintf(title, NULL, "GAME OVER"));
+		UNUSED(sbprintf(title, NULL, "GAME OVER"));
 		break;
 
 	case GAME_IFACE_STATE_SAFE:
-		UNUSED(alx_sbprintf(title, NULL, "You win!"));
+		UNUSED(sbprintf(title, NULL, "You win!"));
 		break;
 	}
 	/* Subtitle */
@@ -157,14 +158,14 @@ void	player_iface		(const	struct Game_Iface_Out	*out,
 		secs	= ((int)score->time % 60);
 
 		if (score->time >= 3600) {
-			UNUSED(alx_sbprintf(subtitle,NULL,"%02i:%02i:%02i | %i",
+			UNUSED(sbprintf(subtitle, NULL, "%02i:%02i:%02i | %i",
 					hours, mins, secs, score->clicks));
 		} else {
-			UNUSED(alx_sbprintf(subtitle, NULL, "%02i:%02i | %i",
+			UNUSED(sbprintf(subtitle, NULL, "%02i:%02i | %i",
 					mins, secs, score->clicks));
 		}
 	} else {
-		UNUSED(alx_sbprintf(subtitle, NULL, "N/A"));
+		UNUSED(sbprintf(subtitle, NULL, "N/A"));
 	}
 
 	/* Request player action */

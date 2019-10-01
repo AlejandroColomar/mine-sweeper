@@ -8,7 +8,7 @@
  ******************************************************************************/
 #include <stdio.h>
 
-#include "libalx/extra/ncurses/common.h"
+#include <libalx/extra/ncurses/common.h>
 
 #include "mine-sweeper/about/about.h"
 #include "mine-sweeper/ctrl/start.h"

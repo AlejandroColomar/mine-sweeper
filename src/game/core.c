@@ -12,7 +12,8 @@
 #include <stddef.h>
 #include <stdlib.h>
 
-#include "libalx/base/stdlib/seed.h"
+#define ALX_NO_PREFIX
+#include <libalx/base/stdlib/seed.h>
 
 #include "mine-sweeper/save/save.h"
 
@@ -54,7 +55,7 @@ static	void	game_flag_recursive	(ptrdiff_t r, ptrdiff_t c);
 void	game_init	(void)
 {
 
-	alx_rsrand();
+	prsrand();
 }
 
 void	game_init_rand	(ptrdiff_t rows, ptrdiff_t cols, int mines,

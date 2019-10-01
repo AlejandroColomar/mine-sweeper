@@ -14,6 +14,7 @@
 #include <stdlib.h>
 #include <time.h>
 
+#define ALX_NO_PREFIX
 #include <libalx/base/errno/error.h>
 #include <libalx/base/compiler/size.h>
 #include <libalx/base/stdio/printf/sbprintf.h>
@@ -98,24 +99,23 @@ void	save_score	(const struct Game_Iface_Score  *game_iface_score)
 	return;
 
 err_fp:
-	alx_perror(fname);
+	perrorx(fname);
 }
 
 void	print_scores	(void)
 {
 	char	cmd[_POSIX_ARG_MAX];
 
-	if (alx_sbprintf(cmd, NULL, "less %s %s %s",
-					HISCORES_BEGINNER_FILE,
-					HISCORES_INTERMEDIATE_FILE,
-					HISCORES_EXPERT_FILE)) {
+	if (sbprintf(cmd, NULL, "less %s %s %s", HISCORES_BEGINNER_FILE,
+						 HISCORES_INTERMEDIATE_FILE,
+						 HISCORES_EXPERT_FILE)) {
 		goto err;
 	}
 	if (system(cmd))
 		goto err;
 	return;
 err:
-	alx_perror(cmd);
+	perrorx(cmd);
 }
 
 

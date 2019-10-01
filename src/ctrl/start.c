@@ -13,7 +13,8 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "libalx/base/errno/error.h"
+#define ALX_NO_PREFIX
+#include <libalx/base/errno/error.h>
 
 #include "mine-sweeper/game/core.h"
 #include "mine-sweeper/game/iface.h"
@@ -101,7 +102,7 @@ static	void	start_load	(void)
 	player_iface_cleanup();
 	return;
 err:
-	alx_perror("game_init_load");
+	perrorx("game_init_load");
 }
 
 

@@ -12,6 +12,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define ALX_NO_PREFIX
 #include <libalx/base/stdio/printf/sbprintf.h>
 #include <libalx/base/stdlib/seed.h>
 #include <libalx/base/stdlib/strto/strtof_s.h>
@@ -134,7 +135,7 @@ void	parser	(int argc, char *argv[])
 static	void	parse_rows		(const char *argument)
 {
 
-	if (alx_strtoi64_s(&menu_iface_variables.rows, argument, 0, NULL))
+	if (strtoi64_s(&menu_iface_variables.rows, argument, 0, NULL))
 		goto err;
 	if ((menu_iface_variables.rows < 2)  ||
 			(menu_iface_variables.rows > ROWS_MAX))
@@ -149,7 +150,7 @@ err:
 static	void	parse_columns		(const char *argument)
 {
 
-	if (alx_strtoi64_s(&menu_iface_variables.cols, argument, 0, NULL))
+	if (strtoi64_s(&menu_iface_variables.cols, argument, 0, NULL))
 		goto err;
 	if ((menu_iface_variables.cols < 2)  ||
 			(menu_iface_variables.cols > COLS_MAX))
@@ -172,7 +173,7 @@ static	void	parse_file		(const char *argument)
 	fclose(fp);
 
 	saved_path[0]	= '\0';
-	if (alx_sbprintf(saved_name, NULL, "%s", argument))
+	if (sbprintf(saved_name, NULL, "%s", argument))
 		goto err;
 
 	return;
@@ -186,7 +187,7 @@ err:
 static	void	parse_iface		(const char *argument)
 {
 
-	if (alx_strtoi32_s(&menu_iface_mode, argument, 0, NULL))
+	if (strtoi32_s(&menu_iface_mode, argument, 0, NULL))
 		goto err;
 	player_iface_mode	= menu_iface_mode;
 	if ((menu_iface_mode < MENU_IFACE_CLUI)  ||
@@ -203,7 +204,7 @@ err:
 static	void	parse_proportion	(const char *argument)
 {
 
-	if (alx_strtod_s(&menu_iface_variables.p, argument, NULL))
+	if (strtod_s(&menu_iface_variables.p, argument, NULL))
 		goto err;
 	if ((menu_iface_variables.p < 0)  ||  (menu_iface_variables.p > 1))
 		goto err;
@@ -225,7 +226,7 @@ static	void	parse_rand_seed		(const char *argument)
 static	void	parse_start		(const char *argument)
 {
 
-	if (alx_strtoi32_s(&start_mode, argument, 0, NULL))
+	if (strtoi32_s(&start_mode, argument, 0, NULL))
 		goto err;
 	if ((start_mode < START_FOO)  ||  (start_mode > START_LOAD))
 		goto err;

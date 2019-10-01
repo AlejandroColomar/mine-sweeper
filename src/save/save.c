@@ -15,6 +15,7 @@
 
 #include <sys/stat.h>
 
+#define ALX_NO_PREFIX
 #include <libalx/base/compiler/unused.h>
 #include <libalx/base/errno/error.h>
 #include <libalx/base/stdio/printf/sbprintf.h>
@@ -39,11 +40,11 @@
 void	save_init	(void)
 {
 
-	if (alx_sbprintf(home_path, NULL, "%s/", getenv(ENV_HOME)))
+	if (sbprintf(home_path, NULL, "%s/", getenv(ENV_HOME)))
 		goto err_path;
-	if (alx_sbprintf(user_game_path,NULL,"%s/%s/",home_path, USER_GAME_DIR))
+	if (sbprintf(user_game_path, NULL, "%s/%s/", home_path, USER_GAME_DIR))
 		goto err_path;
-	if (alx_sbprintf(saved_path, NULL, "%s/%s/", home_path, USER_SAVED_DIR))
+	if (sbprintf(saved_path, NULL, "%s/%s/", home_path, USER_SAVED_DIR))
 		goto err_path;
 	saved_name[0]	= '\0';
 
@@ -59,21 +60,21 @@ void	save_init	(void)
 	return;
 
 err_path:
-	alx_perror(getenv(ENV_HOME));
+	perrorx(getenv(ENV_HOME));
 	exit(EXIT_FAILURE);
 err_mkdir:
-	alx_perror(home_path);
+	perrorx(home_path);
 }
 
 void	save_clr	(void)
 {
 
-	if (alx_sbprintf(saved_path, NULL, "%s/%s/", home_path, USER_SAVED_DIR))
+	if (sbprintf(saved_path, NULL, "%s/%s/", home_path, USER_SAVED_DIR))
 		goto err;
 	return;
 
 err:
-	alx_perror(home_path);
+	perrorx(home_path);
 	exit(EXIT_FAILURE);
 }
 
@@ -84,7 +85,7 @@ int	load_game_file	(void)
 	int	i;
 	int	j;
 
-	if (alx_sbprintf(fname, NULL, "%s/%s", saved_path, saved_name))
+	if (sbprintf(fname, NULL, "%s/%s", saved_path, saved_name))
 		goto err_path;
 
 	fp	= fopen(fname, "r");
@@ -115,7 +116,7 @@ int	load_game_file	(void)
 
 
 err_path:
-	alx_perror(saved_name);
+	perrorx(saved_name);
 	alx_wait4enter();
 	exit(EXIT_FAILURE);
 }
@@ -133,11 +134,11 @@ void	save_game_file	(char fpath[static restrict FILENAME_MAX])
 
 	/* Don't change saved_name variable if not in default dir */
 	if (fpath)
-		UNUSED(alx_sbprintf(old_saved, NULL, "%s", saved_name));
+		UNUSED(sbprintf(old_saved, NULL, "%s", saved_name));
 
 	/* Default path & name */
 	save_clr();
-	UNUSED(alx_sbprintf(saved_name, NULL, "%s", SAVED_NAME_DEFAULT));
+	UNUSED(sbprintf(saved_name, NULL, "%s", SAVED_NAME_DEFAULT));
 	file_num[0]	= '\0';
 
 	/* Request file name */
@@ -147,15 +148,13 @@ void	save_game_file	(char fpath[static restrict FILENAME_MAX])
 	x	= true;
 	for (i = 0; x; i++) {
 		if (!fpath) {
-			if (alx_sbprintf(fname, NULL, "%s/%s%s%s",
-					saved_path, saved_name, file_num,
-					FILE_EXTENSION)) {
+			if (sbprintf(fname, NULL, "%s/%s%s%s", saved_path,
+					saved_name, file_num, FILE_EXTENSION)) {
 				goto err_path;
 			}
 		} else {
-			if (alx_sbprintf(fname, NULL, "%s/%s%s%s",
-					fpath, saved_name, file_num,
-					FILE_EXTENSION)) {
+			if (sbprintf(fname, NULL, "%s/%s%s%s", fpath,
+					saved_name, file_num, FILE_EXTENSION)) {
 				goto err_path;
 			}
 		}
@@ -170,18 +169,18 @@ void	save_game_file	(char fpath[static restrict FILENAME_MAX])
 			file_num[4] =	'\0';
 		} else {
 			x	= false;
-			if (alx_sbprintf(tmp, NULL, "%s%s%s",
+			if (sbprintf(tmp, NULL, "%s%s%s",
 					saved_name, file_num, FILE_EXTENSION)) {
 				goto err_path;
 			}
-			UNUSED(alx_sbprintf(saved_name, NULL, "%s", tmp));
+			UNUSED(sbprintf(saved_name, NULL, "%s", tmp));
 		}
 	}
 
 	/* Write to a new file */
 	fp	= fopen(fname, "w");
 	if (!fp) {
-		alx_perror(fname);
+		perrorx(fname);
 		goto err_fopen;
 	}
 	fprintf(fp, "mine-sweeper saved game\n");
@@ -209,13 +208,13 @@ void	save_game_file	(char fpath[static restrict FILENAME_MAX])
 err_fopen:
 	/* Don't change saved_name if saving in non-default dir */
 	if (fpath)
-		UNUSED(alx_sbprintf(saved_name, NULL, "%s", old_saved));
+		UNUSED(sbprintf(saved_name, NULL, "%s", old_saved));
 
 	return;
 
 
 err_path:
-	alx_perror(fname);
+	perrorx(fname);
 	alx_wait4enter();
 	exit(EXIT_FAILURE);
 }
