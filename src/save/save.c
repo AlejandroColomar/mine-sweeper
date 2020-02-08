@@ -134,11 +134,11 @@ void	save_game_file	(char fpath[static restrict FILENAME_MAX])
 
 	/* Don't change saved_name variable if not in default dir */
 	if (fpath)
-		UNUSED(sbprintf(old_saved, NULL, "%s", saved_name));
+		ALX_UNUSED(sbprintf(old_saved, NULL, "%s", saved_name));
 
 	/* Default path & name */
 	save_clr();
-	UNUSED(sbprintf(saved_name, NULL, "%s", SAVED_NAME_DEFAULT));
+	ALX_UNUSED(sbprintf(saved_name, NULL, "%s", SAVED_NAME_DEFAULT));
 	file_num[0]	= '\0';
 
 	/* Request file name */
@@ -173,7 +173,7 @@ void	save_game_file	(char fpath[static restrict FILENAME_MAX])
 					saved_name, file_num, FILE_EXTENSION)) {
 				goto err_path;
 			}
-			UNUSED(sbprintf(saved_name, NULL, "%s", tmp));
+			ALX_UNUSED(sbprintf(saved_name, NULL, "%s", tmp));
 		}
 	}
 
@@ -208,7 +208,7 @@ void	save_game_file	(char fpath[static restrict FILENAME_MAX])
 err_fopen:
 	/* Don't change saved_name if saving in non-default dir */
 	if (fpath)
-		UNUSED(sbprintf(saved_name, NULL, "%s", old_saved));
+		ALX_UNUSED(sbprintf(saved_name, NULL, "%s", old_saved));
 
 	return;
 

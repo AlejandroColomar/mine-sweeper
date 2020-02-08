@@ -79,8 +79,8 @@ int	player_iface_start	(ptrdiff_t *row, ptrdiff_t *col)
 	char	subtitle[TITLE_SIZE];
 	int	fail;
 
-	UNUSED(sbprintf(title, NULL, "Start:"));
-	UNUSED(sbprintf(subtitle, NULL, "00:00 | 0"));
+	ALX_UNUSED(sbprintf(title, NULL, "Start:"));
+	ALX_UNUSED(sbprintf(subtitle, NULL, "00:00 | 0"));
 
 	/* Start position */
 	player_iface_position.row	= 0;
@@ -139,16 +139,16 @@ void	player_iface		(const	struct Game_Iface_Out	*out,
 	case GAME_IFACE_STATE_CHEATED:
 	case GAME_IFACE_STATE_PLAYING:
 	case GAME_IFACE_STATE_PAUSE:
-		UNUSED(sbprintf(title, NULL, "Mines: %i/%i",
+		ALX_UNUSED(sbprintf(title, NULL, "Mines: %i/%i",
 						out->flags, out->mines));
 		break;
 
 	case GAME_IFACE_STATE_GAMEOVER:
-		UNUSED(sbprintf(title, NULL, "GAME OVER"));
+		ALX_UNUSED(sbprintf(title, NULL, "GAME OVER"));
 		break;
 
 	case GAME_IFACE_STATE_SAFE:
-		UNUSED(sbprintf(title, NULL, "You win!"));
+		ALX_UNUSED(sbprintf(title, NULL, "You win!"));
 		break;
 	}
 	/* Subtitle */
@@ -158,14 +158,14 @@ void	player_iface		(const	struct Game_Iface_Out	*out,
 		secs	= ((int)score->time % 60);
 
 		if (score->time >= 3600) {
-			UNUSED(sbprintf(subtitle, NULL, "%02i:%02i:%02i | %i",
+			ALX_UNUSED(sbprintf(subtitle, NULL, "%02i:%02i:%02i | %i",
 					hours, mins, secs, score->clicks));
 		} else {
-			UNUSED(sbprintf(subtitle, NULL, "%02i:%02i | %i",
+			ALX_UNUSED(sbprintf(subtitle, NULL, "%02i:%02i | %i",
 					mins, secs, score->clicks));
 		}
 	} else {
-		UNUSED(sbprintf(subtitle, NULL, "N/A"));
+		ALX_UNUSED(sbprintf(subtitle, NULL, "N/A"));
 	}
 
 	/* Request player action */
