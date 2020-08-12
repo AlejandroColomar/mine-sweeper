@@ -36,41 +36,26 @@
  * SERVICING, REPAIR OR CORRECTION.					      *
  ******************************************************************************/
 
-	If you make a version, please tell me.
-	I would like to see it. Thank you.
-
 site:
-	https://github.com/AlejandroColomar/mine-sweeper
+	https://github.com/alejandro-colomar/mine-sweeper
 
 
 COMPILE:
-	 - linux:
-		$ make
-	 - windows (MSYS2):
-		$ make OS=win
+	$ make
 
 INSTALL:
-	 - linux:
-		# make install
-	 - windows:
-		run 'SETUP.cmd' as administrator
+	$ sudo make install
 
 RUN:
-	 - linux:
-		$ mine-sweeper
-				if it doesn't work:
-		$ /usr/local/games/mine-sweeper
-	 - windows:
-		run 'bin/mine-sweeper.exe'
+	$ mine-sweeper
+			if it doesn't work:
+	$ /usr/local/games/mine-sweeper
 
 UNINSTALL:
-	 - linux:
-		# make uninstall
-	 - windows:
-		run 'UNINSTALL.cmd' as administrator
+	$ sudo make uninstall
 
 
-The program creates a folder '.mine-sweeper/' at $HOME (also in Windows).  It
+The program creates a folder '.mine-sweeper/' at $HOME.  It
 is used by the program to store saved games.  If you remove the game, you
 should delete that folder manually.
 
