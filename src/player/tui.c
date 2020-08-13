@@ -14,8 +14,7 @@
 
 #include <ncurses.h>
 
-#include <libalx/extra/ncurses/common.h>
-#include <libalx/extra/ncurses/get.h>
+#include <libalx/extra/ncurses/ncurses.h>
 
 #include "mine-sweeper/game/iface.h"
 #include "mine-sweeper/player/iface.h"

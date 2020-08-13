@@ -15,10 +15,10 @@
 #include <time.h>
 
 #define ALX_NO_PREFIX
-#include <libalx/base/errno/error.h>
-#include <libalx/base/compiler/size.h>
-#include <libalx/base/stdio/printf/sbprintf.h>
-#include <libalx/base/stdio/seekc.h>
+#include <libalx/base/errno.h>
+#include <libalx/base/compiler.h>
+#include <libalx/base/stdio.h>
+#include <libalx/base/stdio.h>
 
 #include "mine-sweeper/game/core.h"
 #include "mine-sweeper/game/iface.h"

@@ -13,10 +13,8 @@
 #include <stdlib.h>
 
 #define ALX_NO_PREFIX
-#include <libalx/base/stdio/printf/sbprintf.h>
-#include <libalx/base/stdlib/seed.h>
-#include <libalx/base/stdlib/strto/strtof_s.h>
-#include <libalx/base/stdlib/strto/strtoi_s.h>
+#include <libalx/base/stdio.h>
+#include <libalx/base/stdlib.h>
 
 #include "mine-sweeper/about/about.h"
 #include "mine-sweeper/ctrl/start.h"

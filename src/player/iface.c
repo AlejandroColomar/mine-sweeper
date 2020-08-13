@@ -12,8 +12,8 @@
 #include <stdio.h>
 
 #define ALX_NO_PREFIX
-#include <libalx/base/compiler/unused.h>
-#include <libalx/base/stdio/printf/sbprintf.h>
+#include <libalx/base/compiler.h>
+#include <libalx/base/stdio.h>
 
 #include "mine-sweeper/game/iface.h"
 #include "mine-sweeper/player/clui.h"

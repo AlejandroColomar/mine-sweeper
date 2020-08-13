@@ -14,9 +14,9 @@
 #include <stdlib.h>
 
 #define ALX_NO_PREFIX
-#include <libalx/base/compiler/size.h>
-#include <libalx/base/errno/error.h>
-#include <libalx/base/stdio/get.h>
+#include <libalx/base/compiler.h>
+#include <libalx/base/errno.h>
+#include <libalx/base/stdio.h>
 
 #include "mine-sweeper/about/about.h"
 #include "mine-sweeper/ctrl/start.h"
